@@ -12,7 +12,7 @@
         "zf2",
         "playground",
         "weather",
-        "forecast",
+        "forecast"
     ],
     "homepage" : "https://github.com/gregorybesson/PlaygroundWeather",
     "license" : [
