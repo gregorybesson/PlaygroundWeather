@@ -129,10 +129,11 @@ class WeatherDataUse extends EventProvider implements ServiceManagerAwareInterfa
         $array[] = array();
         foreach ($hourlies as $hourly) {
             $lastAssociatedCode = $this->getWeatherCodeMapper()->findLastAssociatedCode($hourly->getWeatherCode());
+            $time = $hourly->getTime();
             $array[][] = array(
                 'id' => $hourly->getId(),
                 'dailyOccurrence' => $hourly->getDailyOccurrence()->getId(),
-                'time' => $hourly->getTime(),
+                'time' => $time,
                 'temperature' => $hourly->getTemperature(),
                 'weatherCode' => $lastAssociatedCode->getForJson(),
             );

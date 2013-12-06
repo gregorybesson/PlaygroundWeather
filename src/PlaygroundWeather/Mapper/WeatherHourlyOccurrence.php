@@ -3,6 +3,7 @@
 namespace PlaygroundWeather\Mapper;
 
 use PlaygroundWeather\Entity\WeatherDailyOccurrence;
+use ClassLoaderTest\ClassD;
 
 class WeatherHourlyOccurrence
 {
@@ -74,4 +75,14 @@ class WeatherHourlyOccurrence
         return $this->getEntityRepository()->findBy(array('dailyOccurrence' => $dailyOccurrence), $sortArray);
     }
 
+    public function findEveryCodeByDaily(WeatherDailyOccurrence $dailyOccurrence)
+    {
+        $query = $this->em->createQuery(
+            'SELECT c.id FROM PlaygroundWeather\Entity\WeatherHourlyOccurrence h
+            LEFT JOIN h.weatherCode c
+            WHERE h.dailyOccurrence = :dailyOccurrence'
+        );
+        $query->setParameter('dailyOccurrence', $dailyOccurrence);
+        return $query->getResult();
+    }
 }

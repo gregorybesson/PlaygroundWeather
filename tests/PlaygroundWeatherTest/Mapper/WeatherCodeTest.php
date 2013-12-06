@@ -22,6 +22,22 @@ class WeatherCodeTest extends \PHPUnit_Framework_TestCase
         $tool->createSchema($classes);
     }
 
+    public function testFindDefaultByCode()
+    {
+        $code = new WeatherCode();
+        $code->setCode(100);
+        $code->setIsDefault(0);
+        $code->setDescription('toto');
+        $code = $this->tm->insert($code);
+
+        $this->assertEquals($code, current($this->tm->findBy(array('code' =>100))));
+        $this->assertNull($this->tm->findDefaultByCode(100));
+
+        $code->setIsDefault(1);
+        $this->tm->update($code);
+        $this->assertEquals($code, $this->tm->findDefaultByCode(100));
+    }
+
     public function testFindLastAssociatedCode()
     {
         $code1 = new WeatherCode();
@@ -47,34 +63,13 @@ class WeatherCodeTest extends \PHPUnit_Framework_TestCase
     public function testFindLastAssociatedCodeNoAssociated()
     {
         $code1 = new WeatherCode();
-        $code1->setCode(1);
+        $code1->setCode(10);
         $code1->setDescription('bla');
         $code1->setIsDefault(0);
         $code1->setAssociatedCode(null);
         $this->tm->insert($code1);
 
         $this->assertEquals($code1, $this->tm->findLastAssociatedCode($code1));
-    }
-
-    public function testFindDefaultByCode()
-    {
-        $code = new WeatherCode();
-        $code->setCode(100);
-        $code->setIsDefault(0);
-        $code1->setDescription('toto');
-        var_dump($code);
-        $code = $this->tm->insert($code);
-        var_dump($code);
-        var_dump(var_dump($this->tm->findAll()));
-
-        $this->assertEquals($code, current($this->tm->findBy(array('code' =>100))));
-//         $this->assertNull($this->tm->findDefaultByCode(100));
-
-//         $code->setIsDefault(1);
-//         $this->tm->update($code);
-//         var_dump($this->tm->findBy(array('code' =>100)));
-//         var_dump($this->tm->findDefaultByCode(100));
-//         $this->assertEquals($code, $this->tm->findDefaultByCode(100));
     }
 
     public function tearDown()

@@ -75,7 +75,7 @@ return array(
                             'route' => '/meteo',
                             'defaults' => array(
                                 'controller' => 'playgroundweather_admin_controller',
-                                'action' => 'index',
+                                'action' => 'admin',
                             ),
                         ),
                         'may_terminate' => true,

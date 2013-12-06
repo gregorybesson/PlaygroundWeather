@@ -187,7 +187,7 @@ class WeatherDailyOccurrence implements InputFilterAwareInterface
             'location' => $this->getLocation()->getForJson(),
             'minTemperature' => $this->getMinTemperature(),
             'maxTemperature' => $this->getMaxTemperature(),
-//             'weatherCode' => $this->getWeatherCode()->getAsJson(),
+            'weatherCode' => $this->getWeatherCode()->getForJson(),
         );
     }
 

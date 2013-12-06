@@ -54,8 +54,8 @@ class WeatherTableWidget extends AbstractHelper implements ServiceLocatorAwareIn
         var_dump($this->widgetTemplate);
         $widgetModel->setTemplate($this->widgetTemplate);
         $widgetModel->setVariables(array('data'=> 'bla'));
-        //return $this->getView()->render($widgetModel);
-         return true;
+        return $this->getView()->render($widgetModel);
+//          return true;
     }
 
 //     public function getView()
