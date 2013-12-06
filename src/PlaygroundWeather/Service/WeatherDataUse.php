@@ -97,7 +97,25 @@ class WeatherDataUse extends EventProvider implements ServiceManagerAwareInterfa
     public function getCloserHourlyOccurrence(WeatherDailyOccurrence $dailyOccurrence, DateTime $time)
     {
         $hourlies = $this->getWeatherHourlyOccurrenceMapper()->findByDailyOccurrence($dailyOccurrence, array('time' => 'ASC'));
+        if (!$hourlies) {
+            return null;
+        }
 
+        $lower = $bigger = null;
+        for ($i=0; $i<count($hourlies)-1; $i++) {
+            if (current($hourlies)->getTime()<$time && next($hourlies)->getTime()>$time) {
+                $lower = prev($hourlies);
+                $bigger =  next($hourlies);
+            }
+        }
+
+        if (!$lower || !$bigger) {
+            return end($hourlies);
+        } else {
+            $diff1 = $time->getTimestamp() - $lower->getTime()->getTimestamp();
+            $diff2 = $bigger->getTime()->getTimestamp() - $time->getTimestamp();
+            return ($diff1 <= $diff2) ? $lower : $bigger;
+        }
     }
 
     /**
