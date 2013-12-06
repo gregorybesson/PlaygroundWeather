@@ -1,0 +1,15 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundweather');// Pour le texte ?>
+    <?php
+    $form = $this->form;
+    $form->prepare();
+    ?>
+
+<h2><?php echo $this->translate('Importer les états par défaut'); ?></h2>
+<?php echo $this->form()->openTag($form) ?>
+    <p><?php echo $this->translate('Sélectionnez le fichier xml contenant la liste des états par défaut du web service'); ?></p>
+    <div class="label-input">
+        <?php echo $this->formLabel($form->get('file')); ?>
+        <?php echo $this->formFile($form->get('file')); ?>
+    </div>
+    <?php echo $this->formButton($form->get('submit')); ?>
+<?php echo $this->form()->closeTag() ?>
