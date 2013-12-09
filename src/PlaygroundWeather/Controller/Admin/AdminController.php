@@ -17,11 +17,12 @@ class AdminController extends AbstractActionController
     {
         $place = $this->getWeatherLocationService()->getWeatherLocationMapper()->getDefaultLocation();
         $time = new DateTime();
+        $time1 = new DateTime();
         return new ViewModel(array(
             'location'=>$place,
             'startDate'=> new DateTime(),
             'endDate'=> new DateTime('2013-12-13'),
-            'times' => array($time->setTime(10,0), $time->setTime(16,0))
+            'times' => array($time->setTime(10,0), $time1->setTime(16,0))
         ));
     }
 

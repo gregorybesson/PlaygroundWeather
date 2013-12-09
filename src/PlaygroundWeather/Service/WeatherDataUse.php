@@ -65,6 +65,7 @@ class WeatherDataUse extends EventProvider implements ServiceManagerAwareInterfa
         $dates = array($date);
         $interval = new DateInterval('P1D');
         for ($i=1; $i<$numDays; $i++) {
+            $date = new DateTime($date->format('Y-m-d'));
             $date->add($interval);
             $dates[] = $date;
         }
@@ -146,12 +147,11 @@ class WeatherDataUse extends EventProvider implements ServiceManagerAwareInterfa
 
         $lower = $bigger = null;
         for ($i=0; $i<count($hourlies)-1; $i++) {
-            if (current($hourlies)->getTime()<$time && next($hourlies)->getTime()>$time) {
+            if (current($hourlies)->getTime()<=$time && next($hourlies)->getTime()>$time) {
                 $lower = prev($hourlies);
                 $bigger =  next($hourlies);
             }
         }
-
         if (!$lower || !$bigger) {
             return end($hourlies);
         } else {
@@ -172,6 +172,7 @@ class WeatherDataUse extends EventProvider implements ServiceManagerAwareInterfa
             $dayArray['times'] = array();
             foreach ($hours as $hour) {
                 $dayArray['times'][]= $this->getHourlyAsArray($this->getCloserHourlyOccurrence($daily, $hour));
+                var_dump($hour);
             }
             array_push($resultArray['days'], $dayArray);
         }

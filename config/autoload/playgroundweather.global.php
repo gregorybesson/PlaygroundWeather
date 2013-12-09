@@ -43,12 +43,12 @@ $playgroundweather = array(
     /**
      * Template for the weather table widget
      */
-    'tableWidgetTemplate' => 'playground-weather/weather-table-widget/base-template.phtml',
+    'tableWidgetTemplate' => 'playground-weather/widget/base-table.phtml',
 
     /**
      * Template for the weather map widget
      */
-    'mapWidgetTemplate' => 'playground-weather/weather-map-widget/base-template.phtml',
+    'mapWidgetTemplate' => 'playground-weather/weather-map-widget/base-map.phtml',
 );
 
 /**
