@@ -128,7 +128,7 @@ class WeatherHourlyOccurrence implements InputFilterAwareInterface
         return get_object_vars($this);
     }
 
-    public function getForJson()
+    public function getAsArray()
     {
         return array(
             'id' => $this->getId(),

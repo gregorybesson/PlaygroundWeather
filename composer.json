@@ -27,6 +27,7 @@
         "zendframework/zend-loader" : "~2.1",
         "zendframework/zend-servicemanager" : "~2.1",
         "playground/core" : "dev-master",
+        "playground/" : "dev-master",
         "zendframework/zend-modulemanager" : "~2.1"
     },
     "require-dev" : {

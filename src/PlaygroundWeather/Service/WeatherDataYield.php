@@ -157,6 +157,7 @@ class WeatherDataYield extends EventProvider implements ServiceManagerAwareInter
                     'weatherCode' => (int) $hourly->weatherCode,
                 ));
             }
+            $this->setDailyWeatherCode($dailyOcc);
         }
         return true;
     }
@@ -199,6 +200,30 @@ class WeatherDataYield extends EventProvider implements ServiceManagerAwareInter
             return false;
         }
         return $weatherHourly;
+    }
+
+    public function findDailyWeatherCode($dailyOccurrence)
+    {
+        $codes = $this->getWeatherHourlyOccurrenceMapper()->findEveryCodeByDaily($dailyOccurrence);
+        if (!$codes) {
+            return null;
+        }
+        $ids = array();
+        foreach ($codes as $code) {
+            $ids[] = current($code);
+        }
+        $counts = array_count_values($ids);
+        asort($counts);
+        $ids = array_keys($counts);
+        $code = $this->getWeatherCodeMapper()->findById(end($ids));
+        return $code;
+    }
+
+    public function setDailyWeatherCode($dailyOccurrence)
+    {
+        $dailyOccurrence->setWeatherCode($this->findDailyWeatherCode($dailyOccurrence));
+        $dailyOccurrence = $this->getWeatherDailyOccurrenceMapper()->update($dailyOccurrence);
+        return $dailyOccurrence;
     }
 
     public function getWeatherCodeMapper()

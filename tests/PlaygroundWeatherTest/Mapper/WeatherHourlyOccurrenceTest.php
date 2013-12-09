@@ -88,6 +88,60 @@ class WeatherHourlyOccurrenceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, count($this->tm->findByDailyOccurrence($dailyOccurrence)));
     }
 
+    public function testFindEveryCodeByDaily()
+    {
+        $dailyOccurrence = new WeatherDailyOccurrence();
+        $dailyOccurrence->setId(3);
+        $location = new WeatherLocation();
+        $location->setCity('Paris');
+        $location->setLatitude(5);
+        $location->setLongitude(6);
+        $dailyOccurrence->setLocation($location);
+        $dailyOccurrence->setForecast(true);
+        $dailyOccurrence->setDate(new DateTime());
+        $dailyOccurrence->setMinTemperature(5);
+        $dailyOccurrence->setMaxTemperature(30);
+
+        $interval = new DateInterval('PT1H');
+        $time = new DateTime();
+        $code = new WeatherCode();
+        $code->setId(1);
+        $code->setCode(300);
+        $code->setDescription('toto');
+        $hourlyOccurrence = new WeatherHourlyOccurrence();
+        $hourlyOccurrence->setId(5);
+        $hourlyOccurrence->setWeatherCode($code);
+        $hourlyOccurrence->setTime($time);
+        $hourlyOccurrence->setTemperature(30);
+        $hourlyOccurrence->setDailyOccurrence($dailyOccurrence);
+        $this->tm->insert($hourlyOccurrence);
+
+        $code2 = new WeatherCode();
+        $code2->setId(6);
+        $code2->setCode(500);
+        $code2->setDescription('titi');
+        $hourlyOccurrence2 = new WeatherHourlyOccurrence();
+        $hourlyOccurrence2->setId(8);
+        $hourlyOccurrence2->setWeatherCode($code2);
+        $hourlyOccurrence2->setTime($time->add($interval));
+        $hourlyOccurrence2->setTemperature(35);
+        $hourlyOccurrence2->setDailyOccurrence($dailyOccurrence);
+        $this->tm->insert($hourlyOccurrence2);
+
+        $hourlyOccurrence3 = new WeatherHourlyOccurrence();
+        $hourlyOccurrence3->setId(7);
+        $hourlyOccurrence3->setWeatherCode($code2);
+        $hourlyOccurrence3->setTime($time->add($interval));
+        $hourlyOccurrence3->setTemperature(30);
+        $hourlyOccurrence3->setDailyOccurrence($dailyOccurrence);
+        $this->tm->insert($hourlyOccurrence3);
+
+        var_dump($this->tm->findEveryCodeByDaily($dailyOccurrence));
+
+        $this->assertCount(3, $this->tm->findByDailyOccurrence($dailyOccurrence));
+        $this->assertCount(3, $this->tm->findEveryCodeByDaily($dailyOccurrence));
+    }
+
     public function tearDown()
     {
         $dbh = $this->em->getConnection();

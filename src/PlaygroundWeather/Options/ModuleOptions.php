@@ -9,12 +9,12 @@ class ModuleOptions extends AbstractOptions
     /**
      * drive path to weather media files
      */
-    protected $media_path = 'public/media/adfabweather';
+    protected $media_path = 'public/media/weather';
 
     /**
      * url path to story media files
      */
-    protected $media_url = 'media/adfabweather';
+    protected $media_url = 'media/weather';
 
     /**
      * API user key
