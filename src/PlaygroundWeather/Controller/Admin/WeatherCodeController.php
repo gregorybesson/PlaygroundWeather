@@ -96,7 +96,7 @@ class WeatherCodeController extends AbstractActionController
         }
 
         $viewModel = new ViewModel();
-        $viewModel->setTemplate('adfab-meteo/weather-code/add');
+        $viewModel->setTemplate('playground-weather/weather-code/add');
         $viewModel->setVariables(
             array(
                 'form' => $form,

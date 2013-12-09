@@ -11,6 +11,7 @@ use PlaygroundWeather\Service\WeatherDataUse;
 use PlaygroundWeather\Options\ModuleOptions;
 
 use Zend\View\Model\ViewModel;
+use DateTime;
 
 class WeatherTableWidget extends AbstractHelper implements ServiceLocatorAwareInterface
 {
@@ -36,37 +37,48 @@ class WeatherTableWidget extends AbstractHelper implements ServiceLocatorAwareIn
 
     public function __invoke($params=array())
     {
-//         if (array_key_exists('location', $options)) {
-//             $location = $options['location'];
-//         } else {
-//             $location = null;
-//         }
-//         if (array_key_exists('startDate', $options)) {
-//             $startDate = $options['startDate'];
-//         } else {
-//             $startDate = null;
-//         }
+        if (array_key_exists('location', $params)) {
+            $location = $params['location'];
+        } else {
+            $location = null;
+        }
+        if (array_key_exists('startDate', $params)) {
+            $startDate = $params['startDate'];
+        } else {
+            $startDate = new DateTime();
+        }
+        if (array_key_exists('endDate', $params)) {
+            $endDate = $params['endDate'];
+        } else {
+            $endDate = new DateTime();
+        }
+        if (array_key_exists('times', $params)) {
+            $times = $params['times'];
+        } else {
+            $times = array();
+        }
+        $data = null;
+        if ($location) {
+            $startDate->setTime(0,0);
 
+            $endDate->setTime(0,0);
+            $diff = $startDate->diff($endDate);
+            $numDays = $diff->days + 1;
+            $data = $this->getWeatherDataUseService()->getDailyWeatherForTimesAsArray($location, $startDate, $numDays, $times);
+        }
+        var_dump($data);
 
         $widgetModel = new ViewModel();
         $this->setWidgetTemplate($this->getOptions()->getTableWidgetTemplate());
 
-        var_dump($this->widgetTemplate);
         $widgetModel->setTemplate($this->widgetTemplate);
-        $widgetModel->setVariables(array('data'=> 'bla'));
+        $widgetModel->setVariables(array('data'=> $data));
         return $this->getView()->render($widgetModel);
-//          return true;
     }
 
-//     public function getView()
-//     {
-//         // TODO: Auto-generated method stub
-//     }
+    public function generateDataArray(){
 
-
-//     public function setView($view) {
-
-//     }
+    }
 
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
@@ -89,7 +101,7 @@ class WeatherTableWidget extends AbstractHelper implements ServiceLocatorAwareIn
     {
         $sm = $this->getServiceLocator()->getServiceLocator();
         if ($this->weatherDataUseService === null) {
-            $this->weatherDataUseService = $this->getServiceLocator()->get('playgroundweather_weatherdatause_service');
+            $this->weatherDataUseService = $sm->get('playgroundweather_weatherdatause_service');
         }
         return $this->weatherDataUseService;
     }

@@ -15,11 +15,16 @@ use PlaygroundWeather\Mapper\WeatherDailyOccurrence as WeatherDailyOccurrenceMap
 use PlaygroundWeather\Mapper\WeatherHourlyOccurrence as WeatherHourlyOccurrenceMapper;
 use PlaygroundWeather\Mapper\WeatherLocation  as WeatherLocationMapper;
 use PlaygroundWeather\Mapper\WeatherCode  as WeatherCodeMapper;
+use PlaygroundWeather\Options\ModuleOptions;
 use \DateTime;
 use \DateInterval;
 
 class WeatherDataUse extends EventProvider implements ServiceManagerAwareInterface
 {
+    /**
+     * @var ModuleOptions
+     */
+    protected $options;
     /**
      * @var WeatherCodeMapper
      */
@@ -75,9 +80,47 @@ class WeatherDataUse extends EventProvider implements ServiceManagerAwareInterfa
                     continue;
                 }
             }
-            $results[] = $this->getDailyWeatherAsJson($daily);
+            $results[] = $daily;
         }
         return $results;
+    }
+
+    public function getHourlyAsArray($hourly)
+    {
+        $time = $hourly->getTime();
+        $lastAssociatedCode = $this->getWeatherCodeMapper()->findLastAssociatedCode($hourly->getWeatherCode());
+        return array(
+            'id' => $hourly->getId(),
+            'dailyOccurrence' => $hourly->getDailyOccurrence()->getId(),
+            'time' => $time,
+            'temperature' => $hourly->getTemperature(),
+            'weatherCode' => $this->getCodeAsArray($lastAssociatedCode),
+        );
+    }
+
+    public function getDailyAsArray($daily)
+    {
+        $lastAssociatedCode = $this->getWeatherCodeMapper()->findLastAssociatedCode($daily->getWeatherCode());
+        return array(
+            'id' => $daily->getId(),
+            'date' => $daily->getDate(),
+            'location' => $daily->getLocation()->getForJson(),
+            'minTemperature' => $daily->getMinTemperature(),
+            'maxTemperature' => $daily->getMaxTemperature(),
+            'weatherCode' => $this->getCodeAsArray($lastAssociatedCode),
+        );
+    }
+
+    public function getCodeAsArray($code)
+    {
+        $media_path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
+        $media_url = $this->getOptions()->getMediaUrl() . '/';
+        return array(
+            'id' => $code->getId(),
+            'code' => $code->getCode(),
+            'description' => $code->getDescription(),
+            'iconURL' => str_replace($media_url, $media_path, $code->getIconURL()),
+        );
     }
 
     /**
@@ -118,25 +161,34 @@ class WeatherDataUse extends EventProvider implements ServiceManagerAwareInterfa
         }
     }
 
+    public function getDailyWeatherForTimesAsArray(WeatherLocation $location, Datetime $day, $numDays, array $hours)
+    {
+        $dailies = $this->getLocationWeather($location, $day, $numDays);
+        $resultArray = array();
+        $resultArray['location'] = current($dailies)->getLocation();
+        $resultArray['days'] = array();
+        foreach($dailies as $daily) {
+            $dayArray = $this->getDailyAsArray($daily);
+            $dayArray['times'] = array();
+            foreach ($hours as $hour) {
+                $dayArray['times'][]= $this->getHourlyAsArray($this->getCloserHourlyOccurrence($daily, $hour));
+            }
+            array_push($resultArray['days'], $dayArray);
+        }
+        return $resultArray;
+    }
+
     /**
      *
      * @param WeatherDailyOccurrence $daily
      */
-    public function getDailyWeatherAsJson(WeatherDailyOccurrence $daily)
+    public function getDailyWeatherAsArray(WeatherDailyOccurrence $daily)
     {
-        $array = $daily->getAsArray();
+        $array = $this->getDailyAsArray($daily);
         $hourlies = $this->getWeatherHourlyOccurrenceMapper()->findByDailyOccurrence($daily, array('time' => 'ASC'));
         $array[] = array();
         foreach ($hourlies as $hourly) {
-            $lastAssociatedCode = $this->getWeatherCodeMapper()->findLastAssociatedCode($hourly->getWeatherCode());
-            $time = $hourly->getTime();
-            $array[][] = array(
-                'id' => $hourly->getId(),
-                'dailyOccurrence' => $hourly->getDailyOccurrence()->getId(),
-                'time' => $time,
-                'temperature' => $hourly->getTemperature(),
-                'weatherCode' => $lastAssociatedCode->getForJson(),
-            );
+            $array[][] = $this->getHourlyAsArray($hourly);
         }
         return $array;
     }
@@ -215,5 +267,19 @@ class WeatherDataUse extends EventProvider implements ServiceManagerAwareInterfa
         $this->weatherDataYieldService = $weatherDataYieldService;
 
         return $this;
+    }
+
+    public function setOptions(ModuleOptions $options)
+    {
+        $this->options = $options;
+        return $this;
+    }
+
+    public function getOptions()
+    {
+        if (!$this->options instanceof ModuleOptions) {
+            $this->setOptions($this->getServiceManager()->get('playgroundweather_module_options'));
+        }
+        return $this->options;
     }
 }

@@ -37,6 +37,11 @@ class WeatherLocation
         return $query;
     }
 
+    public function getDefaultLocation()
+    {
+        return current($this->getEntityRepository()->findAll());
+    }
+
     public function findById($id)
     {
         return $this->getEntityRepository()->find($id);
