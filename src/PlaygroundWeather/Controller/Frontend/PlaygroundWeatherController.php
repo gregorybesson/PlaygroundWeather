@@ -20,21 +20,7 @@ class PlaygroundWeatherController extends AbstractActionController
     {
         $now = new Datetime("2013-12-03");
 
-        $sm = $this->getEvent()
-        ->getApplication()
-        ->getServiceManager();
-//         var_dump($sm);
-
-        var_dump($sm->get('viewtemplatepathstack'));
-        var_dump($sm->get('playgroundtemplatehintcollector'));
-        var_dump($sm->get('viewtemplatemapresolver'));
-
-        $place = $this->getWeatherLocationService()->getWeatherLocationMapper()->getDefaultLocation();
-
-        $var = $this->getWeatherDataUseService()->isPastDate($now);
-        var_dump($place);
         return new ViewModel(array(
-            'location'=>$place;
         ));
     }
 

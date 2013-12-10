@@ -45,7 +45,7 @@ class ModuleOptions extends AbstractOptions
     /**
      * Template for the weather map widget
      */
-    protected $mapWidgetTemplate = 'playground-weather/widget/base-template.phtml';
+    protected $imageWidgetTemplate = 'playground-weather/widget/base-template.phtml';
 
     /**
      * Set media path
@@ -176,17 +176,17 @@ class ModuleOptions extends AbstractOptions
     /**
      * @return $mapWidgetTemplate
      */
-    public function getMapWidgetTemplate()
+    public function getImageWidgetTemplate()
     {
-        return $this->mapWidgetTemplate;
+        return $this->imageWidgetTemplate;
     }
 
     /**
-     * @param boolean $mapWidgetTemplate
+     * @param boolean $imageWidgetTemplate
      */
-    public function setMapWidgetTemplate($mapWidgetTemplate)
+    public function setImageWidgetTemplate($imageWidgetTemplate)
     {
-        $this->mapWidgetTemplate = trim($mapWidgetTemplate);
+        $this->imageWidgetTemplate = trim($imageWidgetTemplate);
         return $this;
     }
 

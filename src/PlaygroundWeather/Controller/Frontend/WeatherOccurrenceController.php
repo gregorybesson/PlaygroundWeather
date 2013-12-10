@@ -35,17 +35,25 @@ class WeatherOccurrenceController extends AbstractRestfulController
 
         $location = $this->getWeatherLocationService()->getWeatherLocationMapper()->findById($locationId);
         $start = new DateTime($startStr);
-
+        $result = array();
         if ($endStr) {
             $end = new DateTime($endStr);
             $diff = $start->diff($end);
             if ($diff->days > 1 && !$diff->invert) {
                 $data = $this->getWeatherDataUseService()->getLocationWeather($location, $start, $diff->days + 1);
-                return new JsonModel(array('data' => $data));
+                if ($data) {
+                    foreach ($data as $day) {
+                        $result[] =  $this->getWeatherDataUseService()->getDailyWeatherAsArray($day);
+                    }
+                }
+                return new JsonModel(array('data' => $result));
             }
         }
         $data = $this->getWeatherDataUseService()->getLocationWeather($location, $start);
-        return new JsonModel(array('data' => $data));
+        if (current($data)) {
+            $result =  $this->getWeatherDataUseService()->getDailyWeatherAsArray(current($data));
+        }
+        return new JsonModel(array('data' => $result));
     }
 
     public function getWeatherLocationService()

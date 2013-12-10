@@ -1,5 +1,5 @@
 <ul class="liste-buttons">
-    <li class="btn-admin"><a href="<?php echo $this->url('admin/meteo/weather-locations/add'); ?>"><?php echo $this->translate('Ajouter un lieu'); ?></a></li>
+    <li class="btn-admin"><a href="<?php echo $this->url('admin/weather/locations/add'); ?>"><?php echo $this->translate('Ajouter un lieu'); ?></a></li>
 </ul>
 <h2><?php echo $this->translate('Lieux') ?></h2>
     <table id="app_codes">
@@ -23,13 +23,13 @@
                 <td><?php echo $location->getLatitude(); ?></td>
                 <td><?php echo $location->getLongitude(); ?></td>
                 <td></td>
-                <?php $deleteLink = $this->url('admin/meteo/weather-locations/remove', array('locationId' => $location->getId()));?>
+                <?php $deleteLink = $this->url('admin/weather/locations/remove', array('locationId' => $location->getId()));?>
                 <td><a href='<?php echo $deleteLink ?>'><?php echo $this->translate('Supprimer'); ?></a></td>
             </tr>
         <?php endforeach;?>
         </tbody>
     </table>
 <ul class="liste-buttons">
-    <li class="btn-admin"><a href="<?php echo $this->url('admin/meteo/weather-locations/add'); ?>"><?php echo $this->translate('Ajouter un lieu'); ?></a></li>
+    <li class="btn-admin"><a href="<?php echo $this->url('admin/weather/locations/add'); ?>"><?php echo $this->translate('Ajouter un lieu'); ?></a></li>
 </ul>
 

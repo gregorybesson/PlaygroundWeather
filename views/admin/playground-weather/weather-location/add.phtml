@@ -52,7 +52,7 @@
             <td><?php echo $location->getRegion() ?></td>
             <td><?php echo $location->getLatitude() ?></td>
             <td><?php echo $location->getLongitude() ?></td>
-            <?php $createlink = $this->url('admin/meteo/weather-locations/create',
+            <?php $createlink = $this->url('admin/weather/locations/create',
                 array(
                     'city' => $location->getCity(),
                     'country' => $location->getCountry(),

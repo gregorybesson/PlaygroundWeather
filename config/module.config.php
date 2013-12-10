@@ -47,32 +47,17 @@ return array(
     'view_helpers' => array(
         'invokables' => array(
             'weatherTableWidget' => 'PlaygroundWeather\View\Helper\WeatherTableWidget',
-            'weatherMapWidget' => 'PlaygroundWeather\View\Helper\WeatherMapWidget',
+            'weatherImageWidget' => 'PlaygroundWeather\View\Helper\WeatherImageWidget',
         ),
     ),
     'router' => array(
         'routes' =>array(
-            'frontend' => array(
-                'child_routes' => array(
-                    'meteo' => array(
-                        'type' => 'Literal',
-                        'options' => array(
-                            'route' => 'meteo',
-                            'defaults' => array(
-                                'controller' => 'playgroundweather_controller',
-                                'action' => 'index',
-                            )
-                        ),
-                        'may_terminate' => true,
-                    ),
-                ),
-            ),
             'admin' => array(
                 'child_routes' => array(
-                    'meteo' => array(
+                    'weather' => array(
                         'type' => 'Literal',
                         'options' => array(
-                            'route' => '/meteo',
+                            'route' => '/weather',
                             'defaults' => array(
                                 'controller' => 'playgroundweather_admin_controller',
                                 'action' => 'admin',
@@ -80,10 +65,10 @@ return array(
                         ),
                         'may_terminate' => true,
                         'child_routes' => array(
-                            'weather-codes' => array(
+                            'codes' => array(
                                 'type' => 'Literal',
                                 'options' => array(
-                                    'route' => '/weather-codes',
+                                    'route' => '/codes',
                                     'defaults' => array(
                                         'controller' => 'weathercode_admin_controller',
                                         'action' => 'associate',
@@ -152,10 +137,10 @@ return array(
                                 ),
                             ),
 
-                            'weather-locations' => array(
+                            'locations' => array(
                                 'type' => 'Literal',
                                 'options' => array(
-                                    'route' => '/weather-locations',
+                                    'route' => '/locations',
                                     'defaults' => array(
                                         'controller' => 'weatherlocation_admin_controller',
                                         'action' => 'list',

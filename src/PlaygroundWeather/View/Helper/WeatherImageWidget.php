@@ -13,7 +13,7 @@ use PlaygroundWeather\Options\ModuleOptions;
 use Zend\View\Model\ViewModel;
 use DateTime;
 
-class WeatherTableWidget extends AbstractHelper implements ServiceLocatorAwareInterface
+class WeatherImageWidget extends AbstractHelper implements ServiceLocatorAwareInterface
 {
     /**
      * @var ModuleOptions
@@ -37,44 +37,25 @@ class WeatherTableWidget extends AbstractHelper implements ServiceLocatorAwareIn
 
     public function __invoke($params=array())
     {
-        if (array_key_exists('location', $params) && $params['location']!==null) {
-            $location = $params['location'];
+//         if (array_key_exists('mapImage', $params) && $params['mapImage'] instanceof MapImage) {
+//             $mapImage = $params['mapImage'];
+//         } else {
+//             $mapImage = null;
+//         }
+        if (array_key_exists('locations', $params) && is_array($params['locations'])) {
+            $locations = $params['locations'];
         } else {
-            $location = $this->getWeatherDataUseService()->getWeatherLocationMapper()->getDefaultLocation();
-        }
-        if (array_key_exists('startDate', $params) && $params['startDate']!==null) {
-            $startDate = $params['startDate'];
-        } else {
-            $startDate = new DateTime();
-        }
-        if (array_key_exists('endDate', $params) && $params['endDate']!==null) {
-            $endDate = $params['endDate'];
-        } else {
-            $endDate = null;
-        }
-        if (array_key_exists('times', $params) && is_array($params['times'])) {
-            $times = $params['times'];
-        } else {
-            $times = array();
+            $locations = array();
         }
 
         if (array_key_exists('template', $params)) {
             $this->setWidgetTemplate($params['template']);
         } else {
-             $this->setWidgetTemplate($this->getOptions()->getTableWidgetTemplate());;
+             $this->setWidgetTemplate($this->getOptions()->getImageWidgetTemplate());;
         }
-        $data = null;
-        if ($location) {
-            if ($endDate) {
-                $startDate->setTime(0,0);
-                $endDate->setTime(0,0);
-                $diff = $startDate->diff($endDate);
-                $numDays = $diff->days + 1;
-            } else {
-                $numDays = 1;
-            }
-            $data = $this->getWeatherDataUseService()->getDailyWeatherForTimesAsArray($location, $startDate, $numDays, $times);
-        }
+
+        $data = array();
+
         $widgetModel = new ViewModel();
         $widgetModel->setTemplate($this->widgetTemplate);
         $widgetModel->setVariables(array('data'=> $data));

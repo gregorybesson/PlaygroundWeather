@@ -71,9 +71,10 @@ class Module
 
                     return $viewHelper;
                 },
-                'weatherMapWidget' => function($sm) {
+                'weatherImageWidget' => function($sm) {
                     $locator = $sm->getServiceLocator();
-                    $viewHelper = new View\Helper\WeatherMapWidget();
+                    $viewHelper = new View\Helper\WeatherImageWidget();
+                    $viewHelper->setWidgetTemplate($locator->get('playgroundweather_module_options')->getImageWidgetTemplate());
                     return $viewHelper;
                 },
             ),

@@ -35,7 +35,7 @@ class WeatherLocationController extends AbstractActionController
                 foreach ($form->getMessages() as $field => $errMsg) {
                     $this->flashMessenger()->addMessage($field . ' - ' . current($errMsg));
                 }
-                return $this->redirect()->toRoute('admin/meteo/weather-locations/add');
+                return $this->redirect()->toRoute('admin/weather/locations/add');
             }
         }
         return new ViewModel(array(
@@ -50,14 +50,14 @@ class WeatherLocationController extends AbstractActionController
         $params = $this->getEvent()->getRouteMatch()->getParams();
         if (!$params || !$params['city'] || !$params['country'] || !$params['latitude'] || !$params['longitude']) {
             $this->flashMessenger()->addMessage('Des informations sont manquantes, le lieu ne peu pas être ajouté');
-            return $this->redirect()->toRoute('admin/meteo/weather-locations/add');
+            return $this->redirect()->toRoute('admin/weather/locations/add');
         }
         $location = $this->getWeatherLocationService()->create($params);
         if (!$location) {
             $this->flashMessenger()->addMessage('Une erreur est survenue durant l\'ajout du lieu');
-            return $this->redirect()->toRoute('admin/meteo/weather-locations/add');
+            return $this->redirect()->toRoute('admin/weather/locations/add');
         }
-        return $this->redirect()->toRoute('admin/meteo/weather-locations/list');
+        return $this->redirect()->toRoute('admin/weather/locations/list');
     }
 
 
@@ -65,7 +65,7 @@ class WeatherLocationController extends AbstractActionController
     {
         $locationId = $this->getEvent()->getRouteMatch()->getParam('locationId');
         if (!$locationId) {
-            return $this->redirect()->toRoute('admin/meteo/weather-locations/list');
+            return $this->redirect()->toRoute('admin/weather/locations/list');
         }
         $result = $this->getWeatherLocationService()->remove($locationId);
         if (!$result) {
@@ -73,7 +73,7 @@ class WeatherLocationController extends AbstractActionController
         } else {
             $this->flashMessenger()->addMessage('Le lieu a bien été supprimé');
         }
-        return $this->redirect()->toRoute('admin/meteo/weather-locations/list');
+        return $this->redirect()->toRoute('admin/weather/locations/list');
     }
 
     public function listAction()
