@@ -15,16 +15,7 @@ class AdminController extends AbstractActionController
 
     public function adminAction()
     {
-        $place = $this->getWeatherLocationService()->getWeatherLocationMapper()->findById(8);
-        $time = new DateTime();
-        $time1 = new DateTime();
-        $time2 = new DateTime();
-        return new ViewModel(array(
-            'location'=>$place,
-            'startDate'=> new DateTime('2013-12-02'),
-            'endDate'=> new DateTime('2013-12-12'),
-            'times' => array($time->setTime(10,0), $time1->setTime(16,0), $time2->setTime(18,0)),
-        ));
+        return new ViewModel(array());
     }
 
     public function getWeatherLocationService()

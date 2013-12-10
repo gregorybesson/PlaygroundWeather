@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  * @ORM\Entity @HasLifecycleCallbacks
  * @ORM\Table(name="weather_location",
  *   uniqueConstraints={@UniqueConstraint(name="unique_location", columns={"latitude", "longitude"}),
- *                      @UniqueConstraint(name="unique_city", columns={"city", "country"})})
+ *                      @UniqueConstraint(name="unique_city", columns={"city", "region", "country"})})
  */
 class WeatherLocation implements InputFilterAwareInterface
 {

@@ -30,7 +30,7 @@ class WeatherCodeController extends AbstractActionController
             if ($form->isValid()) {
                 $code = $this->getWeatherCodeService()->create(current($form->getData()['codes']));
                 if ($code) {
-                    return $this->redirect()->toRoute('admin/meteo/weather-codes/list');
+                    return $this->redirect()->toRoute('admin/weather/codes/list');
                 }
             } else {
                 foreach ($form->get('codes')->getMessages() as $errMsg) {
@@ -38,7 +38,7 @@ class WeatherCodeController extends AbstractActionController
                         $this->flashMessenger()->addMessage($field . ' - ' . current($msg));
                     }
                 }
-                return $this->redirect()->toRoute('admin/meteo/weather-codes/add');
+                return $this->redirect()->toRoute('admin/weather/codes/add');
             }
         }
         // Display
@@ -54,12 +54,12 @@ class WeatherCodeController extends AbstractActionController
     {
         $codeId = $this->getEvent()->getRouteMatch()->getParam('codeId');
         if (!$codeId) {
-            return $this->redirect()->toRoute('admin/meteo/weather-codes/list');
+            return $this->redirect()->toRoute('admin/weather/codes/list');
         }
         $weatherCodeMapper = $this->getWeatherCodeService()->getWeatherCodeMapper();
         $code = $weatherCodeMapper->findById($codeId);
         if (!$code) {
-            return $this->redirect()->toRoute('admin/meteo/weather-codes/list');
+            return $this->redirect()->toRoute('admin/weather/codes/list');
         }
 
         $form = $this->getServiceLocator()->get('playgroundweather_weathercode_form');
@@ -83,7 +83,7 @@ class WeatherCodeController extends AbstractActionController
             if ($form->isValid()) {
                 $code = $this->getWeatherCodeService()->edit($code->getId(), current($form->getData()['codes']));
                 if ($code) {
-                    return $this->redirect()->toRoute('admin/meteo/weather-codes/list');
+                    return $this->redirect()->toRoute('admin/weather/codes/list');
                 }
             } else {
                 foreach ($form->get('codes')->getMessages() as $errMsg) {
@@ -91,7 +91,7 @@ class WeatherCodeController extends AbstractActionController
                         $this->flashMessenger()->addMessage($field . ' - ' . current($msg));
                     }
                 }
-                return $this->redirect()->toRoute('admin/meteo/weather-codes/edit');
+                return $this->redirect()->toRoute('admin/weather/codes/edit');
             }
         }
 
@@ -110,7 +110,7 @@ class WeatherCodeController extends AbstractActionController
     {
         $codeId = $this->getEvent()->getRouteMatch()->getParam('codeId');
         if (!$codeId) {
-            return $this->redirect()->toRoute('admin/meteo/weather-codes/list');
+            return $this->redirect()->toRoute('admin/weather/codes/list');
         }
         $result = $this->getWeatherCodeService()->remove($codeId);
         if (!$result) {
@@ -118,7 +118,7 @@ class WeatherCodeController extends AbstractActionController
         } else {
             $this->flashMessenger()->addMessage('L\'état du ciel personnalisé a bien été supprimé');
         }
-        return $this->redirect()->toRoute('admin/meteo/weather-codes/list');
+        return $this->redirect()->toRoute('admin/weather/codes/list');
     }
 
     public function importAction()
@@ -145,7 +145,7 @@ class WeatherCodeController extends AbstractActionController
             if ($form->isValid()) {
                 $result = $this->getWeatherCodeService()->import($data['file']);
                 if ($result) {
-                    return $this->redirect()->toRoute('admin/meteo/weather-codes/list');
+                    return $this->redirect()->toRoute('admin/weather/codes/list');
                 } else {
                     $this->flashMessenger()->addMessage('les données du fichier n\'ont pas pu être importées');
                 }
@@ -154,7 +154,7 @@ class WeatherCodeController extends AbstractActionController
                     $this->flashMessenger()->addMessage($field . ' - ' . current($errMsg));
                 }
             }
-            return $this->redirect()->toRoute('admin/meteo/weather-codes/import');
+            return $this->redirect()->toRoute('admin/weather/codes/import');
         }
         return new ViewModel(
             array(
@@ -202,7 +202,7 @@ class WeatherCodeController extends AbstractActionController
                     }
                 }
             }
-            return $this->redirect()->toRoute('admin/meteo/weather-codes/list');
+            return $this->redirect()->toRoute('admin/weather/codes/list');
         }
 
         return new ViewModel(

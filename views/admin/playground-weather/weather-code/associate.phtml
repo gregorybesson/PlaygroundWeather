@@ -4,8 +4,8 @@ $form = $this->form;
 $form->prepare();
 ?>
 	<ul class="liste-buttons">
-	    <li class="btn-admin"><a href="<?php echo $this->url('admin/meteo/weather-codes/import'); ?>"><?php echo $this->translate('Importer les états par défaut'); ?></a></li>
-		<li class="btn-admin"><a href="<?php echo $this->url('admin/meteo/weather-codes/add'); ?>"><?php echo $this->translate('Ajouter un état du ciel'); ?></a></li>
+	    <li class="btn-admin"><a href="<?php echo $this->url('admin/weather/codes/import'); ?>"><?php echo $this->translate('Importer les états par défaut'); ?></a></li>
+		<li class="btn-admin"><a href="<?php echo $this->url('admin/weather/codes/add'); ?>"><?php echo $this->translate('Ajouter un état du ciel'); ?></a></li>
 	</ul>
 
 	<h2>Table d'association</h2>
@@ -34,8 +34,8 @@ $form->prepare();
                         <?php endif;?>
                     </td>
                     <td></td>
-                    <?php $editLink   = $this->url('admin/meteo/weather-codes/edit', array('codeId' => $code->getId()));?>
-                    <?php $deleteLink = $this->url('admin/meteo/weather-codes/remove', array('codeId' => $code->getId()));?>
+                    <?php $editLink   = $this->url('admin/weather/codes/edit', array('codeId' => $code->getId()));?>
+                    <?php $deleteLink = $this->url('admin/weather/codes/remove', array('codeId' => $code->getId()));?>
                     <td><a href='<?php echo $editLink ?>'><?php echo $this->translate('Editer'); ?></a> | <a href='<?php echo $deleteLink ?>'><?php echo $this->translate('Supprimer'); ?></a></td>
                 </tr>
             <?php endforeach;?>
@@ -84,11 +84,11 @@ $form->prepare();
             <?php echo $this->formButton($form->get('submit')); ?>
         <?php echo $this->form()->closeTag() ?>
     <?php else : ?>
-        <a href="<?php echo $this->url('admin/meteo/weather-codes/import'); ?>"><?php echo $this->translate('Importer les états par défaut'); ?></a>
+        <a href="<?php echo $this->url('admin/weather/codes/import'); ?>"><?php echo $this->translate('Importer les états par défaut'); ?></a>
     <?php endif; ?>
 
     <ul class="liste-buttons">
-        <li class="btn-admin"><a href="<?php echo $this->url('admin/meteo/weather-codes/import'); ?>"><?php echo $this->translate('Importer les états par défaut'); ?></a></li>
-		<li class="btn-admin"><a href="<?php echo $this->url('admin/meteo/weather-codes/add'); ?>"><?php echo $this->translate('Ajouter un état du ciel'); ?></a></li>
+        <li class="btn-admin"><a href="<?php echo $this->url('admin/weather/codes/import'); ?>"><?php echo $this->translate('Importer les états par défaut'); ?></a></li>
+		<li class="btn-admin"><a href="<?php echo $this->url('admin/weather/codes/add'); ?>"><?php echo $this->translate('Ajouter un état du ciel'); ?></a></li>
 	</ul>
 </div>
