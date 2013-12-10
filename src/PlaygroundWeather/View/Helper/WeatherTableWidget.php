@@ -37,47 +37,44 @@ class WeatherTableWidget extends AbstractHelper implements ServiceLocatorAwareIn
 
     public function __invoke($params=array())
     {
-        if (array_key_exists('location', $params)) {
+        if (array_key_exists('location', $params) && $params['location']!==null) {
             $location = $params['location'];
         } else {
-            $location = null;
+            $location = $this->getWeatherDataUseService()->getWeatherLocationMapper()->getDefaultLocation();
         }
-        if (array_key_exists('startDate', $params)) {
+        if (array_key_exists('startDate', $params) && $params['startDate']!==null) {
             $startDate = $params['startDate'];
         } else {
             $startDate = new DateTime();
         }
-        if (array_key_exists('endDate', $params)) {
+        if (array_key_exists('endDate', $params) && $params['endDate']!==null) {
             $endDate = $params['endDate'];
         } else {
             $endDate = new DateTime();
         }
-        if (array_key_exists('times', $params)) {
+        if (array_key_exists('times', $params) && is_array($params['times'])) {
             $times = $params['times'];
         } else {
             $times = array();
         }
+
+        if (array_key_exists('template', $params)) {
+            $this->setWidgetTemplate($params['template']);
+        } else {
+             $this->setWidgetTemplate($this->getOptions()->getTableWidgetTemplate());;
+        }
         $data = null;
         if ($location) {
             $startDate->setTime(0,0);
-
             $endDate->setTime(0,0);
             $diff = $startDate->diff($endDate);
             $numDays = $diff->days + 1;
             $data = $this->getWeatherDataUseService()->getDailyWeatherForTimesAsArray($location, $startDate, $numDays, $times);
         }
-        var_dump($data);
-
         $widgetModel = new ViewModel();
-        $this->setWidgetTemplate($this->getOptions()->getTableWidgetTemplate());
-
         $widgetModel->setTemplate($this->widgetTemplate);
         $widgetModel->setVariables(array('data'=> $data));
         return $this->getView()->render($widgetModel);
-    }
-
-    public function generateDataArray(){
-
     }
 
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)

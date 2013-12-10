@@ -40,7 +40,7 @@ class WeatherLocation extends EventProvider implements ServiceManagerAwareInterf
      */
     public function request(array $locationData, $numResults = 1, $timezone = false, $popular = true, $category = '')
     {
-        $location = createQueryString($locationData);
+        $location = $this->createQueryString($locationData);
         if (!$location) {
             return '';
         }

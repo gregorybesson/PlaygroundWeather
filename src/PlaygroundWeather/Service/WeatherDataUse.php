@@ -65,17 +65,19 @@ class WeatherDataUse extends EventProvider implements ServiceManagerAwareInterfa
         $dates = array($date);
         $interval = new DateInterval('P1D');
         for ($i=1; $i<$numDays; $i++) {
+            $date = new DateTime($date->format('Y-m-d'));
             $date->add($interval);
             $dates[] = $date;
         }
         $results = array();
         foreach ($dates as $day) {
             // If the day searched is over, we query on REAL weather data and not forecasts
-            $daily = $this->getWeatherDailyOccurrenceMapper()->findOneBy($location, $day, !$this->isPastDate($day));
+            $past = $this->getWeatherDataYieldService()->isPastDate($day);
+            $daily = $this->getWeatherDailyOccurrenceMapper()->findOneBy($location, $day, !$past);
             if (!$daily) {
                 // Query WWO
                 $this->getWeatherDataYieldService()->getLocationWeather($location, $day);
-                $daily = $this->getWeatherDailyOccurrenceMapper()->findOneBy($location, $day, !$this->isPastDate($day));
+                $daily = $this->getWeatherDailyOccurrenceMapper()->findOneBy($location, $day, !$past);
                 if (!$daily) {
                     continue;
                 }
@@ -123,20 +125,6 @@ class WeatherDataUse extends EventProvider implements ServiceManagerAwareInterfa
         );
     }
 
-    /**
-     * Tell us if the given day is over or not
-     * @param DateTime $date
-     * @return boolean
-     */
-    public function isPastDate(DateTime $date)
-    {
-        $today = new DateTime();
-        $today->setTime(0,0);
-
-        $diff = $today->diff($date);
-        return ($diff->invert) ? true : false ;
-    }
-
     public function getCloserHourlyOccurrence(WeatherDailyOccurrence $dailyOccurrence, DateTime $time)
     {
         $hourlies = $this->getWeatherHourlyOccurrenceMapper()->findByDailyOccurrence($dailyOccurrence, array('time' => 'ASC'));
@@ -146,12 +134,11 @@ class WeatherDataUse extends EventProvider implements ServiceManagerAwareInterfa
 
         $lower = $bigger = null;
         for ($i=0; $i<count($hourlies)-1; $i++) {
-            if (current($hourlies)->getTime()<$time && next($hourlies)->getTime()>$time) {
+            if (current($hourlies)->getTime()<=$time && next($hourlies)->getTime()>$time) {
                 $lower = prev($hourlies);
                 $bigger =  next($hourlies);
             }
         }
-
         if (!$lower || !$bigger) {
             return end($hourlies);
         } else {
@@ -165,7 +152,7 @@ class WeatherDataUse extends EventProvider implements ServiceManagerAwareInterfa
     {
         $dailies = $this->getLocationWeather($location, $day, $numDays);
         $resultArray = array();
-        $resultArray['location'] = current($dailies)->getLocation();
+        $resultArray['location'] = current($dailies) ? current($dailies)->getLocation() : null;
         $resultArray['days'] = array();
         foreach($dailies as $daily) {
             $dayArray = $this->getDailyAsArray($daily);

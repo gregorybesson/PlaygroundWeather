@@ -152,7 +152,7 @@ class WeatherCodeFieldset extends Fieldset implements InputFilterProviderInterfa
     	$results = $codeService->getWeatherCodeMapper()->findBy(array('isDefault'=>0));
 
     	foreach ($results as $result) {
-    		$codes[$result->getId()] = $result->getDescription();
+    		$codes[$result->getId()] = $result->getCode() . ' - ' . $result->getDescription();
     	}
 
     	return $codes;

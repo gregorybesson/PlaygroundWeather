@@ -35,12 +35,12 @@ class WeatherDailyOccurrence implements InputFilterAwareInterface
     protected $location;
 
     /**
-     * @ORM\Column(name="min_temperature", type="decimal")
+     * @ORM\Column(name="min_temperature", type="integer")
      */
     protected $minTemperature;
 
     /**
-     * @ORM\Column(name="max_temperature", type="decimal")
+     * @ORM\Column(name="max_temperature", type="integer")
      */
     protected $maxTemperature;
 
@@ -53,7 +53,7 @@ class WeatherDailyOccurrence implements InputFilterAwareInterface
     /**
      * @ORM\Column(type="boolean")
     */
-    protected $forecast;
+    protected $forecast=1;
 
     /**
      * @param unknown $id
@@ -165,16 +165,16 @@ class WeatherDailyOccurrence implements InputFilterAwareInterface
      */
     public function populate($data = array())
     {
-        if (isset($data['location']) && $data['location'] != null) {
+        if (isset($data['location'])) {
             $this->location = $data['location'];
         }
-        if (isset($data['minTemperature']) && $data['minTemperature'] != null) {
+        if (isset($data['minTemperature'])) {
             $this->minTemperature = $data['minTemperature'];
         }
-        if (isset($data['maxTemperature']) && $data['maxTemperature'] != null) {
+        if (isset($data['maxTemperature'])) {
             $this->maxTemperature = $data['maxTemperature'];
         }
-        if (isset($data['forecast']) && $data['forecast'] != null) {
+        if (isset($data['forecast'])) {
             $this->forecast = $data['forecast'];
         }
     }
