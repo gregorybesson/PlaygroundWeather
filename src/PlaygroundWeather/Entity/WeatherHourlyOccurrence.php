@@ -37,7 +37,7 @@ class WeatherHourlyOccurrence implements InputFilterAwareInterface
     protected $time;
 
     /**
-     * @ORM\Column(type="decimal")
+     * @ORM\Column(type="integer")
      */
     protected $temperature; // saved in Celsius' degrees
 
@@ -146,7 +146,7 @@ class WeatherHourlyOccurrence implements InputFilterAwareInterface
      */
     public function populate($data = array())
     {
-        if (isset($data['temperature']) && $data['temperature'] != null) {
+        if (isset($data['temperature'])) {
             $this->temperature = $data['temperature'];
         }
     }

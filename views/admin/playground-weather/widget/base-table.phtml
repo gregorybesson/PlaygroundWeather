@@ -1,16 +1,19 @@
 <?php $this->plugin('translate')->setTranslatorTextDomain('playgroundweather');// Pour le texte ?>
 <?php $locale= $this->plugin('translate')->getTranslator()->getLocale(); ?>
 <div class="weather-table-widget">
-    <?php $location = $this->data['location']; ?>
-    <h5><?php echo $this->translate('Weather in '); ?><span><?php echo $location->getCity(); ?></span> (<?php echo $location->getCountry(); ?>)</h5>
-    <span><?php echo $this->translate('Latitude') . ' : ' . $location->getLatitude(); ?> - <?php echo $this->translate('Longitude') . ' : ' . $location->getLongitude(); ?></span>
-    <table cellpadding="0" cellspacing="0">
+    <?php if ( $this->data['location']) : ?>
+        <?php $location = $this->data['location']; ?>
+        <h2><?php echo $this->translate('Weather in '); ?><span><?php echo $location->getCity(); ?></span>
+        (<?php echo $location->getRegion() . ' - ' . $location->getCountry(); ?>)</h2>
+        <span><?php echo $this->translate('Latitude') . ' : ' . $location->getLatitude(); ?> - <?php echo $this->translate('Longitude') . ' : ' . $location->getLongitude(); ?></span>
+    <?php endif; ?>
+    <table cellpadding="15" cellspacing="0" border="1">
         <tbody>
             <?php foreach($data['days'] as $day) : ?>
             <tr class="day-weather-item">
                 <td class="weekday"><?php echo $this->dateFormat($day['date'], IntlDateFormatter::LONG, IntlDateFormatter::NONE, $locale); ?></td>
-                <td class="min-temp"><?php echo $day['minTemperature']; ?></td>
-                <td class="max-temp"><?php echo $day['maxTemperature']; ?></td>
+                <td class="min-temp"><?php echo $this->translate('Min');?> <?php echo $day['minTemperature']; ?>°C</td>
+                <td class="max-temp"><?php echo $this->translate('Max');?> <?php echo $day['maxTemperature']; ?>°C</td>
                 <td class="symbol">
                     <?php $code = $day['weatherCode']; ?>
                     <span><?php echo $code['code']; ?> | <?php echo $code['description']; ?></span>
@@ -19,7 +22,7 @@
                 <?php foreach($day['times'] as $time) : ?>
                     <td class="time">
                         <div><?php echo $this->dateFormat($time['time'], IntlDateFormatter::NONE, IntlDateFormatter::SHORT, $locale); ?></div>
-                        <div><?php echo $time['temperature']; ?></div>
+                        <div><?php echo $time['temperature']; ?>°C</div>
                     </td>
                     <td class="symbol">
                         <?php $code = $time['weatherCode']; ?>

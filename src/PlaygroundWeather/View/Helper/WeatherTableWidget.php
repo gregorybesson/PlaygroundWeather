@@ -71,7 +71,6 @@ class WeatherTableWidget extends AbstractHelper implements ServiceLocatorAwareIn
             $numDays = $diff->days + 1;
             $data = $this->getWeatherDataUseService()->getDailyWeatherForTimesAsArray($location, $startDate, $numDays, $times);
         }
-        var_dump($data);
         $widgetModel = new ViewModel();
         $widgetModel->setTemplate($this->widgetTemplate);
         $widgetModel->setVariables(array('data'=> $data));

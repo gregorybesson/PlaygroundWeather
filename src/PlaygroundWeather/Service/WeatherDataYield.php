@@ -143,28 +143,49 @@ class WeatherDataYield extends EventProvider implements ServiceManagerAwareInter
     {
         $xmlContent = simplexml_load_file($xmlFileURL, null, LIBXML_NOCDATA);
         foreach ($xmlContent->weather as $daily) {
+            $date = new Datetime((string) $daily->date);
+            $past = $this->isPastDate($date);
             $dailyOcc = $this->createDaily(array(
-                'date' => new Datetime((string) $daily->date),
+                'date' => $date,
                 'location' => $location,
-                'minTemperature' => (float) $daily->mintempC,
-                'maxTemperature' => (float) $daily->maxtempC,
-                'forecast' => true,));
-            foreach ($daily->hourly as $hourly) {
-                $hourlyOcc = $this->createHourly(array(
-                    'time' => (string) $hourly->time,
-                    'dailyOccurrence' => $dailyOcc,
-                    'temperature' => (float) $hourly->tempC,
-                    'weatherCode' => (int) $hourly->weatherCode,
-                ));
+                'minTemperature' => (int) $daily->mintempC,
+                'maxTemperature' => (int) $daily->maxtempC,
+                'forecast' => ($past) ? 0 : 1,
+            ));
+            if ($dailyOcc) {
+                foreach ($daily->hourly as $hourly) {
+                    $hourlyOcc = $this->createHourly(array(
+                        'time' => (string) $hourly->time,
+                        'dailyOccurrence' => $dailyOcc,
+                        'temperature' => (int) $hourly->tempC,
+                        'weatherCode' => (int) $hourly->weatherCode,
+                    ));
+                }
+                $this->setDailyWeatherCode($dailyOcc);
             }
-            $this->setDailyWeatherCode($dailyOcc);
         }
         return true;
     }
+
+    /**
+     * Tell us if the given day is over or not
+     * @param DateTime $date
+     * @return boolean
+     */
+    public function isPastDate(DateTime $date)
+    {
+        $today = new DateTime();
+        $today->setTime(0,0);
+
+        $diff = $today->diff($date);
+        return ($diff->invert) ? true : false ;
+    }
+
     public function createDaily(array $data)
     {
         $weatherDaily = new WeatherDailyOccurrence();
         $weatherDaily->populate($data);
+
         if ($data['location'] instanceof \PlaygroundWeather\Entity\WeatherLocation) {
             $weatherDaily->setLocation($data['location']);
         }
@@ -182,6 +203,7 @@ class WeatherDataYield extends EventProvider implements ServiceManagerAwareInter
     {
         $weatherHourly = new WeatherHourlyOccurrence();
         $weatherHourly->populate($data);
+
         if ($data['dailyOccurrence'] instanceof WeatherDailyOccurrence) {
             $weatherHourly->setDailyOccurrence($data['dailyOccurrence']);
         }
@@ -194,8 +216,7 @@ class WeatherDataYield extends EventProvider implements ServiceManagerAwareInter
         if ($weatherCode) {
             $weatherHourly->setWeatherCode($weatherCode);
         }
-
-        $weatherHourly = $this->getWeatherDailyOccurrenceMapper()->insert($weatherHourly);
+        $weatherHourly = $this->getWeatherHourlyOccurrenceMapper()->insert($weatherHourly);
         if (!$weatherHourly) {
             return false;
         }

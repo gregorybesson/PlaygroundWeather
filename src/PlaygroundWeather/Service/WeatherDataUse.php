@@ -72,11 +72,12 @@ class WeatherDataUse extends EventProvider implements ServiceManagerAwareInterfa
         $results = array();
         foreach ($dates as $day) {
             // If the day searched is over, we query on REAL weather data and not forecasts
-            $daily = $this->getWeatherDailyOccurrenceMapper()->findOneBy($location, $day, !$this->isPastDate($day));
+            $past = $this->getWeatherDataYieldService()->isPastDate($day);
+            $daily = $this->getWeatherDailyOccurrenceMapper()->findOneBy($location, $day, !$past);
             if (!$daily) {
                 // Query WWO
                 $this->getWeatherDataYieldService()->getLocationWeather($location, $day);
-                $daily = $this->getWeatherDailyOccurrenceMapper()->findOneBy($location, $day, !$this->isPastDate($day));
+                $daily = $this->getWeatherDailyOccurrenceMapper()->findOneBy($location, $day, !$past);
                 if (!$daily) {
                     continue;
                 }
@@ -124,20 +125,6 @@ class WeatherDataUse extends EventProvider implements ServiceManagerAwareInterfa
         );
     }
 
-    /**
-     * Tell us if the given day is over or not
-     * @param DateTime $date
-     * @return boolean
-     */
-    public function isPastDate(DateTime $date)
-    {
-        $today = new DateTime();
-        $today->setTime(0,0);
-
-        $diff = $today->diff($date);
-        return ($diff->invert) ? true : false ;
-    }
-
     public function getCloserHourlyOccurrence(WeatherDailyOccurrence $dailyOccurrence, DateTime $time)
     {
         $hourlies = $this->getWeatherHourlyOccurrenceMapper()->findByDailyOccurrence($dailyOccurrence, array('time' => 'ASC'));
@@ -165,14 +152,13 @@ class WeatherDataUse extends EventProvider implements ServiceManagerAwareInterfa
     {
         $dailies = $this->getLocationWeather($location, $day, $numDays);
         $resultArray = array();
-        $resultArray['location'] = current($dailies)->getLocation();
+        $resultArray['location'] = current($dailies) ? current($dailies)->getLocation() : null;
         $resultArray['days'] = array();
         foreach($dailies as $daily) {
             $dayArray = $this->getDailyAsArray($daily);
             $dayArray['times'] = array();
             foreach ($hours as $hour) {
                 $dayArray['times'][]= $this->getHourlyAsArray($this->getCloserHourlyOccurrence($daily, $hour));
-                var_dump($hour);
             }
             array_push($resultArray['days'], $dayArray);
         }

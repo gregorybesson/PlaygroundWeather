@@ -63,14 +63,15 @@ class WeatherCode extends EventProvider implements ServiceManagerAwareInterface
         $media_url = $this->getOptions()->getMediaUrl() . '/';
 
         if (!empty($data['icon']['tmp_name'])) {
-            $oldIcon = $code->getIconURL();
+            $oldIconURL = $code->getIconURL();
             ErrorHandler::start();
             $data['icon']['name'] = $codeId . "-" . $data['icon']['name'];
             move_uploaded_file($data['icon']['tmp_name'], $path . $data['icon']['name']);
             $code->setIconURl($media_url . $data['icon']['name']);
             ErrorHandler::stop(true);
-            if ($oldIcon) {
-                unlink($oldIcon);
+            if ($oldIconURL) {
+                $real_media_path = realpath($path) . DIRECTORY_SEPARATOR;
+                unlink(str_replace($media_url, $real_media_path,$oldIconURL));
             }
         }
         $code->setAssociatedCode($associatedCode);
@@ -86,8 +87,10 @@ class WeatherCode extends EventProvider implements ServiceManagerAwareInterface
             return false;
         }
         if ($weatherCode->getIconURL()) {
+            $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
+            $real_media_path = realpath($path) . DIRECTORY_SEPARATOR;
             $media_url = $this->getOptions()->getMediaUrl() . '/';
-            unlink($media_url . $weatherCode->getIconURL());
+            unlink(str_replace($media_url, $real_media_path, $weatherCode->getIconURL()));
         }
         $weatherCodeMapper->remove($weatherCode);
         return true;
