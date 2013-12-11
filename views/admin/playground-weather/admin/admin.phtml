@@ -1,1 +1,6 @@
-<?php echo 'bim' ?>
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundweather');// Pour le texte ?>
+<ul class="liste-buttons">
+	<li class="btn-admin"><a href="<?php echo $this->url('admin/weather/images'); ?>"><?php echo $this->translate('Maps Images'); ?></a></li>
+    <li class="btn-admin"><a href="<?php echo $this->url('admin/weather/codes'); ?>"><?php echo $this->translate('Sky states'); ?></a></li>
+	<li class="btn-admin"><a href="<?php echo $this->url('admin/weather/locations'); ?>"><?php echo $this->translate('Locations'); ?></a></li>
+</ul>

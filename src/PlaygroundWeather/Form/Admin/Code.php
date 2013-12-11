@@ -6,8 +6,9 @@ use Zend\Form\Element;
 use ZfcBase\Form\ProvidesEventsForm;
 use Zend\I18n\Translator\Translator;
 use Zend\ServiceManager\ServiceManager;
+use PlaygroundWeather\Form\Admin\CodeFieldset;
 
-class FileImport extends ProvidesEventsForm
+class Code extends ProvidesEventsForm
 {
     protected $serviceManager;
 
@@ -20,12 +21,16 @@ class FileImport extends ProvidesEventsForm
         $this->setAttribute('method', 'post');
         $this->setAttribute('enctype', 'multipart/form-data');
 
+        $codeFieldset = new CodeFieldset(null, $sm, $translator);
         $this->add(array(
-            'type'    => 'Zend\Form\Element\File',
-            'name'    => 'file',
+            'type'    => 'Zend\Form\Element\Collection',
+            'name'    => 'codes',
             'options' => array(
-                'id'    => 'file',
-                'label' => $translator->translate('Fichier', 'playgroundweather'),
+                'id'    => 'codes',
+                'label' => $translator->translate('List of states', 'playgroundweather'),
+                'count' => 0,
+                'should_create_template' => true,
+                'target_element' => $codeFieldset,
             )
         ));
 

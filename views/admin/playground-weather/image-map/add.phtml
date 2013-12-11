@@ -1,0 +1,57 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundweather');// Pour le texte ?>
+    <?php
+    $form = $this->form;
+    $form->prepare();
+    ?>
+
+<h2><?php echo $this->translate('Add a map image'); ?></h2>
+<?php echo $this->form()->openTag($form) ?>
+
+    <?php echo $this->formButton($form->get('submit')); ?>
+
+    <div class="label-input">
+        <?php echo $this->formHidden($form->get('id')); ?>
+    </div>
+    <div class="label-input">
+        <?php echo $this->formLabel($form->get('name')); ?>
+        <?php echo $this->formInput($form->get('name')); ?>
+    </div>
+    <div class="label-input">
+        <?php echo $this->formLabel($form->get('country')); ?>
+        <?php echo $this->formSelect($form->get('country')); ?>
+    </div>
+    <div class="label-input">
+        <?php echo $this->formLabel($form->get('image')); ?>
+        <?php echo $this->formFile($form->get('image')); ?>
+    </div>
+        <div class="label-input">
+        <?php echo $this->formHidden($form->get('id')); ?>
+    </div>
+    <div class="label-input">
+        <?php echo $this->formHidden($form->get('width')); ?>
+    </div>
+    <div class="label-input">
+        <?php echo $this->formHidden($form->get('height')); ?>
+    </div>
+    <div class="label-input" style="float:left;">
+        <?php echo $this->formLabel($form->get('topLeftLatitude')); ?>
+        <?php echo $this->formInput($form->get('topLeftLatitude')); ?>
+    </div>
+    <div class="label-input" style="float:left;">
+        <?php echo $this->formLabel($form->get('topLeftLongitude')); ?>
+        <?php echo $this->formInput($form->get('topLeftLongitude')); ?>
+    </div>
+    <?php if($form->get('imageURL')->getValue() != ''):?>
+        <img src="<?php echo $this->basePath($form->get('imageURL')->getValue()); ?>" />
+    <?php endif;?>
+
+    <div class="label-input" style="clear:left; float:right;">
+        <?php echo $this->formLabel($form->get('bottomRightLatitude')); ?>
+        <?php echo $this->formInput($form->get('bottomRightLatitude')); ?>
+    </div>
+    <div class="label-input" style="float:right;">
+        <?php echo $this->formLabel($form->get('bottomRightLongitude')); ?>
+        <?php echo $this->formInput($form->get('bottomRightLongitude')); ?>
+    </div>
+
+<?php echo $this->form()->closeTag() ?>
