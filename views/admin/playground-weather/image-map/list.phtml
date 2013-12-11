@@ -1,1 +1,32 @@
-<?php
+<ul class="liste-buttons">
+    <li class="btn-admin"><a href="<?php echo $this->url('admin/weather/images/add'); ?>"><?php echo $this->translate('Add a map image'); ?></a></li>
+</ul>
+<h2><?php echo $this->translate('Map Images') ?></h2>
+    <table id="app_codes">
+        <thead>
+            <tr>
+                <th><?php echo $this->translate('Name') ?></th>
+                <th><?php echo $this->translate('Country') ?></th>
+                <th><?php echo $this->translate('Description') ?></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach($this->imageMaps as $imageMap):?>
+            <tr>
+                <td><?php echo $imageMap->getName(); ?></td>
+                <td><?php echo $imageMap->getCountry(); ?></td>
+                <td><?php echo $imageMap->getDescription(); ?></td>
+                <td></td>
+                <?php $deleteLink = $this->url('admin/weather/images/remove', array('imageMapId' => $imageMap->getId()));?>
+                <?php $editLink = $this->url('admin/weather/images/edit', array('imageMapId' => $imageMap->getId()));?>
+                <td><a href='<?php echo $editLink ?>'><?php echo $this->translate('Edit'); ?></a></td>
+                <td><a href='<?php echo $deleteLink ?>'><?php echo $this->translate('Remove'); ?></a></td>
+            </tr>
+        <?php endforeach;?>
+        </tbody>
+    </table>
+<ul class="liste-buttons">
+    <li class="btn-admin"><a href="<?php echo $this->url('admin/weather/images/add'); ?>"><?php echo $this->translate('Add a map image'); ?></a></li>
+</ul>

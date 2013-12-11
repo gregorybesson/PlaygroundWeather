@@ -65,7 +65,7 @@ class Code extends EventProvider implements ServiceManagerAwareInterface
         if (!empty($data['icon']['tmp_name'])) {
             $oldIconURL = $code->getIconURL();
             ErrorHandler::start();
-            $data['icon']['name'] = $codeId . "-" . $data['icon']['name'];
+            $data['icon']['name'] = 'code-icon-' . $codeId . "-" . $data['icon']['name'];
             move_uploaded_file($data['icon']['tmp_name'], $path . $data['icon']['name']);
             $code->setIconURl($media_url . $data['icon']['name']);
             ErrorHandler::stop(true);

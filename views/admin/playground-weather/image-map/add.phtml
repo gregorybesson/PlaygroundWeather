@@ -17,6 +17,10 @@
         <?php echo $this->formInput($form->get('name')); ?>
     </div>
     <div class="label-input">
+        <?php echo $this->formLabel($form->get('description')); ?>
+        <?php echo $this->formInput($form->get('description')); ?>
+    </div>
+    <div class="label-input">
         <?php echo $this->formLabel($form->get('country')); ?>
         <?php echo $this->formSelect($form->get('country')); ?>
     </div>
@@ -28,10 +32,10 @@
         <?php echo $this->formHidden($form->get('id')); ?>
     </div>
     <div class="label-input">
-        <?php echo $this->formHidden($form->get('width')); ?>
+        <?php echo $this->formHidden($form->get('imageWidth')); ?>
     </div>
     <div class="label-input">
-        <?php echo $this->formHidden($form->get('height')); ?>
+        <?php echo $this->formHidden($form->get('imageHeight')); ?>
     </div>
     <div class="label-input" style="float:left;">
         <?php echo $this->formLabel($form->get('topLeftLatitude')); ?>

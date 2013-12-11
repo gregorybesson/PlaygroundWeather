@@ -63,7 +63,7 @@ class ImageMap extends ProvidesEventsForm
             'type' => 'Zend\Form\Element\Select',
             'name' => 'country',
             'options' => array(
-                'value_options' => Location::$countries,
+                'value_options' => $this->getCountries(),
                 'label' => $translator->translate('Country', 'playgroundweather')
             )
         ));
@@ -86,7 +86,7 @@ class ImageMap extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'name' => 'width',
+            'name' => 'imageWidth',
             'type' => 'Zend\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
@@ -94,7 +94,7 @@ class ImageMap extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'name' => 'height',
+            'name' => 'imageHeight',
             'type' => 'Zend\Form\Element\Hidden',
             'attributes' => array(
                 'value' => 0,
@@ -157,6 +157,15 @@ class ImageMap extends ProvidesEventsForm
         $this->add($submitElement, array(
             'priority' => -100,
         ));
+    }
+
+    public function getCountries()
+    {
+        $countries = array();
+        foreach (Location::$countries as $country) {
+            $countries[$country] = $country;
+        }
+        return $countries;
     }
 
     /**

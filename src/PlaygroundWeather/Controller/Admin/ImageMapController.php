@@ -3,7 +3,13 @@ namespace PlaygroundWeather\Controller\Admin;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+
+use Zend\Paginator\Paginator;
+use PlaygroundCore\ORM\Pagination\LargeTablePaginator;
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
+
 use PlaygroundWeather\Service\ImageMap as ImageMapService;
+use PlaygroundWeather\Entity\ImageMap;
 
 class ImageMapController extends AbstractActionController
 {
@@ -17,6 +23,8 @@ class ImageMapController extends AbstractActionController
         $form = $this->getServiceLocator()->get('playgroundweather_imagemap_form');
         $form->get('submit')->setLabel("Créer");
         $form->setAttribute('action', '');
+        $imageMap = new ImageMap();
+        $form->bind($imageMap);
         if ($this->getRequest()->isPost()) {
             $data = array_replace_recursive(
                 $this->getRequest()->getPost()->toArray(),
@@ -47,7 +55,39 @@ class ImageMapController extends AbstractActionController
 
     public function editAction()
     {
+        $imageMapId = $this->getEvent()->getRouteMatch()->getParam('imageMapId');
+        if (!$imageMapId) {
+            return $this->redirect()->toRoute('admin/weather/images');
+        }
+        $imageMap = $this->getImageMapService()->getImageMapMapper()->findById($imageMapId);
+
+        $form = $this->getServiceLocator()->get('playgroundweather_imagemap_form');
+        $form->get('submit')->setLabel("Modifier");
+        $form->setAttribute('action', '');
+        $form->bind($imageMap);
+
+        if ($this->getRequest()->isPost()) {
+            $data = array_replace_recursive(
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
+            );
+
+            $form->setData($data);
+            if ($form->isValid()) {
+                $imageMap = $this->getImageMapService()->create($form->getData());
+                if ($imageMap) {
+                    return $this->redirect()->toRoute('admin/weather/images');
+                }
+            } else {
+                foreach ($form->getMessages() as $field => $errMsg) {
+                    $this->flashMessenger()->addMessage($field . ' - ' . current($errMsg));
+                }
+                return $this->redirect()->toRoute('admin/weather/images/add');
+            }
+        }
+
         $viewModel = new ViewModel();
+        $viewModel->setTemplate('playground-weather/image-map/add');
         $viewModel->setVariables(
             array(
                 'form' => $form,
@@ -76,7 +116,7 @@ class ImageMapController extends AbstractActionController
     {
         $adapter = new DoctrineAdapter(
             new LargeTablePaginator(
-                $this->getImageMapService()->getWeatherImageMapMapper()->queryAll(array('country' => 'ASC'))
+                $this->getImageMapService()->getImageMapMapper()->queryAll(array('country' => 'ASC'))
             )
         );
         $paginator = new Paginator($adapter);

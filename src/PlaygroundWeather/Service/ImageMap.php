@@ -38,59 +38,60 @@ class ImageMap extends EventProvider implements ServiceManagerAwareInterface
         return $this->update($imageMap->getId(), $data);
     }
 
-    public function edit($imageMap, array $data)
+    public function edit($imageMapId, array $data)
     {
         // find by Id the corresponding imageMap
-        $imageMap = $this->getImageMapMapper()->findById($imageMap);
+        $imageMap = $this->getImageMapMapper()->findById($imageMapId);
         if (!$imageMap) {
             return false;
         }
         return $this->update($imageMap->getId(), $data);
     }
 
-    public function update($codeId, array $data)
+    public function update($imageMapId, array $data)
     {
-        $code = $this->getImageMapMapper()->findById($codeId);
-        $code->populate($data);
-        $associatedCode = null;
-        // handle association with an other code
-        if (isset($data['associatedCode'])) {
-            $associatedCode = $this->getImageMapMapper()->findById($data['associatedCode']);
-        }
+        $imageMap = $this->getImageMapMapper()->findById($imageMapId);
 
-        // Handle Icon loading
-        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
-        $media_url = $this->getOptions()->getMediaUrl() . '/';
-
-        if (!empty($data['icon']['tmp_name'])) {
-            $oldIconURL = $code->getIconURL();
-            ErrorHandler::start();
-            $data['icon']['name'] = $codeId . "-" . $data['icon']['name'];
-            move_uploaded_file($data['icon']['tmp_name'], $path . $data['icon']['name']);
-            $code->setIconURl($media_url . $data['icon']['name']);
-            ErrorHandler::stop(true);
-            if ($oldIconURL) {
-                $real_media_path = realpath($path) . DIRECTORY_SEPARATOR;
-                unlink(str_replace($media_url, $real_media_path,$oldIconURL));
-            }
-        }
-        $code->setAssociatedCode($associatedCode);
-        $this->getImageMapMapper()->update($code);
-
-        return $code;
-    }
-
-    public function remove($codeId) {
-        $imageMapMapper = $this->getImageMapMapper();
-        $imageMap = $imageMapMapper->findById($codeId);
-        if (!$imageMap) {
-            return false;
-        }
-        if ($imageMap->getIconURL()) {
+        // Handle Image upload
+        if (!empty($data['image']['tmp_name'])) {
             $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
             $real_media_path = realpath($path) . DIRECTORY_SEPARATOR;
             $media_url = $this->getOptions()->getMediaUrl() . '/';
-            unlink(str_replace($media_url, $real_media_path, $imageMap->getIconURL()));
+
+            $oldImageURL = $imageMap->getImageURL();
+            ErrorHandler::start();
+            $data['image']['name'] = 'image-map-' . $imageMapId . "-" . $data['image']['name'];
+            move_uploaded_file($data['image']['tmp_name'], $path . $data['image']['name']);
+            $imageMap->setImageURl($media_url . $data['image']['name']);
+            ErrorHandler::stop(true);
+
+            $size = getimagesize(str_replace($media_url, $real_media_path, $imageMap->getImageURl()));
+            $data['imageWidth'] = current($size);
+            $data['imageHeight'] = next($size);
+
+            if ($oldImageURL) {
+                $real_media_path = realpath($path) . DIRECTORY_SEPARATOR;
+                unlink(str_replace($media_url, $real_media_path, $oldImageURL));
+            }
+        }
+
+        $imageMap->populate($data);
+        $this->getImageMapMapper()->update($imageMap);
+
+        return $imageMap;
+    }
+
+    public function remove($imageMapId) {
+        $imageMapMapper = $this->getImageMapMapper();
+        $imageMap = $imageMapMapper->findById($imageMapId);
+        if (!$imageMap) {
+            return false;
+        }
+        if ($imageMap->getImageURL()) {
+            $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
+            $real_media_path = realpath($path) . DIRECTORY_SEPARATOR;
+            $media_url = $this->getOptions()->getMediaUrl() . '/';
+            unlink(str_replace($media_url, $real_media_path, $imageMap->getImageURL()));
         }
         $imageMapMapper->remove($imageMap);
         return true;
