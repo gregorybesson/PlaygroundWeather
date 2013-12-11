@@ -2,33 +2,33 @@
 namespace PlaygroundWeather\Controller\Admin;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use PlaygroundWeather\Service\WeatherLocation as WeatherLocationService;
+use PlaygroundWeather\Service\Location as LocationService;
 use Zend\View\Model\ViewModel;
 use DateTime;
 
 class AdminController extends AbstractActionController
 {
     /**
-     * @var WeatherLocationService
+     * @var LocationService
      */
-    protected $weatherLocationService;
+    protected $locationService;
 
     public function adminAction()
     {
         return new ViewModel(array());
     }
 
-    public function getWeatherLocationService()
+    public function getLocationService()
     {
-        if ($this->weatherLocationService === null) {
-            $this->weatherLocationService = $this->getServiceLocator()->get('playgroundweather_weatherlocation_service');
+        if ($this->locationService === null) {
+            $this->locationService = $this->getServiceLocator()->get('playgroundweather_location_service');
         }
-        return $this->weatherLocationService;
+        return $this->locationService;
     }
 
-    public function setWeatherLocationService($weatherLocationService)
+    public function setLocationService($locationService)
     {
-        $this->weatherLocationService = $weatherLocationService;
+        $this->locationService = $locationService;
 
         return $this;
     }

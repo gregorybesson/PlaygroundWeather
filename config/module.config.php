@@ -37,17 +37,17 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'playgroundweather_controller'          => 'PlaygroundWeather\Controller\Frontend\PlaygroundWeatherController',
-            'weatheroccurrence_controller'          => 'PlaygroundWeather\Controller\Frontend\WeatherOccurrenceController',
-            'playgroundweather_admin_controller'    => 'PlaygroundWeather\Controller\Admin\AdminController',
-            'weathercode_admin_controller'          => 'PlaygroundWeather\Controller\Admin\WeatherCodeController',
-            'weatherlocation_admin_controller'      => 'PlaygroundWeather\Controller\Admin\WeatherLocationController',
+            'webservice_controller'          => 'PlaygroundWeather\Controller\Frontend\WebServiceController',
+            'admin_controller'    => 'PlaygroundWeather\Controller\Admin\AdminController',
+            'code_admin_controller'          => 'PlaygroundWeather\Controller\Admin\CodeController',
+            'location_admin_controller'      => 'PlaygroundWeather\Controller\Admin\LocationController',
+            'imagemap_admin_controller'      => 'PlaygroundWeather\Controller\Admin\ImageMapController',
         ),
     ),
     'view_helpers' => array(
         'invokables' => array(
-            'weatherTableWidget' => 'PlaygroundWeather\View\Helper\WeatherTableWidget',
-            'weatherImageWidget' => 'PlaygroundWeather\View\Helper\WeatherImageWidget',
+            'weatherTableWidget' => 'PlaygroundWeather\View\Helper\TableWidget',
+            'weatherImageWidget' => 'PlaygroundWeather\View\Helper\ImageWidget',
         ),
     ),
     'router' => array(
@@ -59,7 +59,7 @@ return array(
                         'options' => array(
                             'route' => '/weather',
                             'defaults' => array(
-                                'controller' => 'playgroundweather_admin_controller',
+                                'controller' => 'admin_controller',
                                 'action' => 'admin',
                             ),
                         ),
@@ -70,7 +70,7 @@ return array(
                                 'options' => array(
                                     'route' => '/codes',
                                     'defaults' => array(
-                                        'controller' => 'weathercode_admin_controller',
+                                        'controller' => 'code_admin_controller',
                                         'action' => 'associate',
                                     ),
                                 ),
@@ -81,7 +81,7 @@ return array(
                                         'options' => array(
                                             'route' => '/add',
                                             'defaults' => array(
-                                                'controller' => 'weathercode_admin_controller',
+                                                'controller' => 'code_admin_controller',
                                                 'action' => 'add',
                                             ),
                                         ),
@@ -91,7 +91,7 @@ return array(
                                         'options' => array(
                                             'route' => '/list',
                                             'defaults' => array(
-                                                'controller' => 'weathercode_admin_controller',
+                                                'controller' => 'code_admin_controller',
                                                 'action' => 'associate',
                                             ),
                                         ),
@@ -101,7 +101,7 @@ return array(
                                         'options' => array(
                                             'route' => '/import',
                                             'defaults' => array(
-                                                'controller' => 'weathercode_admin_controller',
+                                                'controller' => 'code_admin_controller',
                                                 'action' => 'import',
                                             ),
                                         ),
@@ -114,7 +114,7 @@ return array(
                                                 ':codeId' => '[0-9]+',
                                             ),
                                             'defaults' => array(
-                                                'controller' => 'weathercode_admin_controller',
+                                                'controller' => 'code_admin_controller',
                                                 'action' => 'remove',
                                                 'codeId' => 0,
                                             ),
@@ -128,7 +128,7 @@ return array(
                                                 ':codeId' => '[0-9]+',
                                             ),
                                             'defaults' => array(
-                                                'controller' => 'weathercode_admin_controller',
+                                                'controller' => 'code_admin_controller',
                                                 'action' => 'edit',
                                                 'codeId' => 0,
                                             ),
@@ -142,7 +142,7 @@ return array(
                                 'options' => array(
                                     'route' => '/locations',
                                     'defaults' => array(
-                                        'controller' => 'weatherlocation_admin_controller',
+                                        'controller' => 'location_admin_controller',
                                         'action' => 'list',
                                     ),
                                 ),
@@ -153,7 +153,7 @@ return array(
                                         'options' => array(
                                             'route' => '/add',
                                             'defaults' => array(
-                                                'controller' => 'weatherlocation_admin_controller',
+                                                'controller' => 'location_admin_controller',
                                                 'action' => 'add',
                                             ),
                                         ),
@@ -163,7 +163,7 @@ return array(
                                         'options' => array(
                                             'route' => '/list',
                                             'defaults' => array(
-                                                'controller' => 'weatherlocation_admin_controller',
+                                                'controller' => 'location_admin_controller',
                                                 'action' => 'list',
                                             ),
                                         ),
@@ -180,7 +180,7 @@ return array(
                                                 ':longitude' => '[0-9]{1-3}[0-9]+',
                                             ),
                                             'defaults' => array(
-                                                'controller' => 'weatherlocation_admin_controller',
+                                                'controller' => 'location_admin_controller',
                                                 'action' => 'create',
                                             ),
                                         ),
@@ -193,13 +193,74 @@ return array(
                                                 ':locationId' => '[0-9]+',
                                             ),
                                             'defaults' => array(
-                                                'controller' => 'weatherlocation_admin_controller',
+                                                'controller' => 'location_admin_controller',
                                                 'action' => 'remove',
                                             ),
                                         ),
                                     ),
                                 ),
                             ),
+
+                            'images' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/images',
+                                    'defaults' => array(
+                                        'controller' => 'imagemap_admin_controller',
+                                        'action' => 'list',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'add' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
+                                            'route' => '/add',
+                                            'defaults' => array(
+                                                'controller' => 'imagemap_admin_controller',
+                                                'action' => 'add',
+                                            ),
+                                        ),
+                                    ),
+                                    'edit' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/edit/:imageMapId',
+                                            'constraints' => array(
+                                                ':imageMapId' => '[0-9]+',
+                                            ),
+                                            'defaults' => array(
+                                                'controller' => 'imagemap_admin_controller',
+                                                'action' => 'edit',
+                                            ),
+                                        ),
+                                    ),
+                                    'list' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
+                                            'route' => '/list',
+                                            'defaults' => array(
+                                                'controller' => 'imagemap_admin_controller',
+                                                'action' => 'list',
+                                            ),
+                                        ),
+                                    ),
+                                    'remove' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/remove/:imageMapId',
+                                            'constraints' => array(
+                                                ':imageMapId' => '[0-9]+',
+                                            ),
+                                            'defaults' => array(
+                                                'controller' => 'imagemap_admin_controller',
+                                                'action' => 'remove',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+
                         ),
                     ),
                 ),
@@ -220,7 +281,7 @@ return array(
                                 ':end' => '[0-9]{4}\-[0-9]{2}\-[0-9]{2}',
                             ),
                             'defaults' => array(
-                                'controller' => 'weatheroccurrence_controller',
+                                'controller' => 'webservice_controller',
                             ),
                         ),
                     ),
