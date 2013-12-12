@@ -56,24 +56,44 @@ class ImageMap implements InputFilterAwareInterface
     protected $imageHeight;
 
     /**
-     * @ORM\Column(name="top_right_latitude", type="decimal",  precision=8, scale=5)
+     * @ORM\Column(name="latitude1", type="decimal",  precision=8, scale=5)
      */
-    protected $topLeftLatitude;
+    protected $latitude1;
 
     /**
-     * @ORM\Column(name="top_right_longitude", type="decimal",  precision=8, scale=5)
+     * @ORM\Column(name="longitude1", type="decimal",  precision=8, scale=5)
      */
-    protected $topLeftLongitude;
+    protected $longitude1;
 
     /**
-     * @ORM\Column(name="bottom_left_latitude", type="decimal",  precision=8, scale=5)
+     * @ORM\Column(name="$ptx1", type="int")
      */
-    protected $bottomRightLatitude;
+    protected $ptX1;
 
     /**
-     * @ORM\Column(name="bottom_left_longitude", type="decimal", precision=8, scale=5)
+     * @ORM\Column(name="pty1", type="int")
      */
-    protected $bottomRightLongitude;
+    protected $ptY1;
+
+    /**
+     * @ORM\Column(name="latitude2", type="decimal",  precision=8, scale=5)
+     */
+    protected $latitude2;
+
+    /**
+     * @ORM\Column(name="longitude2", type="decimal", precision=8, scale=5)
+     */
+    protected $longitude2;
+
+    /**
+     * @ORM\Column(name="$ptx2", type="int")
+     */
+    protected $ptX2;
+
+    /**
+     * @ORM\Column(name="pty2", type="int")
+     */
+    protected $ptY2;
 
     /**
      * @param unknown $id

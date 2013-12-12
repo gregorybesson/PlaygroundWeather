@@ -102,51 +102,103 @@ class ImageMap extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'name' => 'topLeftLatitude',
+            'name' => 'latitude1',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => $translator->translate('Top left latitude', 'playgroundweather')
+                'label' => $translator->translate('latitude', 'playgroundweather')
             ),
             'attributes' => array(
                 'value' => 0,
+                'id' => 'latitude1',
             ),
         ));
 
 
         $this->add(array(
-            'name' => 'topLeftLongitude',
+            'name' => 'longitude1',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => $translator->translate('Top left longitude', 'playgroundweather')
+                'label' => $translator->translate('longitude', 'playgroundweather')
             ),
             'attributes' => array(
                 'value' => 0,
+                'id' => 'longitude1',
             ),
         ));
 
         $this->add(array(
-            'name' => 'bottomRightLatitude',
+            'name' => 'ptX1',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => $translator->translate('Bottom right latitude', 'playgroundweather')
+                'label' => $translator->translate('X', 'playgroundweather')
             ),
             'attributes' => array(
                 'value' => 0,
+                'id' => 'ptX1',
             ),
         ));
 
 
         $this->add(array(
-            'name' => 'bottomRightLongitude',
+            'name' => 'ptY1',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => $translator->translate('Bottom right longitude', 'playgroundweather')
+                'label' => $translator->translate('Y', 'playgroundweather')
             ),
             'attributes' => array(
                 'value' => 0,
+                'id' => 'ptY1',
             ),
         ));
 
+        $this->add(array(
+            'name' => 'latitude2',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => array(
+                'label' => $translator->translate('latitude', 'playgroundweather')
+            ),
+            'attributes' => array(
+                'value' => 0,
+                'id' => 'latitude2',
+            ),
+        ));
+
+
+        $this->add(array(
+            'name' => 'longitude2',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => array(
+                'label' => $translator->translate('longitude', 'playgroundweather')
+            ),
+            'attributes' => array(
+                'value' => 0,
+                'id' => 'longitude2',
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'ptX2',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => array(
+                'label' => $translator->translate('X', 'playgroundweather')
+            ),
+            'attributes' => array(
+                'value' => 0,
+                'id' => 'ptX2',
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'ptY2',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => array(
+                'label' => $translator->translate('Y', 'playgroundweather')
+            ),
+            'attributes' => array(
+                'value' => 0,
+                'id' => 'ptY2',
+            ),
+        ));
 
         $submitElement = new Element\Button('submit');
         $submitElement->setAttributes(array(
