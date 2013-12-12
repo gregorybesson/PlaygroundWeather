@@ -56,24 +56,44 @@ class ImageMap implements InputFilterAwareInterface
     protected $imageHeight;
 
     /**
-     * @ORM\Column(name="top_right_latitude", type="decimal",  precision=8, scale=5)
+     * @ORM\Column(name="latitude1", type="decimal",  precision=8, scale=5)
      */
-    protected $topLeftLatitude;
+    protected $latitude1;
 
     /**
-     * @ORM\Column(name="top_right_longitude", type="decimal",  precision=8, scale=5)
+     * @ORM\Column(name="longitude1", type="decimal",  precision=8, scale=5)
      */
-    protected $topLeftLongitude;
+    protected $longitude1;
 
     /**
-     * @ORM\Column(name="bottom_left_latitude", type="decimal",  precision=8, scale=5)
+     * @ORM\Column(name="$ptx1", type="integer")
      */
-    protected $bottomRightLatitude;
+    protected $ptX1;
 
     /**
-     * @ORM\Column(name="bottom_left_longitude", type="decimal", precision=8, scale=5)
+     * @ORM\Column(name="pty1", type="integer")
      */
-    protected $bottomRightLongitude;
+    protected $ptY1;
+
+    /**
+     * @ORM\Column(name="latitude2", type="decimal",  precision=8, scale=5)
+     */
+    protected $latitude2;
+
+    /**
+     * @ORM\Column(name="longitude2", type="decimal", precision=8, scale=5)
+     */
+    protected $longitude2;
+
+    /**
+     * @ORM\Column(name="$ptx2", type="integer")
+     */
+    protected $ptX2;
+
+    /**
+     * @ORM\Column(name="pty2", type="integer")
+     */
+    protected $ptY2;
 
     /**
      * @param unknown $id
@@ -296,11 +316,14 @@ class ImageMap implements InputFilterAwareInterface
         if (isset($data['country']) && $data['country'] != null) {
             $this->country = $data['country'];
         }
-        if (isset($data['width']) && $data['width'] != null) {
-            $this->width = $data['width'];
+        if (isset($data['description']) && $data['description'] != null) {
+            $this->description = $data['description'];
         }
-        if (isset($data['height']) && $data['height'] != null) {
-            $this->height = $data['height'];
+        if (isset($data['imageWidth']) && $data['imageWidth'] != null) {
+            $this->imageWidth = $data['imageWidth'];
+        }
+        if (isset($data['imageHeight']) && $data['imageHeight'] != null) {
+            $this->imageHeight = $data['imageHeight'];
         }
         if (isset($data['topLeftLatitude']) && $data['topLeftLatitude'] != null) {
             $this->topLeftLatitude = $data['topLeftLatitude'];
@@ -353,7 +376,6 @@ class ImageMap implements InputFilterAwareInterface
                     array('name' => 'NotEmpty',),
                 ),
             )));
-
             $inputFilter->add($factory->createInput(array(
                 'name' => 'country',
                 'required' => false,
@@ -373,7 +395,7 @@ class ImageMap implements InputFilterAwareInterface
                 ),
             )));
             $inputFilter->add($factory->createInput(array(
-                'name' => 'width',
+                'name' => 'imageWidth',
                 'required' => false,
                 'validators' => array(
                     array('name' => 'Int'),
@@ -381,7 +403,7 @@ class ImageMap implements InputFilterAwareInterface
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name' => 'height',
+                'name' => 'imageHeight',
                 'required' => false,
                 'validators' => array(
                     array('name' => 'Int'),

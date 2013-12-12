@@ -37,11 +37,16 @@ class ImageWidget extends AbstractHelper implements ServiceLocatorAwareInterface
 
     public function __invoke($params=array())
     {
-//         if (array_key_exists('mapImage', $params) && $params['mapImage'] instanceof MapImage) {
-//             $mapImage = $params['mapImage'];
-//         } else {
-//             $mapImage = null;
-//         }
+        if (array_key_exists('mapImage', $params) && $params['mapImage'] instanceof MapImage) {
+            $mapImage = $params['mapImage'];
+        } else {
+            $mapImage = null;
+        }
+        if (array_key_exists('date', $params) && $params['date'] instanceof DateTime) {
+            $date = $params['date'];
+        } else {
+            $date = new DateTime();
+        }
         if (array_key_exists('locations', $params) && is_array($params['locations'])) {
             $locations = $params['locations'];
         } else {

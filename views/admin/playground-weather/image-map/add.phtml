@@ -17,6 +17,10 @@
         <?php echo $this->formInput($form->get('name')); ?>
     </div>
     <div class="label-input">
+        <?php echo $this->formLabel($form->get('description')); ?>
+        <?php echo $this->formInput($form->get('description')); ?>
+    </div>
+    <div class="label-input">
         <?php echo $this->formLabel($form->get('country')); ?>
         <?php echo $this->formSelect($form->get('country')); ?>
     </div>
@@ -28,30 +32,50 @@
         <?php echo $this->formHidden($form->get('id')); ?>
     </div>
     <div class="label-input">
-        <?php echo $this->formHidden($form->get('width')); ?>
+        <?php echo $this->formHidden($form->get('imageWidth')); ?>
     </div>
     <div class="label-input">
-        <?php echo $this->formHidden($form->get('height')); ?>
+        <?php echo $this->formHidden($form->get('imageHeight')); ?>
     </div>
     <div class="label-input" style="float:left;">
-        <?php echo $this->formLabel($form->get('topLeftLatitude')); ?>
-        <?php echo $this->formInput($form->get('topLeftLatitude')); ?>
+        <?php echo $this->formLabel($form->get('ptX1')); ?>
+        <?php echo $this->formInput($form->get('ptX1')); ?>
     </div>
     <div class="label-input" style="float:left;">
-        <?php echo $this->formLabel($form->get('topLeftLongitude')); ?>
-        <?php echo $this->formInput($form->get('topLeftLongitude')); ?>
+        <?php echo $this->formLabel($form->get('ptY1')); ?>
+        <?php echo $this->formInput($form->get('ptY1')); ?>
+    </div>
+    <div class="label-input" style="float:left;">
+        <?php echo $this->formLabel($form->get('latitude1')); ?>
+        <?php echo $this->formInput($form->get('latitude1')); ?>
+    </div>
+    <div class="label-input" style="float:left;">
+        <?php echo $this->formLabel($form->get('longitude1')); ?>
+        <?php echo $this->formInput($form->get('longitude1')); ?>
+    </div>
+    <div class="label-input" style="float:left;">
+        <?php echo $this->formLabel($form->get('ptX2')); ?>
+        <?php echo $this->formInput($form->get('ptX2')); ?>
+    </div>
+    <div class="label-input" style="float:left;">
+        <?php echo $this->formLabel($form->get('ptY2')); ?>
+        <?php echo $this->formInput($form->get('ptY2')); ?>
+    </div>
+    <div class="label-input" style="float:left;">
+        <?php echo $this->formLabel($form->get('latitude2')); ?>
+        <?php echo $this->formInput($form->get('latitude2')); ?>
+    </div>
+    <div class="label-input" style="float:left;">
+        <?php echo $this->formLabel($form->get('longitude2')); ?>
+        <?php echo $this->formInput($form->get('longitude2')); ?>
     </div>
     <?php if($form->get('imageURL')->getValue() != ''):?>
         <img src="<?php echo $this->basePath($form->get('imageURL')->getValue()); ?>" />
     <?php endif;?>
 
-    <div class="label-input" style="clear:left; float:right;">
-        <?php echo $this->formLabel($form->get('bottomRightLatitude')); ?>
-        <?php echo $this->formInput($form->get('bottomRightLatitude')); ?>
-    </div>
-    <div class="label-input" style="float:right;">
-        <?php echo $this->formLabel($form->get('bottomRightLongitude')); ?>
-        <?php echo $this->formInput($form->get('bottomRightLongitude')); ?>
-    </div>
-
 <?php echo $this->form()->closeTag() ?>
+
+<script type="text/javascript">
+  var c = document.getElementById("map-image");
+  var ctx = c.getContext("2d");
+</script>
