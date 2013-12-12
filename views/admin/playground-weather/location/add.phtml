@@ -1,0 +1,69 @@
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundweather');// Pour le texte ?>
+    <?php
+    $form = $this->form;
+    $form->prepare();
+    ?>
+
+<h2><?php echo $this->translate('Ajouter un lieu'); ?></h2>
+<?php echo $this->form()->openTag($form) ?>
+    <p><?php echo $this->translate('Entrez une ville et un pays'); ?></p>
+    <div class="label-input">
+        <?php echo $this->formHidden($form->get('id')); ?>
+    </div>
+    <div class="label-input">
+        <?php echo $this->formLabel($form->get('city')); ?>
+        <?php echo $this->formInput($form->get('city')); ?>
+    </div>
+    <div class="label-input">
+        <?php echo $this->formLabel($form->get('country')); ?>
+        <?php echo $this->formInput($form->get('country')); ?>
+    </div>
+    <p><?php echo $this->translate('OU'); ?></p>
+    <div class="label-input">
+        <?php echo $this->formLabel($form->get('latitude')); ?>
+        <?php echo $this->formInput($form->get('latitude')); ?>
+    </div>
+    <div class="label-input">
+        <?php echo $this->formLabel($form->get('longitude')); ?>
+        <?php echo $this->formInput($form->get('longitude')); ?>
+    </div>
+
+    <?php echo $this->formButton($form->get('submit')); ?>
+<?php echo $this->form()->closeTag() ?>
+
+<?php  if ($this->locations) : ?>
+    <p><?php echo $this->translate('Sélectionnez le lieu correspondant à votre recherche : '); ?></p>
+    <table>
+        <thead>
+            <tr>
+                <th><?php echo $this->translate('Ville'); ?></th>
+                <th><?php echo $this->translate('Pays'); ?></th>
+                <th><?php echo $this->translate('Region'); ?></th>
+                <th><?php echo $this->translate('Latitude'); ?></th>
+                <th><?php echo $this->translate('Longitude'); ?></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    <?php  foreach ($locations as $location) : ?>
+        <tr>
+            <td><?php echo $location->getCity() ?></td>
+            <td><?php echo $location->getCountry() ?></td>
+            <td><?php echo $location->getRegion() ?></td>
+            <td><?php echo $location->getLatitude() ?></td>
+            <td><?php echo $location->getLongitude() ?></td>
+            <?php $createlink = $this->url('admin/weather/locations/create',
+                array(
+                    'city' => $location->getCity(),
+                    'country' => $location->getCountry(),
+                    'region' => $location->getRegion(),
+                    'latitude' => $location->getLatitude(),
+                    'longitude' => $location->getLongitude(),
+                ));
+            ?>
+            <td><a href="<?php echo $createlink; ?>"><?php echo $this->translate('Ajouter'); ?></a></td>
+        </tr>
+    <?php  endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>

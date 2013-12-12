@@ -1,0 +1,35 @@
+<ul class="liste-buttons">
+    <li class="btn-admin"><a href="<?php echo $this->url('admin/weather/locations/add'); ?>"><?php echo $this->translate('Ajouter un lieu'); ?></a></li>
+</ul>
+<h2><?php echo $this->translate('Lieux') ?></h2>
+    <table id="app_codes">
+        <thead>
+            <tr>
+                <th><?php echo $this->translate('Ville') ?></th>
+                <th><?php echo $this->translate('Pays') ?></th>
+                <th><?php echo $this->translate('Region') ?></th>
+                <th><?php echo $this->translate('Latitude') ?></th>
+                <th><?php echo $this->translate('Longitude') ?></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach($this->locations as $location):?>
+            <tr>
+                <td><?php echo $location->getCity(); ?></td>
+                <td><?php echo $location->getCountry(); ?></td>
+                <td><?php echo $location->getRegion(); ?></td>
+                <td><?php echo $location->getLatitude(); ?></td>
+                <td><?php echo $location->getLongitude(); ?></td>
+                <td></td>
+                <?php $deleteLink = $this->url('admin/weather/locations/remove', array('locationId' => $location->getId()));?>
+                <td><a href='<?php echo $deleteLink ?>'><?php echo $this->translate('Supprimer'); ?></a></td>
+            </tr>
+        <?php endforeach;?>
+        </tbody>
+    </table>
+<ul class="liste-buttons">
+    <li class="btn-admin"><a href="<?php echo $this->url('admin/weather/locations/add'); ?>"><?php echo $this->translate('Ajouter un lieu'); ?></a></li>
+</ul>
+
