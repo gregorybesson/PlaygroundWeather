@@ -6,7 +6,6 @@ use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\EventManager\EventProvider;
 use PlaygroundWeather\Entity\Code as CodeEntity;
-use PlaygroundCore\Filter\Slugify;
 use Zend\Stdlib\ErrorHandler;
 use PlaygroundWeather\Options\ModuleOptions;
 

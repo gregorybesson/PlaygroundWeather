@@ -66,12 +66,12 @@ class ImageMap implements InputFilterAwareInterface
     protected $longitude1;
 
     /**
-     * @ORM\Column(name="$ptx1", type="int")
+     * @ORM\Column(name="$ptx1", type="integer")
      */
     protected $ptX1;
 
     /**
-     * @ORM\Column(name="pty1", type="int")
+     * @ORM\Column(name="pty1", type="integer")
      */
     protected $ptY1;
 
@@ -86,12 +86,12 @@ class ImageMap implements InputFilterAwareInterface
     protected $longitude2;
 
     /**
-     * @ORM\Column(name="$ptx2", type="int")
+     * @ORM\Column(name="$ptx2", type="integer")
      */
     protected $ptX2;
 
     /**
-     * @ORM\Column(name="pty2", type="int")
+     * @ORM\Column(name="pty2", type="integer")
      */
     protected $ptY2;
 

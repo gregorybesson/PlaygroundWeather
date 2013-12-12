@@ -73,18 +73,6 @@
         <img src="<?php echo $this->basePath($form->get('imageURL')->getValue()); ?>" />
     <?php endif;?>
 
-    <div class="label-input" style="clear:left; float:right;">
-        <?php echo $this->formLabel($form->get('bottomRightLatitude')); ?>
-        <?php echo $this->formInput($form->get('bottomRightLatitude')); ?>
-    </div>
-    <div class="label-input" style="float:right;">
-        <?php echo $this->formLabel($form->get('bottomRightLongitude')); ?>
-        <?php echo $this->formInput($form->get('bottomRightLongitude')); ?>
-    </div>
-    <canvas id="map-image" width="" height="">
-
-    </canvas>
-
 <?php echo $this->form()->closeTag() ?>
 
 <script type="text/javascript">
