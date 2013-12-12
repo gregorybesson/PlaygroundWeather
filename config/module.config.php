@@ -289,4 +289,34 @@ return array(
             ),
         ),
     ),
+    'navigation' => array(
+        'admin' => array(
+            'playgroundweather' => array(
+                'label' => 'Weather',
+                'route' => 'admin/weather',
+                'resource' => 'user',
+                'privilege' => 'list',
+                'pages' => array(
+                    'list-locations' => array(
+                        'label' => 'Locations',
+                        'route' => 'admin/weather/locations',
+                        'resource' => 'weather',
+                        'privilege' => 'list',
+                    ),
+                    'list-codes' => array(
+                        'label' => 'Codes',
+                        'route' => 'admin/weather/codes',
+                        'resource' => 'weather',
+                        'privilege' => 'list',
+                    ),
+                    'list' => array(
+                        'label' => 'Image Maps',
+                        'route' => 'admin/weather/images',
+                        'resource' => 'user',
+                        'privilege' => 'list',
+                    ),
+                ),
+            ),
+        ),
+    ),
 );
