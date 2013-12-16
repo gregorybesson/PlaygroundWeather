@@ -17,7 +17,7 @@
                 <td class="symbol">
                     <?php $code = $day['code']; ?>
                     <span><?php echo $code['code']; ?> | <?php echo $code['description']; ?></span>
-                    <img src="<?php echo '../' . $code['iconURL']; ?>" alt="<?php echo $code['description']; ?>" />
+                    <img src="<?php echo $code['iconURL']; ?>" alt="<?php echo $code['description']; ?>" />
                 </td>
                 <?php foreach($day['times'] as $time) : ?>
                     <td class="time">
@@ -27,7 +27,7 @@
                     <td class="symbol">
                         <?php $code = $time['code']; ?>
                         <span><?php echo $code['code']; ?> | <?php echo $code['description']; ?></span>
-                        <img src="<?php echo '../' . $code['iconURL']; ?>" alt="<?php echo $code['description']; ?>" />
+                        <img src="<?php echo $code['iconURL']; ?>" alt="<?php echo $code['description']; ?>" />
                     </td>
                 <?php endforeach; ?>
             </tr>
