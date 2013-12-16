@@ -108,7 +108,7 @@ class Code extends EventProvider implements ServiceManagerAwareInterface
             if ($xmlContent) {
                 foreach ($xmlContent->condition as $code) {
                     $this->create(array(
-                        'code' => (int) $code->code,
+                        'value' => (int) $code->code,
                         'description' => (string) $code->description,
                         'isDefault' => 1,
                     ));
