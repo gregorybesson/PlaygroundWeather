@@ -192,7 +192,8 @@ class CodeController extends AbstractActionController
             }
             $form->setData($data);
             if ($form->isValid()) {
-                foreach ($form->getData()['codes'] as $codeData) {
+                $data = $form->getData();
+                foreach ($data['codes'] as $codeData) {
                     $this->getCodeService()->edit($codeData['id'], $codeData);
                 }
             } else {
