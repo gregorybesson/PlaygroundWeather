@@ -74,7 +74,7 @@ class ImageMapController extends AbstractActionController
 
             $form->setData($data);
             if ($form->isValid()) {
-                $imageMap = $this->getImageMapService()->create($form->getData());
+                $imageMap = $this->getImageMapService()->edit($form->getData());
                 if ($imageMap) {
                     return $this->redirect()->toRoute('admin/weather/images');
                 }

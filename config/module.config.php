@@ -37,11 +37,11 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'webservice_controller'          => 'PlaygroundWeather\Controller\Frontend\WebServiceController',
-            'admin_controller'    => 'PlaygroundWeather\Controller\Admin\AdminController',
-            'code_admin_controller'          => 'PlaygroundWeather\Controller\Admin\CodeController',
-            'location_admin_controller'      => 'PlaygroundWeather\Controller\Admin\LocationController',
-            'imagemap_admin_controller'      => 'PlaygroundWeather\Controller\Admin\ImageMapController',
+            'playgroundweather_webservice'             => 'PlaygroundWeather\Controller\Frontend\WebServiceController',
+            'playgroundweatheradmin'            => 'PlaygroundWeather\Controller\Admin\AdminController',
+            'playgroundweather_admin_code'      => 'PlaygroundWeather\Controller\Admin\CodeController',
+            'playgroundweather_admin_location'  => 'PlaygroundWeather\Controller\Admin\LocationController',
+            'playgroundweather_admin_imagemap'  => 'PlaygroundWeather\Controller\Admin\ImageMapController',
         ),
     ),
     'view_helpers' => array(
@@ -59,7 +59,7 @@ return array(
                         'options' => array(
                             'route' => '/weather',
                             'defaults' => array(
-                                'controller' => 'admin_controller',
+                                'controller' => 'playgroundweatheradmin',
                                 'action' => 'admin',
                             ),
                         ),
@@ -70,7 +70,7 @@ return array(
                                 'options' => array(
                                     'route' => '/codes',
                                     'defaults' => array(
-                                        'controller' => 'code_admin_controller',
+                                        'controller' => 'playgroundweather_admin_code',
                                         'action' => 'associate',
                                     ),
                                 ),
@@ -81,7 +81,7 @@ return array(
                                         'options' => array(
                                             'route' => '/add',
                                             'defaults' => array(
-                                                'controller' => 'code_admin_controller',
+                                                'controller' => 'playgroundweather_admin_code',
                                                 'action' => 'add',
                                             ),
                                         ),
@@ -91,7 +91,7 @@ return array(
                                         'options' => array(
                                             'route' => '/list',
                                             'defaults' => array(
-                                                'controller' => 'code_admin_controller',
+                                                'controller' => 'playgroundweather_admin_code',
                                                 'action' => 'associate',
                                             ),
                                         ),
@@ -101,7 +101,7 @@ return array(
                                         'options' => array(
                                             'route' => '/import',
                                             'defaults' => array(
-                                                'controller' => 'code_admin_controller',
+                                                'controller' => 'playgroundweather_admin_code',
                                                 'action' => 'import',
                                             ),
                                         ),
@@ -114,7 +114,7 @@ return array(
                                                 ':codeId' => '[0-9]+',
                                             ),
                                             'defaults' => array(
-                                                'controller' => 'code_admin_controller',
+                                                'controller' => 'playgroundweather_admin_code',
                                                 'action' => 'remove',
                                                 'codeId' => 0,
                                             ),
@@ -128,7 +128,7 @@ return array(
                                                 ':codeId' => '[0-9]+',
                                             ),
                                             'defaults' => array(
-                                                'controller' => 'code_admin_controller',
+                                                'controller' => 'playgroundweather_admin_code',
                                                 'action' => 'edit',
                                                 'codeId' => 0,
                                             ),
@@ -142,7 +142,7 @@ return array(
                                 'options' => array(
                                     'route' => '/locations',
                                     'defaults' => array(
-                                        'controller' => 'location_admin_controller',
+                                        'controller' => 'playgroundweather_admin_location',
                                         'action' => 'list',
                                     ),
                                 ),
@@ -153,7 +153,7 @@ return array(
                                         'options' => array(
                                             'route' => '/add',
                                             'defaults' => array(
-                                                'controller' => 'location_admin_controller',
+                                                'controller' => 'playgroundweather_admin_location',
                                                 'action' => 'add',
                                             ),
                                         ),
@@ -163,7 +163,7 @@ return array(
                                         'options' => array(
                                             'route' => '/list',
                                             'defaults' => array(
-                                                'controller' => 'location_admin_controller',
+                                                'controller' => 'playgroundweather_admin_location',
                                                 'action' => 'list',
                                             ),
                                         ),
@@ -180,7 +180,7 @@ return array(
                                                 ':longitude' => '[0-9]{1-3}[0-9]+',
                                             ),
                                             'defaults' => array(
-                                                'controller' => 'location_admin_controller',
+                                                'controller' => 'playgroundweather_admin_location',
                                                 'action' => 'create',
                                             ),
                                         ),
@@ -193,7 +193,7 @@ return array(
                                                 ':locationId' => '[0-9]+',
                                             ),
                                             'defaults' => array(
-                                                'controller' => 'location_admin_controller',
+                                                'controller' => 'playgroundweather_admin_location',
                                                 'action' => 'remove',
                                             ),
                                         ),
@@ -206,7 +206,7 @@ return array(
                                 'options' => array(
                                     'route' => '/images',
                                     'defaults' => array(
-                                        'controller' => 'imagemap_admin_controller',
+                                        'controller' => 'playgroundweather_admin_imagemap',
                                         'action' => 'list',
                                     ),
                                 ),
@@ -217,7 +217,7 @@ return array(
                                         'options' => array(
                                             'route' => '/add',
                                             'defaults' => array(
-                                                'controller' => 'imagemap_admin_controller',
+                                                'controller' => 'playgroundweather_admin_imagemap',
                                                 'action' => 'add',
                                             ),
                                         ),
@@ -230,7 +230,7 @@ return array(
                                                 ':imageMapId' => '[0-9]+',
                                             ),
                                             'defaults' => array(
-                                                'controller' => 'imagemap_admin_controller',
+                                                'controller' => 'playgroundweather_admin_imagemap',
                                                 'action' => 'edit',
                                             ),
                                         ),
@@ -240,7 +240,7 @@ return array(
                                         'options' => array(
                                             'route' => '/list',
                                             'defaults' => array(
-                                                'controller' => 'imagemap_admin_controller',
+                                                'controller' => 'playgroundweather_admin_imagemap',
                                                 'action' => 'list',
                                             ),
                                         ),
@@ -253,7 +253,7 @@ return array(
                                                 ':imageMapId' => '[0-9]+',
                                             ),
                                             'defaults' => array(
-                                                'controller' => 'imagemap_admin_controller',
+                                                'controller' => 'playgroundweather_admin_imagemap',
                                                 'action' => 'remove',
                                             ),
                                         ),
@@ -281,7 +281,7 @@ return array(
                                 ':end' => '[0-9]{4}\-[0-9]{2}\-[0-9]{2}',
                             ),
                             'defaults' => array(
-                                'controller' => 'webservice_controller',
+                                'controller' => 'playgroundweather_webservice',
                             ),
                         ),
                     ),

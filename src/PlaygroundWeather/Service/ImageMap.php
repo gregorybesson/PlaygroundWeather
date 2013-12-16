@@ -40,17 +40,16 @@ class ImageMap extends EventProvider implements ServiceManagerAwareInterface
 
     public function edit($imageMapId, array $data)
     {
+        return $this->update($imageMapId, $data);
+    }
+
+    public function update($imageMapId, array $data)
+    {
         // find by Id the corresponding imageMap
         $imageMap = $this->getImageMapMapper()->findById($imageMapId);
         if (!$imageMap) {
             return false;
         }
-        return $this->update($imageMap->getId(), $data);
-    }
-
-    public function update($imageMapId, array $data)
-    {
-        $imageMap = $this->getImageMapMapper()->findById($imageMapId);
 
         // Handle Image upload
         if (!empty($data['image']['tmp_name'])) {

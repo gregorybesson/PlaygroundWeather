@@ -60,7 +60,6 @@ class LocationController extends AbstractActionController
         return $this->redirect()->toRoute('admin/weather/locations/list');
     }
 
-
     public function removeAction()
     {
         $locationId = $this->getEvent()->getRouteMatch()->getParam('locationId');
