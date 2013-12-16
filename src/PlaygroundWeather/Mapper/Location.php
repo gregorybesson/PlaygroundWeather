@@ -2,6 +2,8 @@
 
 namespace PlaygroundWeather\Mapper;
 
+use Doctrine\ORM\AbstractQuery as Query;
+
 class Location
 {
     /**
@@ -37,9 +39,14 @@ class Location
         return $query;
     }
 
-    public function getDefaultLocation()
+    public function getDefaultLocation($sortArray = array())
     {
-        return $this->getEntityRepository()->findOne();
+        $query = $this->em->createQuery(
+            'SELECT l FROM PlaygroundWeather\Entity\Location l '
+            .( ! empty($sortArray) ? 'ORDER BY l.'.key($sortArray).' '.current($sortArray) : '' )
+        );
+        $query->setMaxResults(1);
+        return current($query->getResult(Query::HYDRATE_OBJECT));
     }
 
     public function findById($id)

@@ -28,7 +28,8 @@ class CodeController extends AbstractActionController
             }
             $form->setData($data);
             if ($form->isValid()) {
-                $code = $this->getCodeService()->create(current($form->getData()['codes']));
+                $data = $form->getData();
+                $code = $this->getCodeService()->create(current($data['codes']));
                 if ($code) {
                     return $this->redirect()->toRoute('admin/weather/codes/list');
                 }
@@ -81,7 +82,8 @@ class CodeController extends AbstractActionController
             }
             $form->setData($data);
             if ($form->isValid()) {
-                $code = $this->getCodeService()->edit($code->getId(), current($form->getData()['codes']));
+                $data = $form->getData();
+                $code = $this->getCodeService()->edit($code->getId(), current($data['codes']));
                 if ($code) {
                     return $this->redirect()->toRoute('admin/weather/codes/list');
                 }
@@ -192,7 +194,8 @@ class CodeController extends AbstractActionController
             }
             $form->setData($data);
             if ($form->isValid()) {
-                foreach ($form->getData()['codes'] as $codeData) {
+                $data = $form->getData();
+                foreach ($data['codes'] as $codeData) {
                     $this->getCodeService()->edit($codeData['id'], $codeData);
                 }
             } else {

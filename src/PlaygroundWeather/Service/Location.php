@@ -130,18 +130,6 @@ class Location extends EventProvider implements ServiceManagerAwareInterface
         return $location;
     }
 
-//     public function edit($id, $data = array())
-//     {
-//         $locationMapper = $this->getLocationMapper();
-//         $location = $locationMapper->findAll($id);
-//         if (!$location) {
-//             return false;
-//         }
-//         $location->populate($data);
-//         $location = $locationMapper->update($location);
-//         return true;
-//     }
-
     public function remove($id)
     {
         $locationMapper = $this->getLocationMapper();
