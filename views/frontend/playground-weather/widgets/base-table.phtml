@@ -15,9 +15,9 @@
                 <td class="min-temp"><?php echo $this->translate('Min');?> <?php echo $day['minTemperature']; ?>°C</td>
                 <td class="max-temp"><?php echo $this->translate('Max');?> <?php echo $day['maxTemperature']; ?>°C</td>
                 <td class="symbol">
-                    <?php $code = $day['weatherCode']; ?>
+                    <?php $code = $day['code']; ?>
                     <span><?php echo $code['code']; ?> | <?php echo $code['description']; ?></span>
-                    <img src="<?php echo '../' . $code['iconURL']; ?>" alt="<?php echo $code['description']; ?>" />
+                    <img src="<?php echo $code['iconURL']; ?>" alt="<?php echo $code['description']; ?>" />
                 </td>
                 <?php foreach($day['times'] as $time) : ?>
                     <td class="time">
@@ -25,9 +25,9 @@
                         <div><?php echo $time['temperature']; ?>°C</div>
                     </td>
                     <td class="symbol">
-                        <?php $code = $time['weatherCode']; ?>
+                        <?php $code = $time['code']; ?>
                         <span><?php echo $code['code']; ?> | <?php echo $code['description']; ?></span>
-                        <img src="<?php echo '../' . $code['iconURL']; ?>" alt="<?php echo $code['description']; ?>" />
+                        <img src="<?php echo $code['iconURL']; ?>" alt="<?php echo $code['description']; ?>" />
                     </td>
                 <?php endforeach; ?>
             </tr>

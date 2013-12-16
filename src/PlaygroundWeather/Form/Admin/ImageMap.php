@@ -8,7 +8,6 @@ use Zend\I18n\Translator\Translator;
 use Zend\ServiceManager\ServiceManager;
 use PlaygroundCore\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
-use PlaygroundWeather\Entity\WeatherImageMap as ImageMapEntity;
 use PlaygroundWeather\Entity\Location;
 
 class ImageMap extends ProvidesEventsForm

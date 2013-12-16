@@ -109,19 +109,7 @@ class DataUse extends EventProvider implements ServiceManagerAwareInterface
             'location' => $daily->getLocation()->getForJson(),
             'minTemperature' => $daily->getMinTemperature(),
             'maxTemperature' => $daily->getMaxTemperature(),
-            'code' => $this->getCodeAsArray($lastAssociatedCode),
-        );
-    }
-
-    public function getCodeAsArray($code)
-    {
-        $media_path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
-        $media_url = $this->getOptions()->getMediaUrl() . '/';
-        return array(
-            'id' => $code->getId(),
-            'code' => $code->getValue(),
-            'description' => $code->getDescription(),
-            'iconURL' => str_replace($media_url, $media_path, $code->getIconURL()),
+            'code' => $lastAssociatedCode->getForJson(),
         );
     }
 

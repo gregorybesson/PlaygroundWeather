@@ -39,17 +39,16 @@ class Code extends EventProvider implements ServiceManagerAwareInterface
 
     public function edit($codeId, array $data)
     {
+        return $this->update($codeId, $data);
+    }
+
+    public function update($codeId, array $data)
+    {
         // find by Id the corresponding code
         $code = $this->getCodeMapper()->findById($codeId);
         if (!$code) {
             return false;
         }
-        return $this->update($code->getId(), $data);
-    }
-
-    public function update($codeId, array $data)
-    {
-        $code = $this->getCodeMapper()->findById($codeId);
         $code->populate($data);
         $associatedCode = null;
         // handle association with an other code
@@ -109,7 +108,7 @@ class Code extends EventProvider implements ServiceManagerAwareInterface
             if ($xmlContent) {
                 foreach ($xmlContent->condition as $code) {
                     $this->create(array(
-                        'code' => (int) $code->code,
+                        'value' => (int) $code->code,
                         'description' => (string) $code->description,
                         'isDefault' => 1,
                     ));
