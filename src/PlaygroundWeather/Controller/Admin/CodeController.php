@@ -93,7 +93,7 @@ class CodeController extends AbstractActionController
                         $this->flashMessenger()->addMessage($field . ' - ' . current($msg));
                     }
                 }
-                return $this->redirect()->toRoute('admin/weather/codes/edit');
+                return $this->redirect()->toRoute('admin/weather/codes/edit', array('codeId' => $code->getId()));
             }
         }
 
