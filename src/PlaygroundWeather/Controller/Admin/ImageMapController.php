@@ -82,7 +82,7 @@ class ImageMapController extends AbstractActionController
                 foreach ($form->getMessages() as $field => $errMsg) {
                     $this->flashMessenger()->addMessage($field . ' - ' . current($errMsg));
                 }
-                return $this->redirect()->toRoute('admin/weather/images/add');
+                return $this->redirect()->toRoute('admin/weather/images/edit' array('imageMapId' => $imageMap->getId()));
             }
         }
 

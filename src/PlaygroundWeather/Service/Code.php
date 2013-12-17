@@ -103,6 +103,11 @@ class Code extends EventProvider implements ServiceManagerAwareInterface
             ErrorHandler::start();
             move_uploaded_file($fileData['tmp_name'], $path . $fileData['name']);
             ErrorHandler::stop(true);
+
+            if (!file_exists($real_media_path.$fileData['name'])) {
+                return false;
+            }
+
             $xmlContent = simplexml_load_file($real_media_path.$fileData['name']);
 
             if ($xmlContent) {

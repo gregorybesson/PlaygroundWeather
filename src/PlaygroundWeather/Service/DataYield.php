@@ -141,6 +141,9 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
 
     public function parseForecastsToObjects(Location $location, $xmlFileURL)
     {
+        if (!file_exists($xmlFileURL)) {
+            return false;
+        }
         $xmlContent = simplexml_load_file($xmlFileURL, null, LIBXML_NOCDATA);
         foreach ($xmlContent->weather as $daily) {
             $date = new Datetime((string) $daily->date);
