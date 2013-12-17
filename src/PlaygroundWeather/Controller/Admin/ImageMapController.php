@@ -33,7 +33,7 @@ class ImageMapController extends AbstractActionController
 
             $form->setData($data);
             if ($form->isValid()) {
-                $imageMap = $this->getImageMapService()->create($form->getData());
+                $imageMap = $this->getImageMapService()->create($data);
                 if ($imageMap) {
                     return $this->redirect()->toRoute('admin/weather/images');
                 }
@@ -66,15 +66,22 @@ class ImageMapController extends AbstractActionController
         $form->setAttribute('action', '');
         $form->bind($imageMap);
 
+        $locations = array();
+        if (!empty($imageMap->getLocations()->getValues())) {
+            foreach ($imageMap->getLocations()->getValues() as $location) {
+                $locations[] = $location->getId();
+            }
+        }
+        $form->get('locationsCheckboxes')->setValue($locations);
+
         if ($this->getRequest()->isPost()) {
             $data = array_replace_recursive(
                 $this->getRequest()->getPost()->toArray(),
                 $this->getRequest()->getFiles()->toArray()
             );
-
             $form->setData($data);
             if ($form->isValid()) {
-                $imageMap = $this->getImageMapService()->edit($form->getData());
+                $imageMap = $this->getImageMapService()->edit($imageMapId, $data);
                 if ($imageMap) {
                     return $this->redirect()->toRoute('admin/weather/images');
                 }
@@ -82,7 +89,7 @@ class ImageMapController extends AbstractActionController
                 foreach ($form->getMessages() as $field => $errMsg) {
                     $this->flashMessenger()->addMessage($field . ' - ' . current($errMsg));
                 }
-                return $this->redirect()->toRoute('admin/weather/images/edit' array('imageMapId' => $imageMap->getId()));
+                return $this->redirect()->toRoute('admin/weather/images/edit', array('imageMapId' => $imageMap->getId()));
             }
         }
 

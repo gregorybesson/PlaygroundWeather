@@ -1,1 +1,24 @@
-<p>Hello ! </p>
+<?php $this->plugin('translate')->setTranslatorTextDomain('playgroundweather');// Pour le texte ?>
+<?php $locale= $this->plugin('translate')->getTranslator()->getLocale(); ?>
+
+<?php if ($this->data['map']) :?>
+<div class="weather-image-map" >
+    <div style="
+        width:<?php echo $this->data['map']['width'];?>px;
+        height:<?php echo $this->data['map']['height'];?>px;
+        background:<?php echo 'url(\'' . $this->data['map']['url'] . '\') no-repeat center top' ;?>;
+        position:relative;" >
+     <?php foreach ($this->data['locations'] as $location) : ?>
+        <span class="<?php echo $location['location']->getCity(); ?>" style="
+            position:absolute;
+            top:<?php echo ($location['cooY']-15); ?>px;
+            left:<?php echo ($location['cooX']-15); ?>px;">
+            <img    src="<?php echo $location['weather']['code']['iconURL']; ?>"
+                    alt="<?php echo $location['location']->getCity(); ?> - <?php echo $location['weather']['code']['description']; ?>"
+                    width='30' height='30' />
+        </span>
+    <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+</div>
+

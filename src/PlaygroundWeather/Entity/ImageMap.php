@@ -4,6 +4,7 @@ namespace PlaygroundWeather\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\Common\Collections\ArrayCollection;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 use Zend\InputFilter\InputFilter;
@@ -41,6 +42,11 @@ class ImageMap implements InputFilterAwareInterface
     protected $country = '';
 
     /**
+     * @ORM\ManyToMany(targetEntity="Location", fetch="EXTRA_LAZY", cascade={"persist","remove"})
+     */
+    protected $locations = '';
+
+    /**
      * @ORM\Column(name="image_url", type="string")
      */
     protected $imageURL = '';
@@ -48,12 +54,12 @@ class ImageMap implements InputFilterAwareInterface
     /**
      * @ORM\Column(name="image_width", type="integer")
      */
-    protected $imageWidth;
+    protected $imageWidth=0;
 
     /**
      * @ORM\Column(name="image_height", type="integer")
      */
-    protected $imageHeight;
+    protected $imageHeight=0;
 
     /**
      * @ORM\Column(name="latitude1", type="decimal",  precision=8, scale=5)
@@ -66,7 +72,7 @@ class ImageMap implements InputFilterAwareInterface
     protected $longitude1;
 
     /**
-     * @ORM\Column(name="$ptx1", type="integer")
+     * @ORM\Column(name="ptx1", type="integer")
      */
     protected $ptX1;
 
@@ -86,7 +92,7 @@ class ImageMap implements InputFilterAwareInterface
     protected $longitude2;
 
     /**
-     * @ORM\Column(name="$ptx2", type="integer")
+     * @ORM\Column(name="ptx2", type="integer")
      */
     protected $ptX2;
 
@@ -94,6 +100,50 @@ class ImageMap implements InputFilterAwareInterface
      * @ORM\Column(name="pty2", type="integer")
      */
     protected $ptY2;
+
+    public function __construct()
+    {
+        $this->locations = new ArrayCollection();
+    }
+
+
+    /**
+     * @return the unknown_type
+     */
+    public function getLocations()
+    {
+        return $this->locations;
+    }
+
+    /**
+     * frm collection solution
+     * @param unknown_type $locations
+     */
+    public function setLocations(ArrayCollection $locations)
+    {
+        $this->locations = $locations;
+
+        return $this;
+    }
+
+    public function addLocations(ArrayCollection $locations)
+    {
+        foreach ($locations as $location) {
+            $this->locations->add($location);
+        }
+    }
+
+    public function removeLocations(ArrayCollection $locations)
+    {
+        foreach ($locations as $location) {
+            $this->locations->removeElement($location);
+        }
+    }
+
+    public function addLocation($location)
+    {
+        $this->locations[] = $location;
+    }
 
     /**
      * @param unknown $id
@@ -226,82 +276,93 @@ class ImageMap implements InputFilterAwareInterface
         return $this;
     }
 
-    /**
-     *
-     * @return the unknown_type
-     */
-    public function getTopLeftLatitude()
+    public function getLatitude1()
     {
-        return $this->topLeftLatitude;
+        return $this->latitude1;
     }
 
-    /**
-     *
-     * @param unknown_type $topLeftLatitude
-     */
-    public function setTopLeftLatitude($topLeftLatitude)
+    public function setLatitude1($latitude1)
     {
-        $this->topLeftLatitude = $topLeftLatitude;
+        $this->latitude1 = $latitude1;
         return $this;
     }
 
-    /**
-     *
-     * @return the unknown_type
-     */
-    public function getTopLeftLongitude()
+    public function getLongitude1()
     {
-        return $this->topLeftLongitude;
+        return $this->longitude1;
     }
 
-    /**
-     *
-     * @param unknown_type $topLeftLongitude
-     */
-    public function setTopLeftLongitude($topLeftLongitude)
+    public function setLongitude1($longitude1)
     {
-        $this->topLeftLongitude = $topLeftLongitude;
+        $this->longitude1 = $longitude1;
         return $this;
     }
 
-    /**
-     *
-     * @return the unknown_type
-     */
-    public function getBottomRightLatitude()
+    public function getPtX1()
     {
-        return $this->bottomRightLatitude;
+        return $this->ptX1;
     }
 
-    /**
-     *
-     * @param unknown_type $bottomRightLatitude
-     */
-    public function setBottomRightLatitude($bottomRightLatitude)
+    public function setPtX1($ptX1)
     {
-        $this->bottomRightLatitude = $bottomRightLatitude;
+        $this->ptX1 = $ptX1;
         return $this;
     }
 
-    /**
-     *
-     * @return the unknown_type
-     */
-    public function getBottomRightLongitude()
+    public function getPtY1()
     {
-        return $this->bottomRightLongitude;
+        return $this->ptY1;
     }
 
-    /**
-     *
-     * @param unknown_type $bottomRightLongitude
-     */
-    public function setBottomRightLongitude($bottomRightLongitude)
+    public function setPtY1($ptY1)
     {
-        $this->bottomRightLongitude = $bottomRightLongitude;
+        $this->ptY1 = $ptY1;
         return $this;
     }
 
+    public function getLatitude2()
+    {
+        return $this->latitude2;
+    }
+
+    public function setLatitude2($latitude2)
+    {
+        $this->latitude2 = $latitude2;
+        return $this;
+    }
+
+    public function getLongitude2()
+    {
+        return $this->longitude2;
+    }
+
+    public function setLongitude2($longitude2)
+    {
+        $this->longitude2 = $longitude2;
+        return $this;
+    }
+
+    public function getPtX2()
+    {
+        return $this->ptX2;
+    }
+
+    public function setPtX2($ptX2)
+    {
+        $this->ptX2 = $ptX2;
+        return $this;
+    }
+
+    public function getPtY2()
+    {
+        return $this->ptY2;
+    }
+
+    public function setPtY2($ptY2)
+    {
+        $this->ptY2 = $ptY2;
+        return $this;
+    }
 
     /**
      * Populate from an array.
@@ -325,17 +386,29 @@ class ImageMap implements InputFilterAwareInterface
         if (isset($data['imageHeight']) && $data['imageHeight'] != null) {
             $this->imageHeight = $data['imageHeight'];
         }
-        if (isset($data['topLeftLatitude']) && $data['topLeftLatitude'] != null) {
-            $this->topLeftLatitude = $data['topLeftLatitude'];
+        if (isset($data['latitude1']) && $data['latitude1'] != null) {
+            $this->latitude1 = $data['latitude1'];
         }
-        if (isset($data['topLeftLongitude']) && $data['topLeftLongitude'] != null) {
-            $this->topLeftLongitude = $data['topLeftLongitude'];
+        if (isset($data['latitude2']) && $data['latitude2'] != null) {
+            $this->latitude2 = $data['latitude2'];
         }
-        if (isset($data['bottomRightLatitude']) && $data['bottomRightLatitude'] != null) {
-            $this->bottomRightLatitude = $data['bottomRightLatitude'];
+        if (isset($data['longitude1']) && $data['longitude1'] != null) {
+            $this->longitude1 = $data['longitude1'];
         }
-        if (isset($data['bottomRightLongitude']) && $data['bottomRightLongitude'] != null) {
-            $this->bottomRightLongitude = $data['bottomRightLongitude'];
+        if (isset($data['longitude2']) && $data['longitude2'] != null) {
+            $this->longitude2 = $data['longitude2'];
+        }
+        if (isset($data['ptX1']) && $data['ptX1'] != null) {
+            $this->ptX1 = $data['ptX1'];
+        }
+        if (isset($data['ptX2']) && $data['ptX2'] != null) {
+            $this->ptX2 = $data['ptX2'];
+        }
+        if (isset($data['ptY1']) && $data['ptY1'] != null) {
+            $this->ptY1 = $data['ptY1'];
+        }
+        if (isset($data['ptY2']) && $data['ptY2'] != null) {
+            $this->ptY2 = $data['ptY2'];
         }
     }
 
@@ -408,8 +481,9 @@ class ImageMap implements InputFilterAwareInterface
                 'validators' => array(
                     array('name' => 'Int'),
                 ),
-            )));$inputFilter->add($factory->createInput(array(
-                'name' => 'topLeftLatitude',
+            )));
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'latitude1',
                 'required' => true,
                 'validators' => array(
                     array('name' => 'Float'),
@@ -417,14 +491,14 @@ class ImageMap implements InputFilterAwareInterface
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name' => 'topLeftLongitude',
+                'name' => 'longitude1',
                 'required' => true,
                 'validators' => array(
                     array('name' => 'Float'),
                 ),
             )));
             $inputFilter->add($factory->createInput(array(
-                'name' => 'bottomRightLatitude',
+                'name' => 'latitude2',
                 'required' => true,
                 'validators' => array(
                     array('name' => 'Float'),
@@ -432,10 +506,41 @@ class ImageMap implements InputFilterAwareInterface
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name' => 'bottomRightLongitude',
+                'name' => 'longitude2',
                 'required' => true,
                 'validators' => array(
                     array('name' => 'Float'),
+                ),
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'ptX1',
+                'required' => true,
+                'validators' => array(
+                    array('name' => 'Int'),
+                ),
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'ptY1',
+                'required' => true,
+                'validators' => array(
+                    array('name' => 'Int'),
+                ),
+            )));
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'ptX2',
+                'required' => true,
+                'validators' => array(
+                    array('name' => 'Int'),
+                ),
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'ptX2',
+                'required' => true,
+                'validators' => array(
+                    array('name' => 'Int'),
                 ),
             )));
 

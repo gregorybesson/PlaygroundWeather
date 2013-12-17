@@ -69,11 +69,18 @@
         <?php echo $this->formLabel($form->get('longitude2')); ?>
         <?php echo $this->formInput($form->get('longitude2')); ?>
     </div>
+    <p style="clear:both;"><?php echo $this->translate('Add locations for which you want to display weather on this map')?></p>
+    <div class="label-input">
+        <?php echo $this->formMultiCheckbox($form->get('locationsCheckboxes')); ?>
+    </div>
+<?php echo $this->form()->closeTag() ?>
     <?php if($form->get('imageURL')->getValue() != ''):?>
         <img src="<?php echo $this->basePath($form->get('imageURL')->getValue()); ?>" />
     <?php endif;?>
 
-<?php echo $this->form()->closeTag() ?>
+    <canvas id='map-image'>
+
+    </canvas>
 
 <script type="text/javascript">
   var c = document.getElementById("map-image");

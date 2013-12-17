@@ -7,11 +7,18 @@ use Zend\ServiceManager\ServiceManager;
 use ZfcBase\EventManager\EventProvider;
 use PlaygroundWeather\Entity\ImageMap as ImageMapEntity;
 use PlaygroundWeather\Mapper\ImageMap as ImageMapMapper;
+use PlaygroundWeather\Mapper\Location as LocationMapper;
 use Zend\Stdlib\ErrorHandler;
 use PlaygroundWeather\Options\ModuleOptions;
+use PlaygroundWeather\Entity\Location;
 
 class ImageMap extends EventProvider implements ServiceManagerAwareInterface
 {
+    /**
+     * @var LocationMapper
+     */
+    protected $locationMapper;
+
     /**
      * @var ImageMapMapper
      */
@@ -50,7 +57,6 @@ class ImageMap extends EventProvider implements ServiceManagerAwareInterface
         if (!$imageMap) {
             return false;
         }
-
         // Handle Image upload
         if (!empty($data['image']['tmp_name'])) {
             $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
@@ -74,13 +80,23 @@ class ImageMap extends EventProvider implements ServiceManagerAwareInterface
             }
         }
 
+        if (!empty($imageMap->getLocations()->getValues())) {
+            $imageMap->getLocations()->clear();
+        }
+        foreach ($data['locationsCheckboxes'] as $locationId) {
+            $location = $this->getLocationMapper()->findById($locationId);
+            if ($location) {
+                $imageMap->addLocation($location);
+            }
+        }
         $imageMap->populate($data);
         $this->getImageMapMapper()->update($imageMap);
 
         return $imageMap;
     }
 
-    public function remove($imageMapId) {
+    public function remove($imageMapId)
+    {
         $imageMapMapper = $this->getImageMapMapper();
         $imageMap = $imageMapMapper->findById($imageMapId);
         if (!$imageMap) {
@@ -96,6 +112,41 @@ class ImageMap extends EventProvider implements ServiceManagerAwareInterface
         return true;
     }
 
+    public function getMercatorCoordinates($lat, $lon)
+    {
+        $mercatorX = ((float) $lon + 180.0) / 360;
+        $mercatorY = ((float) $lat / 180.0 * pi());
+        $mercatorY = 0.5 - log( (1. + sin($mercatorY)) / (1. - sin($mercatorY))) / (4. * pi());
+        return array($mercatorX, $mercatorY);
+    }
+
+    public function getPosition($imageMap, $lat, $lon)
+    {
+        $coorPt1 = $this->getMercatorCoordinates($imageMap->getLatitude1(), $imageMap->getLongitude1());
+        $coorPt2 = $this->getMercatorCoordinates($lat, $lon);
+
+        $diffX = (float) (current($coorPt2) - current($coorPt1));
+        $diffY = (float) (end($coorPt2) - end($coorPt1));
+
+        $scale = $this->getScale($imageMap);
+
+        $coorX = round($diffX * $imageMap->getImageWidth() / current($scale));
+        $coorY = round($diffY * $imageMap->getImageHeight() / end($scale));
+
+        return array($coorX, $coorY);
+    }
+
+    public function getScale($imageMap)
+    {
+        $coorPt1 = $this->getMercatorCoordinates($imageMap->getLatitude1(), $imageMap->getLongitude1());
+        $coorPt2 = $this->getMercatorCoordinates($imageMap->getLatitude2(), $imageMap->getLongitude2());
+
+        $diffX = (float) (current($coorPt2) - current($coorPt1));
+        $diffY = (float) (end($coorPt2) - end($coorPt1));
+
+        return array($diffX, $diffY);
+    }
+
     public function getImageMapMapper()
     {
         if (null === $this->imageMapMapper) {
@@ -107,6 +158,20 @@ class ImageMap extends EventProvider implements ServiceManagerAwareInterface
     public function setImageMapMapper(ImageMapMapper $imageMapMapper)
     {
         $this->imageMapMapper = $imageMapMapper;
+        return $this;
+    }
+
+    public function getLocationMapper()
+    {
+        if (null === $this->locationMapper) {
+            $this->locationMapper = $this->getServiceManager()->get('playgroundweather_location_mapper');
+        }
+        return $this->locationMapper;
+    }
+
+    public function setLocationMapper(LocationMapper $locationMapper)
+    {
+        $this->locationMapper = $locationMapper;
         return $this;
     }
 

@@ -73,7 +73,8 @@ class ImageMap extends ProvidesEventsForm
                 'label' => $translator->translate('Image', 'playgroundweather')
             ),
             'attributes' => array(
-                'type' => 'file'
+                'type' => 'file',
+                'id'=> 'imageFile'
             )
         ));
         $this->add(array(
@@ -199,6 +200,16 @@ class ImageMap extends ProvidesEventsForm
             ),
         ));
 
+        $locations = $this->getLocations();
+        $this->add(array(
+            'name' => 'locationsCheckboxes',
+            'type' => 'Zend\Form\Element\MultiCheckbox',
+            'options' => array(
+                'label' => $translator->translate('Locations', 'playgroundweather'),
+                'value_options' => $locations,
+            ),
+        ));
+
         $submitElement = new Element\Button('submit');
         $submitElement->setAttributes(array(
             'type'  => 'submit',
@@ -217,6 +228,17 @@ class ImageMap extends ProvidesEventsForm
             $countries[$country] = $country;
         }
         return $countries;
+    }
+
+    public function getLocations()
+    {
+        $locations = array();
+        $locationMapper = $this->getServiceManager()->get('playgroundweather_location_mapper');
+        $results = $locationMapper->findAll(array('country'=>'ASC'));
+        foreach ($results as $result) {
+            $locations[$result->getId()] = $result->getCity() . ' (' . $result->getCountry() . ')';
+        }
+        return $locations;
     }
 
     /**

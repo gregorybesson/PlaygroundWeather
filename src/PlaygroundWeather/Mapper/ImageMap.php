@@ -2,6 +2,8 @@
 
 namespace PlaygroundWeather\Mapper;
 
+use Doctrine\ORM\AbstractQuery as Query;
+
 class ImageMap
 {
     /**
@@ -39,7 +41,12 @@ class ImageMap
 
     public function getDefault()
     {
-        return $this->getEntityRepository()->findOne();
+        $query = $this->em->createQuery(
+            'SELECT m FROM PlaygroundWeather\Entity\ImageMap AS m '
+            .( ! empty($sortArray) ? 'ORDER BY m.'.key($sortArray).' '.current($sortArray) : '' )
+        );
+        $query->setMaxResults(1);
+        return current($query->getResult(Query::HYDRATE_OBJECT));
     }
 
     public function findById($id)
@@ -80,4 +87,16 @@ class ImageMap
         $this->em->remove($entity);
         $this->em->flush();
     }
+
+//     public function findLocationsId($imageMap)
+//     {
+//         $query = $this->em->createQuery(
+//             'SELECT DISTINCT l.id FROM PlaygroundWeather\Entity\ImageMap AS m
+//                 JOIN m.locations AS l
+//                 WHERE m.id = :imageMapId '
+//             .( ! empty($sortArray) ? 'ORDER BY m.'.key($sortArray).' '.current($sortArray) : '' )
+//         );
+//         $query->setParameter('imageMapId', $imageMap->getId());
+//         return $query->getResult(Query::HYDRATE_SCALAR);
+//     }
 }
