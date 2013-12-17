@@ -72,16 +72,6 @@ class ImageMap implements InputFilterAwareInterface
     protected $longitude1;
 
     /**
-     * @ORM\Column(name="ptx1", type="integer")
-     */
-    protected $ptX1;
-
-    /**
-     * @ORM\Column(name="pty1", type="integer")
-     */
-    protected $ptY1;
-
-    /**
      * @ORM\Column(name="latitude2", type="decimal",  precision=8, scale=5)
      */
     protected $latitude2;
@@ -90,16 +80,6 @@ class ImageMap implements InputFilterAwareInterface
      * @ORM\Column(name="longitude2", type="decimal", precision=8, scale=5)
      */
     protected $longitude2;
-
-    /**
-     * @ORM\Column(name="ptx2", type="integer")
-     */
-    protected $ptX2;
-
-    /**
-     * @ORM\Column(name="pty2", type="integer")
-     */
-    protected $ptY2;
 
     public function __construct()
     {
@@ -287,39 +267,6 @@ class ImageMap implements InputFilterAwareInterface
         return $this;
     }
 
-    public function getLongitude1()
-    {
-        return $this->longitude1;
-    }
-
-    public function setLongitude1($longitude1)
-    {
-        $this->longitude1 = $longitude1;
-        return $this;
-    }
-
-    public function getPtX1()
-    {
-        return $this->ptX1;
-    }
-
-    public function setPtX1($ptX1)
-    {
-        $this->ptX1 = $ptX1;
-        return $this;
-    }
-
-    public function getPtY1()
-    {
-        return $this->ptY1;
-    }
-
-    public function setPtY1($ptY1)
-    {
-        $this->ptY1 = $ptY1;
-        return $this;
-    }
-
     public function getLatitude2()
     {
         return $this->latitude2;
@@ -331,6 +278,17 @@ class ImageMap implements InputFilterAwareInterface
         return $this;
     }
 
+    public function getLongitude1()
+    {
+        return $this->longitude1;
+    }
+
+    public function setLongitude1($longitude1)
+    {
+        $this->longitude1 = $longitude1;
+        return $this;
+    }
+
     public function getLongitude2()
     {
         return $this->longitude2;
@@ -339,28 +297,6 @@ class ImageMap implements InputFilterAwareInterface
     public function setLongitude2($longitude2)
     {
         $this->longitude2 = $longitude2;
-        return $this;
-    }
-
-    public function getPtX2()
-    {
-        return $this->ptX2;
-    }
-
-    public function setPtX2($ptX2)
-    {
-        $this->ptX2 = $ptX2;
-        return $this;
-    }
-
-    public function getPtY2()
-    {
-        return $this->ptY2;
-    }
-
-    public function setPtY2($ptY2)
-    {
-        $this->ptY2 = $ptY2;
         return $this;
     }
 
@@ -397,18 +333,6 @@ class ImageMap implements InputFilterAwareInterface
         }
         if (isset($data['longitude2']) && $data['longitude2'] != null) {
             $this->longitude2 = $data['longitude2'];
-        }
-        if (isset($data['ptX1']) && $data['ptX1'] != null) {
-            $this->ptX1 = $data['ptX1'];
-        }
-        if (isset($data['ptX2']) && $data['ptX2'] != null) {
-            $this->ptX2 = $data['ptX2'];
-        }
-        if (isset($data['ptY1']) && $data['ptY1'] != null) {
-            $this->ptY1 = $data['ptY1'];
-        }
-        if (isset($data['ptY2']) && $data['ptY2'] != null) {
-            $this->ptY2 = $data['ptY2'];
         }
     }
 
@@ -509,43 +433,15 @@ class ImageMap implements InputFilterAwareInterface
                 'name' => 'longitude2',
                 'required' => true,
                 'validators' => array(
-                    array('name' => 'Float'),
-                ),
-            )));
-
-            $inputFilter->add($factory->createInput(array(
-                'name' => 'ptX1',
-                'required' => true,
-                'validators' => array(
-                    array('name' => 'Int'),
-                ),
-            )));
-
-            $inputFilter->add($factory->createInput(array(
-                'name' => 'ptY1',
-                'required' => true,
-                'validators' => array(
-                    array('name' => 'Int'),
-                ),
-            )));
-            $inputFilter->add($factory->createInput(array(
-                'name' => 'ptX2',
-                'required' => true,
-                'validators' => array(
-                    array('name' => 'Int'),
-                ),
-            )));
-
-            $inputFilter->add($factory->createInput(array(
-                'name' => 'ptX2',
-                'required' => true,
-                'validators' => array(
-                    array('name' => 'Int'),
-                ),
+                    array(
+                        'name' => 'Float'
+                    )
+                )
             )));
 
             $this->inputFilter = $inputFilter;
         }
         return $this->inputFilter;
     }
+
 }
