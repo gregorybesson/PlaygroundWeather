@@ -121,7 +121,7 @@ class ImageMapController extends AbstractActionController
     {
         $adapter = new DoctrineAdapter(
             new LargeTablePaginator(
-                $this->getImageMapService()->getImageMapMapper()->queryAll(array('country' => 'ASC'))
+                $this->getImageMapService()->getImageMapMapper()->queryAll(array('name' => 'ASC'))
             )
         );
         $paginator = new Paginator($adapter);

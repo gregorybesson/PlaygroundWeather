@@ -59,15 +59,6 @@ class ImageMap extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'type' => 'Zend\Form\Element\Select',
-            'name' => 'country',
-            'options' => array(
-                'value_options' => $this->getCountries(),
-                'label' => $translator->translate('Country', 'playgroundweather')
-            )
-        ));
-
-        $this->add(array(
             'name' => 'image',
             'options' => array(
                 'label' => $translator->translate('Image', 'playgroundweather')
@@ -170,15 +161,6 @@ class ImageMap extends ProvidesEventsForm
         $this->add($submitElement, array(
             'priority' => -100,
         ));
-    }
-
-    public function getCountries()
-    {
-        $countries = array();
-        foreach (Location::$countries as $country) {
-            $countries[$country] = $country;
-        }
-        return $countries;
     }
 
     public function getLocations()

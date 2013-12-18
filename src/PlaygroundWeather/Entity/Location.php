@@ -20,10 +20,6 @@ class Location implements InputFilterAwareInterface
 {
     protected $inputFilter;
 
-    public static $countries = array(
-    	'france',
-    );
-
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -198,12 +194,6 @@ class Location implements InputFilterAwareInterface
                 ),
                 'validators' => array(
                     array('name' => 'StringLength', 'options' => array('min'=>1, 'max' => 255)),
-                    array(
-                        'name' => 'InArray',
-                        'options' => array(
-                            'haystack' => self::$countries,
-                        ),
-                    ),
                 ),
             )));
 
