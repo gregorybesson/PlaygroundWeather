@@ -96,7 +96,7 @@ class DataUse extends EventProvider implements ServiceManagerAwareInterface
             'dailyOccurrence' => $hourly->getDailyOccurrence()->getId(),
             'time' => $time,
             'temperature' => $hourly->getTemperature(),
-            'code' => $this->getCodeAsArray($lastAssociatedCode),
+            'code' => $lastAssociatedCode->getForJson(),
         );
     }
 
