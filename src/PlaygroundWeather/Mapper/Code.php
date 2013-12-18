@@ -83,4 +83,15 @@ class Code
         }
         return $codeObj;
     }
+
+    public function assertNoOther($codeObj)
+    {
+        $results = $this->getEntityRepository()->findBy(
+            array(
+                'value' => $codeObj->getValue(),
+                'isDefault' => $codeObj->getIsDefault(),
+                'description' => $codeObj->getDescription()
+            ));
+        return (empty($results)) ? true : false;
+    }
 }

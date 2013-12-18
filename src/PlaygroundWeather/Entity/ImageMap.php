@@ -37,11 +37,6 @@ class ImageMap implements InputFilterAwareInterface
     protected $description;
 
     /**
-     * @ORM\Column(type="string")
-     */
-    protected $country = '';
-
-    /**
      * @ORM\ManyToMany(targetEntity="Location", fetch="EXTRA_LAZY", cascade={"persist","remove"})
      */
     protected $locations = '';
@@ -184,25 +179,6 @@ class ImageMap implements InputFilterAwareInterface
      *
      * @return the unknown_type
      */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     *
-     * @param unknown_type $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-        return $this;
-    }
-
-    /**
-     *
-     * @return the unknown_type
-     */
     public function getImageURL()
     {
         return $this->imageURL;
@@ -310,9 +286,6 @@ class ImageMap implements InputFilterAwareInterface
         if (isset($data['name']) && $data['name'] != null) {
             $this->name = $data['name'];
         }
-        if (isset($data['country']) && $data['country'] != null) {
-            $this->country = $data['country'];
-        }
         if (isset($data['description']) && $data['description'] != null) {
             $this->description = $data['description'];
         }
@@ -373,24 +346,7 @@ class ImageMap implements InputFilterAwareInterface
                     array('name' => 'NotEmpty',),
                 ),
             )));
-            $inputFilter->add($factory->createInput(array(
-                'name' => 'country',
-                'required' => false,
-                'filters'  => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                    array('name' => 'StringToLower', 'options' => array('encoding' => 'UTF-8')),
-                ),
-                'validators' => array(
-                    array('name' => 'StringLength', 'options' => array('min'=>1, 'max' => 255)),
-                    array(
-                        'name' => 'InArray',
-                        'options' => array(
-                            'haystack' => Location::$countries,
-                        ),
-                    ),
-                ),
-            )));
+
             $inputFilter->add($factory->createInput(array(
                 'name' => 'imageWidth',
                 'required' => false,

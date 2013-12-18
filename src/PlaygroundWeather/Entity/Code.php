@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  * @ORM\Entity @HasLifecycleCallbacks
  * @ORM\Table(
  *              name="weather_code",
- *              uniqueConstraints={@UniqueConstraint(name="code", columns={"value", "description"})}
+ *              uniqueConstraints={@UniqueConstraint(name="code", columns={"value", "is_default", "description"})}
  *           )
  */
 class Code implements InputFilterAwareInterface

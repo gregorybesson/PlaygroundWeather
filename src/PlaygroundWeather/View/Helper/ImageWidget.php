@@ -55,9 +55,11 @@ class ImageWidget extends AbstractHelper implements ServiceLocatorAwareInterface
             $date = new DateTime();
         }
         if (array_key_exists('locations', $params) && is_array($params['locations'])) {
-            $location = $params['locations'];
+            $locations = $params['locations'];
         } else {
-            $locations = $imageMap->getLocations();
+            if ($imageMap) {
+                $locations = $imageMap->getLocations();
+            }
         }
         if (array_key_exists('template', $params)) {
             $this->setWidgetTemplate($params['template']);
@@ -66,19 +68,21 @@ class ImageWidget extends AbstractHelper implements ServiceLocatorAwareInterface
         }
 
         $data = array();
-        $data['map'] = array();
-        $data['map']['url']= $imageMap->getImageURL();
-        $data['map']['width'] = $imageMap->getImageWidth();
-        $data['map']['height'] = $imageMap->getImageHeight();
-        $data['locations'] = array();
-        $data['day'] = $date;
-        $locationData = $this->getDataUseService()->getDailyWeatherForLocationsAsArray($locations, $date);
-        foreach ($locationData as $location) {
-            $locArray = $location;
-            $coor = $this->getImageMapService()->getPosition($imageMap, $location['location']->getLatitude(), $location['location']->getLongitude());
-            $locArray['cooX'] = current($coor);
-            $locArray['cooY'] = end($coor);
-            array_push($data['locations'] , $locArray);
+        if ($imageMap) {
+            $data['map'] = array();
+            $data['map']['url']= $imageMap->getImageURL();
+            $data['map']['width'] = $imageMap->getImageWidth();
+            $data['map']['height'] = $imageMap->getImageHeight();
+            $data['locations'] = array();
+            $data['day'] = $date;
+            $locationData = $this->getDataUseService()->getDailyWeatherForLocationsAsArray($locations, $date);
+            foreach ($locationData as $location) {
+                $locArray = $location;
+                $coor = $this->getImageMapService()->getPosition($imageMap, $location['location']->getLatitude(), $location['location']->getLongitude());
+                $locArray['cooX'] = current($coor);
+                $locArray['cooY'] = end($coor);
+                array_push($data['locations'] , $locArray);
+            }
         }
 
         $widgetModel = new ViewModel();

@@ -95,6 +95,9 @@ class Location extends EventProvider implements ServiceManagerAwareInterface
         } catch (\Exception $e) {
             return $locations;
         }
+        if ($xmlContent->error) {
+            return false;
+        }
         foreach ($xmlContent as $result) {
              $location = new LocationEntity();
              $location->populate(array(
@@ -127,6 +130,9 @@ class Location extends EventProvider implements ServiceManagerAwareInterface
     {
         $location = new LocationEntity();
         $location->populate($data);
+        if (!$this->getLocationMapper()->assertNoOther($location)) {
+            return false;
+        }
         $location = $this->getLocationMapper()->insert($location);
         if (!$location) {
             return false;

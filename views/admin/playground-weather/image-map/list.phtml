@@ -6,7 +6,6 @@
         <thead>
             <tr>
                 <th><?php echo $this->translate('Name') ?></th>
-                <th><?php echo $this->translate('Country') ?></th>
                 <th><?php echo $this->translate('Description') ?></th>
                 <th></th>
                 <th></th>
@@ -16,7 +15,6 @@
         <?php foreach($this->imageMaps as $imageMap):?>
             <tr>
                 <td><?php echo $imageMap->getName(); ?></td>
-                <td><?php echo $imageMap->getCountry(); ?></td>
                 <td><?php echo $imageMap->getDescription(); ?></td>
                 <td></td>
                 <?php $deleteLink = $this->url('admin/weather/images/remove', array('imageMapId' => $imageMap->getId()));?>

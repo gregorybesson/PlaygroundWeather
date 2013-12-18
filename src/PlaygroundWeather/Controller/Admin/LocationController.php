@@ -54,7 +54,7 @@ class LocationController extends AbstractActionController
         }
         $location = $this->getLocationService()->create($params);
         if (!$location) {
-            $this->flashMessenger()->addMessage('Une erreur est survenue durant l\'ajout du lieu');
+            $this->flashMessenger()->addMessage('We could not create this location, verify that is does not exists already');
             return $this->redirect()->toRoute('admin/weather/locations/add');
         }
         return $this->redirect()->toRoute('admin/weather/locations/list');

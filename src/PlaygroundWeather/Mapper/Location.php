@@ -87,4 +87,15 @@ class Location
         $this->em->remove($entity);
         $this->em->flush();
     }
+
+    public function assertNoOther($location)
+    {
+        $results = $this->getEntityRepository()->findBy(
+            array(
+                'city' => $location->getCity(),
+                'region' => $location->getRegion(),
+                'country' => $location->getCountry()
+            ));
+        return (empty($results)) ? true : false;
+    }
 }
