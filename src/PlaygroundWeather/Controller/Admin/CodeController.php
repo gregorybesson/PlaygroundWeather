@@ -33,6 +33,8 @@ class CodeController extends AbstractActionController
                 if ($code) {
                     return $this->redirect()->toRoute('admin/weather/codes/list');
                 }
+                $this->flashMessenger()->addMessage('this code can not be created, check that it does not already exists');
+                return $this->redirect()->toRoute('admin/weather/codes/add');
             } else {
                 foreach ($form->get('codes')->getMessages() as $errMsg) {
                     foreach ($errMsg as $field => $msg) {

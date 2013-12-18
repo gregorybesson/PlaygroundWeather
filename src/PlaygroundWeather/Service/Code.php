@@ -30,6 +30,9 @@ class Code extends EventProvider implements ServiceManagerAwareInterface
     {
         $code = new CodeEntity();
         $code->populate($data);
+        if (!$this->getCodeMapper()->assertNoOther($code)) {
+            return false;
+        }
         $code = $this->getCodeMapper()->insert($code);
         if (!$code) {
             return false;
