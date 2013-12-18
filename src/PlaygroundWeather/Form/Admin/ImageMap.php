@@ -127,31 +127,6 @@ class ImageMap extends ProvidesEventsForm
         ));
 
         $this->add(array(
-            'name' => 'ptX1',
-            'type' => 'Zend\Form\Element\Text',
-            'options' => array(
-                'label' => $translator->translate('X', 'playgroundweather')
-            ),
-            'attributes' => array(
-                'value' => 0,
-                'id' => 'ptX1',
-            ),
-        ));
-
-
-        $this->add(array(
-            'name' => 'ptY1',
-            'type' => 'Zend\Form\Element\Text',
-            'options' => array(
-                'label' => $translator->translate('Y', 'playgroundweather')
-            ),
-            'attributes' => array(
-                'value' => 0,
-                'id' => 'ptY1',
-            ),
-        ));
-
-        $this->add(array(
             'name' => 'latitude2',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
@@ -173,30 +148,6 @@ class ImageMap extends ProvidesEventsForm
             'attributes' => array(
                 'value' => 0,
                 'id' => 'longitude2',
-            ),
-        ));
-
-        $this->add(array(
-            'name' => 'ptX2',
-            'type' => 'Zend\Form\Element\Text',
-            'options' => array(
-                'label' => $translator->translate('X', 'playgroundweather')
-            ),
-            'attributes' => array(
-                'value' => 0,
-                'id' => 'ptX2',
-            ),
-        ));
-
-        $this->add(array(
-            'name' => 'ptY2',
-            'type' => 'Zend\Form\Element\Text',
-            'options' => array(
-                'label' => $translator->translate('Y', 'playgroundweather')
-            ),
-            'attributes' => array(
-                'value' => 0,
-                'id' => 'ptY2',
             ),
         ));
 

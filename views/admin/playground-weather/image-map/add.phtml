@@ -37,14 +37,10 @@
     <div class="label-input">
         <?php echo $this->formHidden($form->get('imageHeight')); ?>
     </div>
-    <div class="label-input" style="float:left;">
-        <?php echo $this->formLabel($form->get('ptX1')); ?>
-        <?php echo $this->formInput($form->get('ptX1')); ?>
-    </div>
-    <div class="label-input" style="float:left;">
-        <?php echo $this->formLabel($form->get('ptY1')); ?>
-        <?php echo $this->formInput($form->get('ptY1')); ?>
-    </div>
+    <?php if($form->get('imageURL')->getValue() != ''):?>
+        <img src="<?php echo $this->basePath($form->get('imageURL')->getValue()); ?>" />
+    <?php endif;?>
+    <p><?php echo $this->translate('Top Left')?></p>
     <div class="label-input" style="float:left;">
         <?php echo $this->formLabel($form->get('latitude1')); ?>
         <?php echo $this->formInput($form->get('latitude1')); ?>
@@ -53,14 +49,7 @@
         <?php echo $this->formLabel($form->get('longitude1')); ?>
         <?php echo $this->formInput($form->get('longitude1')); ?>
     </div>
-    <div class="label-input" style="float:left;">
-        <?php echo $this->formLabel($form->get('ptX2')); ?>
-        <?php echo $this->formInput($form->get('ptX2')); ?>
-    </div>
-    <div class="label-input" style="float:left;">
-        <?php echo $this->formLabel($form->get('ptY2')); ?>
-        <?php echo $this->formInput($form->get('ptY2')); ?>
-    </div>
+    <p style="clear:both;"><?php echo $this->translate('Bottom Right')?></p>
     <div class="label-input" style="float:left;">
         <?php echo $this->formLabel($form->get('latitude2')); ?>
         <?php echo $this->formInput($form->get('latitude2')); ?>
@@ -69,20 +58,8 @@
         <?php echo $this->formLabel($form->get('longitude2')); ?>
         <?php echo $this->formInput($form->get('longitude2')); ?>
     </div>
-    <p style="clear:both;"><?php echo $this->translate('Add locations for which you want to display weather on this map')?></p>
+    <h3 style="clear:both;"><?php echo $this->translate('Add locations for which you want to display weather on this map')?></h3>
     <div class="label-input">
         <?php echo $this->formMultiCheckbox($form->get('locationsCheckboxes')); ?>
     </div>
 <?php echo $this->form()->closeTag() ?>
-    <?php if($form->get('imageURL')->getValue() != ''):?>
-        <img src="<?php echo $this->basePath($form->get('imageURL')->getValue()); ?>" />
-    <?php endif;?>
-
-    <canvas id='map-image'>
-
-    </canvas>
-
-<script type="text/javascript">
-  var c = document.getElementById("map-image");
-  var ctx = c.getContext("2d");
-</script>

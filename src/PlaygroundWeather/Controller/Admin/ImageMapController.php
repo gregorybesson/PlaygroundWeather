@@ -44,7 +44,6 @@ class ImageMapController extends AbstractActionController
                 return $this->redirect()->toRoute('admin/weather/images/add');
             }
         }
-        // Display
         return new ViewModel(
             array(
                 'form' => $form,
@@ -65,7 +64,6 @@ class ImageMapController extends AbstractActionController
         $form->get('submit')->setLabel("Modifier");
         $form->setAttribute('action', '');
         $form->bind($imageMap);
-
         $locations = array();
         if (!empty($imageMap->getLocations()->getValues())) {
             foreach ($imageMap->getLocations()->getValues() as $location) {
