@@ -80,7 +80,8 @@ class ImageMap extends EventProvider implements ServiceManagerAwareInterface
             }
         }
 
-        if (!empty($imageMap->getLocations()->getValues())) {
+        $values = $imageMap->getLocations()->getValues();
+        if (!empty($values)) {
             $imageMap->getLocations()->clear();
         }
         foreach ($data['locationsCheckboxes'] as $locationId) {
