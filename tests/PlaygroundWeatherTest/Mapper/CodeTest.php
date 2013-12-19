@@ -30,7 +30,7 @@ class CodeTest extends \PHPUnit_Framework_TestCase
         $code->setDescription('toto');
         $code = $this->tm->insert($code);
 
-        $this->assertEquals($code, current($this->tm->findBy(array('code' =>100))));
+        $this->assertEquals($code, current($this->tm->findBy(array('value' =>100))));
         $this->assertNull($this->tm->findDefaultByCode(100));
 
         $code->setIsDefault(1);
