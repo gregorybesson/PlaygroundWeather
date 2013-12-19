@@ -65,8 +65,7 @@ class ImageMapController extends AbstractActionController
         $form->setAttribute('action', '');
         $form->bind($imageMap);
         $locations = array();
-        $values = $imageMap->getLocations()->getValues();
-        if (!empty($values)) {
+        if (!empty($imageMap->getLocations()->getValues())) {
             foreach ($imageMap->getLocations()->getValues() as $location) {
                 $locations[] = $location->getId();
             }
