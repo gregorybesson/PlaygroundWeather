@@ -201,7 +201,7 @@ class Location implements InputFilterAwareInterface
                 'name' => 'latitude',
                 'required' => false,
                 'validators' => array(
-                    array('name' => 'Float'),
+                    array('name' => 'Float', 'options' => array('locale' => 'fr_FR')),
                 ),
             )));
 
@@ -209,7 +209,7 @@ class Location implements InputFilterAwareInterface
                 'name' => 'longitude',
                 'required' => false,
                 'validators' => array(
-                    array('name' => 'Float'),
+                    array('name' => 'Float', 'options' => array('locale' => 'fr_FR')),
                 ),
             )));
 
