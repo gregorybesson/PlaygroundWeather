@@ -29,6 +29,9 @@
         <?php endforeach;?>
         </tbody>
     </table>
+
+<?php echo (count($this->locations)>1)?$this->paginationControl($this->locations, 'Sliding', 'playground-weather/location/pagination_locations.phtml'):''; ?>
+
 <ul class="liste-buttons">
     <li class="btn-admin"><a href="<?php echo $this->url('admin/weather/locations/add'); ?>"><?php echo $this->translate('Ajouter un lieu'); ?></a></li>
 </ul>

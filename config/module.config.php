@@ -167,6 +167,19 @@ return array(
                                                 'action' => 'list',
                                             ),
                                         ),
+                                        'may_terminate' => true,
+                                        'child_routes' => array(
+                                            'pagination' => array(
+                                                'type' => 'Segment',
+                                                'options' => array(
+                                                    'route' => '[/:p]',
+                                                    'defaults' => array(
+                                                        'controller' => 'playgroundweather_admin_location',
+                                                        'action' => 'list'
+                                                    ),
+                                                ),
+                                            ),
+                                        ),
                                     ),
                                     'create' => array(
                                         'type' => 'Segment',
@@ -242,6 +255,19 @@ return array(
                                             'defaults' => array(
                                                 'controller' => 'playgroundweather_admin_imagemap',
                                                 'action' => 'list',
+                                            ),
+                                        ),
+                                        'may_terminate' => true,
+                                        'child_routes' => array(
+                                            'pagination' => array(
+                                                'type' => 'Segment',
+                                                'options' => array(
+                                                    'route' => '[/:p]',
+                                                    'defaults' => array(
+                                                        'controller' => 'playgroundweather_admin_imagemap',
+                                                        'action' => 'list'
+                                                    ),
+                                                ),
                                             ),
                                         ),
                                     ),
