@@ -10,7 +10,6 @@ use PlaygroundWeather\Mapper\ImageMap as ImageMapMapper;
 use PlaygroundWeather\Mapper\Location as LocationMapper;
 use Zend\Stdlib\ErrorHandler;
 use PlaygroundWeather\Options\ModuleOptions;
-use PlaygroundWeather\Entity\Location;
 
 class ImageMap extends EventProvider implements ServiceManagerAwareInterface
 {

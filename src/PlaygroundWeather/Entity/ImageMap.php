@@ -366,7 +366,7 @@ class ImageMap implements InputFilterAwareInterface
                 'name' => 'latitude1',
                 'required' => true,
                 'validators' => array(
-                    array('name' => 'Float', 'options' => array('locale' => 'fr_FR')),
+                    array('name' => 'Float', 'options' => array('locale' => 'en')),
                 ),
             )));
 
@@ -374,14 +374,14 @@ class ImageMap implements InputFilterAwareInterface
                 'name' => 'longitude1',
                 'required' => true,
                 'validators' => array(
-                    array('name' => 'Float', 'options' => array('locale' => 'fr_FR')),
+                    array('name' => 'Float', 'options' => array('locale' => 'en')),
                 ),
             )));
             $inputFilter->add($factory->createInput(array(
                 'name' => 'latitude2',
                 'required' => true,
                 'validators' => array(
-                    array('name' => 'Float', 'options' => array('locale' => 'fr_FR')),
+                    array('name' => 'Float', 'options' => array('locale' => 'en_US')),
                 ),
             )));
 
@@ -391,7 +391,7 @@ class ImageMap implements InputFilterAwareInterface
                 'validators' => array(
                     array(
                         'name' => 'Float',
-                        'options' => array('locale' => 'fr_FR')
+                        'options' => array('locale' => 'en_US')
                     )
                 )
             )));
