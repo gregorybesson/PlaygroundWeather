@@ -8,16 +8,18 @@
         height:<?php echo $this->data['map']['height'];?>px;
         background:<?php echo 'url(\'' . $this->data['map']['url'] . '\') no-repeat center top' ;?>;
         position:relative;" >
-     <?php foreach ($this->data['locations'] as $location) : ?>
-        <span class="<?php echo $location['location']->getCity(); ?>" style="
-            position:absolute;
-            top:<?php echo ($location['cooY']-11); ?>px;
-            left:<?php echo ($location['cooX']-13); ?>px;">
-            <img    src="<?php echo $location['weather']['code']['iconURL']; ?>"
-                    alt="<?php echo $location['location']->getCity(); ?> - <?php echo $location['weather']['code']['description']; ?>"
-                    width='26' height='22' />
-        </span>
-    <?php endforeach; ?>
+     <?php if ($this->data['locations']) :?>
+         <?php foreach ($this->data['locations'] as $location) : ?>
+            <span class="<?php echo $location['location']->getCity(); ?>" style="
+                position:absolute;
+                top:<?php echo ($location['cooY']-11); ?>px;
+                left:<?php echo ($location['cooX']-13); ?>px;">
+                <img    src="<?php echo $location['weather']['code']['iconURL']; ?>"
+                        alt="<?php echo $location['location']->getCity(); ?> - <?php echo $location['weather']['code']['description']; ?>"
+                        width='26' height='22' />
+            </span>
+        <?php endforeach; ?>
+    <?php endif; ?>
     </div>
 <?php endif; ?>
 </div>

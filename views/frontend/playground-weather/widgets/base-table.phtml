@@ -9,29 +9,33 @@
     <?php endif; ?>
     <table cellpadding="15" cellspacing="0" border="1">
         <tbody>
+        <?php if ($this->data['days']) :?>
             <?php foreach($data['days'] as $day) : ?>
-            <tr class="day-weather-item">
-                <td class="weekday"><?php echo $this->dateFormat($day['date'], IntlDateFormatter::LONG, IntlDateFormatter::NONE, $locale); ?></td>
-                <td class="min-temp"><?php echo $this->translate('Min');?> <?php echo $day['minTemperature']; ?>°C</td>
-                <td class="max-temp"><?php echo $this->translate('Max');?> <?php echo $day['maxTemperature']; ?>°C</td>
-                <td class="symbol">
-                    <?php $code = $day['code']; ?>
-                    <span><?php echo $code['code']; ?> | <?php echo $code['description']; ?></span>
-                    <img src="<?php echo $code['iconURL']; ?>" alt="<?php echo $code['description']; ?>" />
-                </td>
-                <?php foreach($day['times'] as $time) : ?>
-                    <td class="time">
-                        <div><?php echo $this->dateFormat($time['time'], IntlDateFormatter::NONE, IntlDateFormatter::SHORT, $locale); ?></div>
-                        <div><?php echo $time['temperature']; ?>°C</div>
-                    </td>
+                <tr class="day-weather-item">
+                    <td class="weekday"><?php echo $this->dateFormat($day['date'], IntlDateFormatter::LONG, IntlDateFormatter::NONE, $locale); ?></td>
+                    <td class="min-temp"><?php echo $this->translate('Min');?> <?php echo $day['minTemperature']; ?>°C</td>
+                    <td class="max-temp"><?php echo $this->translate('Max');?> <?php echo $day['maxTemperature']; ?>°C</td>
                     <td class="symbol">
-                        <?php $code = $time['code']; ?>
+                        <?php $code = $day['code']; ?>
                         <span><?php echo $code['code']; ?> | <?php echo $code['description']; ?></span>
                         <img src="<?php echo $code['iconURL']; ?>" alt="<?php echo $code['description']; ?>" />
                     </td>
-                <?php endforeach; ?>
-            </tr>
-        <?php endforeach; ?>
+                    <?php if ($day['times']) :?>
+                        <?php foreach($day['times'] as $time) : ?>
+                            <td class="time">
+                                <div><?php echo $this->dateFormat($time['time'], IntlDateFormatter::NONE, IntlDateFormatter::SHORT, $locale); ?></div>
+                                <div><?php echo $time['temperature']; ?>°C</div>
+                            </td>
+                            <td class="symbol">
+                                <?php $code = $time['code']; ?>
+                                <span><?php echo $code['code']; ?> | <?php echo $code['description']; ?></span>
+                                <img src="<?php echo $code['iconURL']; ?>" alt="<?php echo $code['description']; ?>" />
+                            </td>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
         </tbody>
     </table>
     </div>
