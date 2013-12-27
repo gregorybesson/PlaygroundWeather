@@ -80,8 +80,8 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
         $showComments = ($showComments) ? 'yes' : 'no';
 
         $dateStr = '';
+        $today = new DateTime("now");
         if ($date) {
-            $today = new DateTime("now");
             $today->setTime(0,0);
             $diff = $today->diff($date);
             if ($diff->invert) {
@@ -92,7 +92,7 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
                 $endDate = '';
                 if ($numDays > 1) {
                     $end = new Datetime();
-                    $end->setTimestamp($date->getTimestamp()+($numDays*86400));
+                    $end->setTimestamp($date->getTimestamp()+(($numDays-1)*86400));
                     // Beginning and ending dates must have the same month and same year
                     if ($date->format('Y-m') == $end->format('Y-m')) {
                         $endDate = $end->format('Y-m-d');
@@ -103,6 +103,9 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
                 $dateStr = $date->format('Y-m-d');
             }
         }
+        else {
+            $dateStr = $today->format('Y-m-d');
+        }
         return $this->requestForecast($location, $dateStr, $numDays, $fx, $cc, $includeLocation, $showComments);
     }
 
@@ -111,7 +114,7 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
         . '?q=' . $location
         . '&date=' . $date
         . '&enddate=' . $endDate
-        . '&includeLocation' . $includeLocation
+        . '&includeLocation=' . $includeLocation
         . '&format=xml'
         . '&key=' . $this->getOptions()->getUserKey();
     }
@@ -123,7 +126,7 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
         . '&date=' . $date
         . '&fx=' . $fx
         . '&cc=' . $cc
-        . '&includeLocation' . $includeLocation
+        . '&includeLocation=' . $includeLocation
         . '&showComments=' . $showComments
         . '&format=xml'
         . '&key=' . $this->getOptions()->getUserKey();
@@ -190,10 +193,10 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
         $daily = new DailyOccurrence();
         $daily->populate($data);
 
-        if ($data['location'] instanceof \PlaygroundWeather\Entity\Location) {
+        if (array_key_exists('location',$data) && $data['location'] instanceof \PlaygroundWeather\Entity\Location) {
             $daily->setLocation($data['location']);
         }
-        if ($data['date'] instanceof \DateTime) {
+        if (array_key_exists('date',$data) && $data['date'] instanceof \DateTime) {
             $daily->setDate($data['date']);
         }
         $daily = $this->getDailyOccurrenceMapper()->insert($daily);
@@ -208,17 +211,19 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
         $hourly = new HourlyOccurrence();
         $hourly->populate($data);
 
-        if ($data['dailyOccurrence'] instanceof DailyOccurrence) {
+        if (array_key_exists('dailyOccurrence',$data) && $data['dailyOccurrence'] instanceof DailyOccurrence) {
             $hourly->setDailyOccurrence($data['dailyOccurrence']);
         }
-        if ($data['time']) {
+        if (array_key_exists('time',$data)) {
             $date = $hourly->getDailyOccurrence()->getDate();
             $time = $date->setTime((int)substr($data['time'], -4, -2), (int)substr($data['time'], 2, 4));
             $hourly->setTime($time);
         }
-        $code = $this->getCodeMapper()->findDefaultByCode((int) $data['code_value']);
-        if ($code) {
-            $hourly->setCode($code);
+        if (array_key_exists('code_value', $data)) {
+            $code = $this->getCodeMapper()->findDefaultByCode((int) $data['code_value']);
+            if ($code) {
+                $hourly->setCode($code);
+            }
         }
         $hourly = $this->getHourlyOccurrenceMapper()->insert($hourly);
         if (!$hourly) {
@@ -238,6 +243,7 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
             $ids[] = current($code);
         }
         $counts = array_count_values($ids);
+        asort($counts);
         $ids = array_keys($counts);
         $code = $this->getCodeMapper()->findById(end($ids));
         return $code;
