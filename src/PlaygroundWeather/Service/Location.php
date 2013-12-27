@@ -89,15 +89,21 @@ class Location extends EventProvider implements ServiceManagerAwareInterface
      */
     public function parseResultToObjects($xmlFileURL)
     {
-        $locations = array();
         try {
             $xmlContent = simplexml_load_file($xmlFileURL, null, LIBXML_NOCDATA);
         } catch (\Exception $e) {
-            return $locations;
+            return false;
         }
+
+        return $this->createObjectsFromXML($xmlContent);
+    }
+
+   public function createObjectsFromXML($xmlContent)
+   {
         if ($xmlContent->error) {
             return false;
         }
+        $locations = array();
         foreach ($xmlContent as $result) {
              $location = new LocationEntity();
              $location->populate(array(

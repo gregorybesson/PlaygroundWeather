@@ -183,14 +183,13 @@ class CodeTest extends \PHPUnit_Framework_TestCase
         $ws->getCodeMapper()
         ->expects($this->once())
         ->method('remove')
-        ->will($this->returnValue(true));
+        ->with($this->isInstanceOf('\PlaygroundWeather\Entity\Code'));
 
         $this->assertTrue($ws->remove(1));
     }
 
     public function testRemoveUrlButNotExisting()
     {
-
         $options = $this->getMockBuilder('PlaygroundWeather\Options\ModuleOptions')
         ->disableOriginalConstructor()
         ->getMock();
@@ -227,9 +226,44 @@ class CodeTest extends \PHPUnit_Framework_TestCase
         $ws->getCodeMapper()
         ->expects($this->once())
         ->method('remove')
-        ->will($this->returnValue(true));
+        ->with($this->isInstanceOf('\PlaygroundWeather\Entity\Code'));
 
         $this->assertTrue($ws->remove(1));
     }
+
+    public function testRemoveCodeNotFound()
+    {
+        $options = $this->getMockBuilder('PlaygroundWeather\Options\ModuleOptions')
+        ->disableOriginalConstructor()
+        ->getMock();
+
+        $codeMapper = $this->getMockBuilder('PlaygroundWeather\Mapper\Code')
+        ->disableOriginalConstructor()
+        ->getMock();
+
+        $ws = new \PlaygroundWeather\Service\Code();
+        $ws->setCodeMapper($codeMapper);
+        $ws->setOptions($options);
+
+        $ws->getCodeMapper()
+        ->expects($this->once())
+        ->method('findById')
+        ->will($this->returnValue(false));
+
+        $ws->getOptions()
+        ->expects($this->never())
+        ->method('getMediaPath');
+
+        $ws->getOptions()
+        ->expects($this->never())
+        ->method('getMediaUrl');
+
+        $ws->getCodeMapper()
+        ->expects($this->never())
+        ->method('remove');
+
+        $this->assertTrue($ws->remove(1));
+    }
+
 
 }
