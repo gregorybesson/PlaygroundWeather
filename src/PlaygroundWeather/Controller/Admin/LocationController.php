@@ -79,7 +79,7 @@ class LocationController extends AbstractActionController
     {
         $adapter = new DoctrineAdapter(
                         new LargeTablePaginator(
-                            $this->getLocationService()->getLocationMapper()->queryAll(array('country' => 'ASC'))
+                            $this->getLocationService()->getLocationMapper()->queryAll(array('city' => 'ASC'))
                         )
                     );
         $paginator = new Paginator($adapter);
