@@ -8,7 +8,7 @@ use ZfcBase\EventManager\EventProvider;
 
 use PlaygroundWeather\Entity\DailyOccurrence;
 use PlaygroundWeather\Entity\HourlyOccurrence;
-use PlaygroundWeather\Entity\Location;
+use PlaygroundWeather\Entity\Location as LocationEntity;
 
 use PlaygroundWeather\Service\DataYield;
 use PlaygroundWeather\Mapper\DailyOccurrence as DailyOccurrenceMapper;
@@ -57,10 +57,10 @@ class DataUse extends EventProvider implements ServiceManagerAwareInterface
 
     /**
      *
-     * @param Location $location
+     * @param LocationEntity $location
      * @param DateTime $date
      */
-    public function getLocationWeather(Location $location, DateTime $date, $numDays=1)
+    public function getLocationWeather(LocationEntity $location, DateTime $date, $numDays=1)
     {
         $dates = array($date);
         $interval = new DateInterval('P1D');
@@ -136,7 +136,7 @@ class DataUse extends EventProvider implements ServiceManagerAwareInterface
         }
     }
 
-    public function getDailyWeatherForTimesAsArray(Location $location, Datetime $day, $numDays, array $hours)
+    public function getDailyWeatherForTimesAsArray(LocationEntity $location, Datetime $day, $numDays, array $hours)
     {
         $dailies = $this->getLocationWeather($location, $day, $numDays);
         $resultArray = array();
@@ -187,6 +187,12 @@ class DataUse extends EventProvider implements ServiceManagerAwareInterface
             $this->codeMapper = $this->getServiceManager()->get('playgroundweather_code_mapper');
         }
         return $this->codeMapper;
+    }
+
+    public function setCodeMapper(CodeMapper $codeMapper)
+    {
+        $this->codeMapper = $codeMapper;
+        return $this;
     }
 
     public function getLocationMapper()
