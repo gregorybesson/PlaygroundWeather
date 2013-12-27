@@ -73,7 +73,10 @@ class Code extends EventProvider implements ServiceManagerAwareInterface
             ErrorHandler::stop(true);
             if ($oldIconURL) {
                 $real_media_path = realpath($path) . DIRECTORY_SEPARATOR;
-                unlink(str_replace($media_url, $real_media_path,$oldIconURL));
+                $filePath = str_replace($media_url, $real_media_path, $oldIconURL);
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
             }
         }
         $code->setAssociatedCode($associatedCode);
