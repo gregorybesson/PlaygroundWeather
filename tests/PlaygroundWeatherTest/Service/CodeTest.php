@@ -262,7 +262,7 @@ class CodeTest extends \PHPUnit_Framework_TestCase
         ->expects($this->never())
         ->method('remove');
 
-        $this->assertTrue($ws->remove(1));
+        $this->assertFalse($ws->remove(1));
     }
 
 
