@@ -99,12 +99,12 @@ class DailyOccurrence implements InputFilterAwareInterface
         return $this;
     }
 
-    public function getcode()
+    public function getCode()
     {
         return $this->code;
     }
 
-    public function setcode($code)
+    public function setCode($code)
     {
         $this->code = $code;
         return $this;
