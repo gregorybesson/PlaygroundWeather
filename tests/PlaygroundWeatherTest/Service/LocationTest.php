@@ -46,12 +46,18 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         $ws->getOptions()
         ->expects($this->once())
         ->method('getLocationURL')
+        ->with($this->isFalse())
         ->will($this->returnValue('URL'));
 
         $ws->getOptions()
-        ->expects($this->once())
-        ->method('getUserKey')
+        ->expects($this->exactly(2))
+        ->method('getUserKeyFree')
         ->will($this->returnValue('AwesomeKey'));
+
+        $ws->getOptions()
+        ->expects($this->once())
+        ->method('getUserKeyPremium')
+        ->will($this->returnValue('AwesomeKeyPremium'));
 
         $this->assertEquals('URL?query=paris,France&popular=no&num_of_results=2&format=xml&wct=&key=AwesomeKey',
                             $ws->request(array('paris', 'France'), 2, true, false, 'fakeCategory'));

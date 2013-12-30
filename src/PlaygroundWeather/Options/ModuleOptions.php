@@ -17,9 +17,14 @@ class ModuleOptions extends AbstractOptions
     protected $media_url = 'media/weather';
 
     /**
-     * API user key
+     * API Premium user key
      */
-    protected $userKey = '';
+    protected $userKeyPremium = '';
+
+    /**
+     * API Free user key
+     */
+    protected $userKeyFree = '';
 
     /**
      * URL on which we will query for weather forecasts
@@ -89,28 +94,48 @@ class ModuleOptions extends AbstractOptions
     }
 
     /**
-     * @return $userKey
+     * @return $userKeyPremium
      */
-    public function getUserKey()
+    public function getUserKeyPremium()
     {
-        return $this->userKey;
+        return $this->userKeyPremium;
     }
 
     /**
-     * @param boolean $userKey
+     * @param string $userKeyPremium
      */
-    public function setUserKey($userKey)
+    public function setUserKeyPremium($userKeyPremium)
     {
-        $this->userKey = trim($userKey);
+        $this->userKeyPremium = trim($userKeyPremium);
+        return $this;
+    }
+
+    /**
+     * @return $userKeyFree
+     */
+    public function getUserKeyFree()
+    {
+        return $this->userKeyFree;
+    }
+
+    /**
+     * @param string $userKeyFree
+     */
+    public function setUserKeyFree($userKeyFree)
+    {
+        $this->userKeyFree = trim($userKeyFree);
         return $this;
     }
 
     /**
      * @return $forecastURL
      */
-    public function getForecastURL()
+    public function getForecastURL($premium = null)
     {
-        return $this->forecastURL;
+        if ($premium) {
+            return str_replace('free', 'premium', $this->forecastURL);
+        }
+        return str_replace('premium', 'free', $this->forecastURL);
     }
 
     /**
@@ -142,9 +167,12 @@ class ModuleOptions extends AbstractOptions
     /**
      * @return $locationURL
      */
-    public function getLocationURL()
+    public function getLocationURL($premium = null)
     {
-        return $this->locationURL;
+        if ($premium) {
+            return str_replace('free', 'premium', $this->locationURL);
+        }
+        return str_replace('premium', 'free', $this->locationURL);
     }
 
     /**

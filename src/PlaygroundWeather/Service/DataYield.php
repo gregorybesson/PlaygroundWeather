@@ -80,9 +80,11 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
 
         $dateStr = '';
         $today = new DateTime("now");
+        $diff_days = 0;
         if ($date) {
             $today->setTime(0,0);
             $diff = $today->diff($date);
+            $diff_days = $diff->days;
             if ($diff->invert) {
                 $WWOstart = new DateTime("2008-07-01");
                 if ($date < $WWOstart) {
@@ -105,21 +107,29 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
         else {
             $dateStr = $today->format('Y-m-d');
         }
-        return $this->requestForecast($location, $dateStr, $numDays, $fx, $cc, $includeLocation, $showComments);
+        $premium = ($diff_days + $numDays <= 5) ? false : true;
+        return $this->requestForecast($location, $dateStr, $numDays, $fx, $cc, $includeLocation, $showComments, $premium);
     }
 
     public function requestPast($location, $date, $endDate, $includeLocation) {
+        if (!$this->getOptions()->getUserKeyPremium()) {
+            return false;
+        }
         return $this->getOptions()->getPastURL()
         . '?q=' . $location
         . '&date=' . $date
         . '&enddate=' . $endDate
         . '&includeLocation=' . $includeLocation
         . '&format=xml'
-        . '&key=' . $this->getOptions()->getUserKey();
+        . '&key=' . $this->getOptions()->getUserKeyPremium();
     }
 
-    public function requestForecast($location, $date, $numDays, $fx, $cc, $includeLocation, $showComments) {
-        return $this->getOptions()->getForecastURL()
+    public function requestForecast($location, $date, $numDays, $fx, $cc, $includeLocation, $showComments, $premium) {
+        if ($premium && !$this->getOptions()->getUserKeyPremium()) {
+            return false;
+        }
+        $key = ($premium) ? $this->getOptions()->getUserKeyPremium() : $this->getOptions()->getUserKeyFree();
+        return $this->getOptions()->getForecastURL($premium)
         . '?q=' . $location
         . '&num_of_days=' . $numDays
         . '&date=' . $date
@@ -128,7 +138,7 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
         . '&includeLocation=' . $includeLocation
         . '&showComments=' . $showComments
         . '&format=xml'
-        . '&key=' . $this->getOptions()->getUserKey();
+        . '&key=' . $key;
     }
 
     /**
@@ -143,6 +153,9 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
 
     public function parseForecastsToObjects(\PlaygroundWeather\Entity\Location $location, $xmlFileURL)
     {
+        if (!$xmlFileURL) {
+            return false;
+        }
         try {
             $xmlContent = simplexml_load_file($xmlFileURL, null, LIBXML_NOCDATA);
         } catch (\Exception $e) {
@@ -201,15 +214,10 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
         if (array_key_exists('code_value', $data)) {
             $code = $this->getCodeMapper()->findDefaultByCode((int) $data['code_value']);
             if ($code) {
-                var_dump($code->getId());
                 $daily->setCode($code);
             }
         }
         $daily = $this->getDailyOccurrenceMapper()->insert($daily);
-        if (!$daily) {
-            return false;
-        }
-        $daily->getCode();
         return $daily;
     }
 
