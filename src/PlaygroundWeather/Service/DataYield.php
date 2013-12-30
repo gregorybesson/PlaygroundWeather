@@ -9,7 +9,6 @@ use PlaygroundWeather\Options\ModuleOptions;
 
 use PlaygroundWeather\Entity\DailyOccurrence;
 use PlaygroundWeather\Entity\HourlyOccurrence;
-use PlaygroundWeather\Entity\Location;
 
 use PlaygroundWeather\Mapper\Code as CodeMapper;
 use PlaygroundWeather\Mapper\DailyOccurrence as DailyOccurrenceMapper;
@@ -134,15 +133,15 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
 
     /**
      *
-     * @param Location $location
+     * @param \PlaygroundWeather\Entity\Location $location
      * @param DateTime $date
      */
-    public function getLocationWeather(Location $location, DateTime $date, $numDays=1)
+    public function getLocationWeather(\PlaygroundWeather\Entity\Location $location, DateTime $date, $numDays=1)
     {
         return $this->parseForecastsToObjects($location, $this->request($location->getQueryArray(), $date, $numDays));
     }
 
-    public function parseForecastsToObjects(Location $location, $xmlFileURL)
+    public function parseForecastsToObjects(\PlaygroundWeather\Entity\Location $location, $xmlFileURL)
     {
         try {
             $xmlContent = simplexml_load_file($xmlFileURL, null, LIBXML_NOCDATA);
