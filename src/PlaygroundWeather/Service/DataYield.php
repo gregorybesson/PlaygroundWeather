@@ -154,11 +154,12 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
             $dailyOcc = $this->createDaily(array(
                 'date' => $date,
                 'location' => $location,
-                'minTemperature' => (int) $daily->mintempC,
-                'maxTemperature' => (int) $daily->maxtempC,
+                'minTemperature' => ($daily->mintempC) ? (int) $daily->mintempC : (int) $daily->tempMinC,
+                'maxTemperature' => ($daily->maxtempC) ? (int) $daily->maxtempC : (int) $daily->tempMaxC,
                 'forecast' => ($past) ? 0 : 1,
+                'code_value' => ($daily->weatherCode) ? (int) $daily->weatherCode : null,
             ));
-            if ($dailyOcc) {
+            if ($dailyOcc && $daily->hourly) {
                 foreach ($daily->hourly as $hourly) {
                     $hourlyOcc = $this->createHourly(array(
                         'time' => (string) $hourly->time,
@@ -191,17 +192,24 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
     {
         $daily = new DailyOccurrence();
         $daily->populate($data);
-
         if (array_key_exists('location',$data) && $data['location'] instanceof \PlaygroundWeather\Entity\Location) {
             $daily->setLocation($data['location']);
         }
         if (array_key_exists('date',$data) && $data['date'] instanceof \DateTime) {
             $daily->setDate($data['date']);
         }
+        if (array_key_exists('code_value', $data)) {
+            $code = $this->getCodeMapper()->findDefaultByCode((int) $data['code_value']);
+            if ($code) {
+                var_dump($code->getId());
+                $daily->setCode($code);
+            }
+        }
         $daily = $this->getDailyOccurrenceMapper()->insert($daily);
         if (!$daily) {
             return false;
         }
+        $daily->getCode();
         return $daily;
     }
 
