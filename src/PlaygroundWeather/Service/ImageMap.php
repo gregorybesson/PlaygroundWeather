@@ -75,7 +75,10 @@ class ImageMap extends EventProvider implements ServiceManagerAwareInterface
 
             if ($oldImageURL) {
                 $real_media_path = realpath($path) . DIRECTORY_SEPARATOR;
-                unlink(str_replace($media_url, $real_media_path, $oldImageURL));
+                $filePath = str_replace($media_url, $real_media_path, $oldImageURL);
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
             }
         }
 
@@ -83,10 +86,12 @@ class ImageMap extends EventProvider implements ServiceManagerAwareInterface
         if (!empty($values)) {
             $imageMap->getLocations()->clear();
         }
-        foreach ($data['locationsCheckboxes'] as $locationId) {
-            $location = $this->getLocationMapper()->findById($locationId);
-            if ($location) {
-                $imageMap->addLocation($location);
+        if (array_key_exists('locationsCheckboxes', $data)) {
+            foreach ($data['locationsCheckboxes'] as $locationId) {
+                $location = $this->getLocationMapper()->findById($locationId);
+                if ($location) {
+                    $imageMap->addLocation($location);
+                }
             }
         }
         $imageMap->populate($data);
@@ -106,7 +111,10 @@ class ImageMap extends EventProvider implements ServiceManagerAwareInterface
             $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
             $real_media_path = realpath($path) . DIRECTORY_SEPARATOR;
             $media_url = $this->getOptions()->getMediaUrl() . '/';
-            unlink(str_replace($media_url, $real_media_path, $imageMap->getImageURL()));
+            $filePath = str_replace($media_url, $real_media_path, $imageMap->getImageURL());
+            if (file_exists($filePath)) {
+                    unlink($filePath);
+            }
         }
         $imageMapMapper->remove($imageMap);
         return true;

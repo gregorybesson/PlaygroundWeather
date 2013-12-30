@@ -48,8 +48,11 @@ class LocationController extends AbstractActionController
     public function createAction()
     {
         $params = $this->getEvent()->getRouteMatch()->getParams();
-        if (!$params || !$params['city'] || !$params['country'] || !$params['latitude'] || !$params['longitude']) {
-            $this->flashMessenger()->addMessage('Des informations sont manquantes, le lieu ne peu pas être ajouté');
+        if (!$params || !array_key_exists('city', $params)
+            || !array_key_exists('country', $params)
+            || !array_key_exists('latitude', $params)
+            || !array_key_exists('longitude', $params) ) {
+            $this->flashMessenger()->addMessage('Des informations sont manquantes, le lieu ne peut pas être ajouté');
             return $this->redirect()->toRoute('admin/weather/locations/add');
         }
         $location = $this->getLocationService()->create($params);
@@ -79,7 +82,7 @@ class LocationController extends AbstractActionController
     {
         $adapter = new DoctrineAdapter(
                         new LargeTablePaginator(
-                            $this->getLocationService()->getLocationMapper()->queryAll(array('country' => 'ASC'))
+                            $this->getLocationService()->getLocationMapper()->queryAll(array('city' => 'ASC'))
                         )
                     );
         $paginator = new Paginator($adapter);

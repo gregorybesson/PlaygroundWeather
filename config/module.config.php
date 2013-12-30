@@ -167,11 +167,24 @@ return array(
                                                 'action' => 'list',
                                             ),
                                         ),
+                                        'may_terminate' => true,
+                                        'child_routes' => array(
+                                            'pagination' => array(
+                                                'type' => 'Segment',
+                                                'options' => array(
+                                                    'route' => '[/:p]',
+                                                    'defaults' => array(
+                                                        'controller' => 'playgroundweather_admin_location',
+                                                        'action' => 'list'
+                                                    ),
+                                                ),
+                                            ),
+                                        ),
                                     ),
                                     'create' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                            'route' => '/create/:city/:country[/:region]/:latitude/:longitude',
+                                            'route' => '/create[/:city][/:country][/:region][/:latitude][/:longitude]',
                                             'constraints' => array(
                                                 ':city' => '[a-zA-Z0-9_\-]+',
                                                 ':country' => '[a-zA-Z0-9_\-]+',
@@ -244,6 +257,19 @@ return array(
                                                 'action' => 'list',
                                             ),
                                         ),
+                                        'may_terminate' => true,
+                                        'child_routes' => array(
+                                            'pagination' => array(
+                                                'type' => 'Segment',
+                                                'options' => array(
+                                                    'route' => '[/:p]',
+                                                    'defaults' => array(
+                                                        'controller' => 'playgroundweather_admin_imagemap',
+                                                        'action' => 'list'
+                                                    ),
+                                                ),
+                                            ),
+                                        ),
                                     ),
                                     'remove' => array(
                                         'type' => 'Segment',
@@ -274,7 +300,7 @@ return array(
                     'forecast' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => '/weather/:locationId/:start[/:end]',
+                            'route' => '/weather/:locationId[/:start][/:end]',
                             'constraints' => array(
                                 ':locationId' => '[0-9]+',
                                 ':start' => '[0-9]{4}\-[0-9]{2}\-[0-9]{2}',

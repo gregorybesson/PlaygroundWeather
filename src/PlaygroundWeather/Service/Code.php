@@ -6,6 +6,7 @@ use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\ServiceManager\ServiceManager;
 use ZfcBase\EventManager\EventProvider;
 use PlaygroundWeather\Entity\Code as CodeEntity;
+use PlaygroundWeather\Mapper\Code as CodeMapper;
 use Zend\Stdlib\ErrorHandler;
 use PlaygroundWeather\Options\ModuleOptions;
 
@@ -59,11 +60,11 @@ class Code extends EventProvider implements ServiceManagerAwareInterface
             $associatedCode = $this->getCodeMapper()->findById($data['associatedCode']);
         }
 
-        // Handle Icon loading
-        $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
-        $media_url = $this->getOptions()->getMediaUrl() . '/';
-
         if (!empty($data['icon']['tmp_name'])) {
+            // Handle Icon loading
+            $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
+            $media_url = $this->getOptions()->getMediaUrl() . '/';
+
             $oldIconURL = $code->getIconURL();
             ErrorHandler::start();
             $data['icon']['name'] = 'code-icon-' . $codeId . "-" . $data['icon']['name'];
@@ -72,7 +73,10 @@ class Code extends EventProvider implements ServiceManagerAwareInterface
             ErrorHandler::stop(true);
             if ($oldIconURL) {
                 $real_media_path = realpath($path) . DIRECTORY_SEPARATOR;
-                unlink(str_replace($media_url, $real_media_path,$oldIconURL));
+                $filePath = str_replace($media_url, $real_media_path, $oldIconURL);
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
             }
         }
         $code->setAssociatedCode($associatedCode);
@@ -87,11 +91,15 @@ class Code extends EventProvider implements ServiceManagerAwareInterface
         if (!$code) {
             return false;
         }
+
         if ($code->getIconURL()) {
             $path = $this->getOptions()->getMediaPath() . DIRECTORY_SEPARATOR;
             $real_media_path = realpath($path) . DIRECTORY_SEPARATOR;
             $media_url = $this->getOptions()->getMediaUrl() . '/';
-            unlink(str_replace($media_url, $real_media_path, $code->getIconURL()));
+            $iconPath = str_replace($media_url, $real_media_path, $code->getIconURL());
+            if (file_exists($iconPath)) {
+                unlink($iconPath);
+            }
         }
         $codeMapper->remove($code);
         return true;

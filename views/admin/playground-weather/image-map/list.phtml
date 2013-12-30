@@ -25,6 +25,9 @@
         <?php endforeach;?>
         </tbody>
     </table>
+
+    <?php echo (count($this->imageMaps)>1)?$this->paginationControl($this->imageMaps, 'Sliding', 'playground-weather/image-map/pagination_imagemap.phtml'):''; ?>
+
 <ul class="liste-buttons">
     <li class="btn-admin"><a href="<?php echo $this->url('admin/weather/images/add'); ?>"><?php echo $this->translate('Add a map image'); ?></a></li>
 </ul>
