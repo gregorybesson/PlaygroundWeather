@@ -32,8 +32,8 @@ class DataYieldTest extends \PHPUnit_Framework_TestCase
         ->will($this->returnValue('URL'));
 
         $ws->getOptions()
-        ->expects($this->exactly(2))
-        ->method('getUserKey')
+        ->expects($this->exactly(4))
+        ->method('getUserKeyPremium')
         ->will($this->returnValue('AwesomeKey'));
 
         $this->assertEquals('URL?q=paris&date=2013-12-25&enddate=2013-12-26&includeLocation=no&format=xml&key=AwesomeKey',
@@ -68,8 +68,8 @@ class DataYieldTest extends \PHPUnit_Framework_TestCase
         ->will($this->returnValue('URL'));
 
         $ws->getOptions()
-        ->expects($this->once())
-        ->method('getUserKey')
+        ->expects($this->exactly(2))
+        ->method('getUserKeyPremium')
         ->will($this->returnValue('AwesomeKey'));
 
         $date = new Datetime('2013-12-25');
@@ -78,7 +78,7 @@ class DataYieldTest extends \PHPUnit_Framework_TestCase
             $ws->request(array('paris'), $date, 2, 3, false));
     }
 
-    public function testRequestPastByRequestDefault()
+    public function testRequestDefault()
     {
         $locationService = $this->getMockBuilder('PlaygroundWeather\Service\Location')
         ->disableOriginalConstructor()
@@ -101,11 +101,12 @@ class DataYieldTest extends \PHPUnit_Framework_TestCase
         $ws->getOptions()
         ->expects($this->once())
         ->method('getForecastURL')
+        ->with($this->isFalse())
         ->will($this->returnValue('URL'));
 
         $ws->getOptions()
         ->expects($this->once())
-        ->method('getUserKey')
+        ->method('getUserKeyFree')
         ->will($this->returnValue('AwesomeKey'));
 
         $date = new Datetime('now');
@@ -138,11 +139,12 @@ class DataYieldTest extends \PHPUnit_Framework_TestCase
         $ws->getOptions()
         ->expects($this->once())
         ->method('getForecastURL')
+        ->with($this->isFalse())
         ->will($this->returnValue('URL'));
 
         $ws->getOptions()
         ->expects($this->once())
-        ->method('getUserKey')
+        ->method('getUserKeyFree')
         ->will($this->returnValue('AwesomeKey'));
 
         $date = new Datetime();

@@ -51,13 +51,16 @@ class Location extends EventProvider implements ServiceManagerAwareInterface
             $category = '';
         }
 
-        return $this->getOptions()->getLocationURL()
+        $premium = $this->getOptions()->getUserKeyFree() ? false : true;
+        $key = $premium ? $this->getOptions()->getUserKeyPremium() : $this->getOptions()->getUserKeyFree();
+        return $this->getOptions()->getLocationURL($premium)
             . '?query=' . $location
             . '&popular=' . $popular
             . '&num_of_results=' . $numResults
             . '&format=xml'
             . '&wct=' . $category
-            . '&key=' . $this->getOptions()->getUserKey();
+            . '&key=' . $key
+        ;
     }
 
     /**
