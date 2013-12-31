@@ -31,7 +31,7 @@ class CodeTest extends \PHPUnit_Framework_TestCase
     {
         $this->form->get('codes')->setCount(7)->prepareFieldset();
         $this->form->setData($this->codesData);
-        var_dump($this->form->isValid());
+        $this->form->isValid();
         $data = $this->form->getData();
         $this->assertCount(7, $data['codes']);
     }

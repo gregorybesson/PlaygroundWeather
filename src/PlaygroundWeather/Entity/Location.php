@@ -178,6 +178,7 @@ class Location implements InputFilterAwareInterface
                 'filters'  => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
+                    array('name' => 'StringToLower', 'options' => array('encoding' => 'UTF-8')),
                 ),
                 'validators' => array(
                     array('name' => 'StringLength', 'options' => array('min'=>1, 'max' => 255)),
