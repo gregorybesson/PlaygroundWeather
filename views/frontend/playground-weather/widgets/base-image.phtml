@@ -1,7 +1,8 @@
 <?php $this->plugin('translate')->setTranslatorTextDomain('playgroundweather');// Pour le texte ?>
 <?php $locale= $this->plugin('translate')->getTranslator()->getLocale(); ?>
 
-<?php if ($this->data['map']) :?>
+
+<?php if (array_key_exists('map', $this->data)) :?>
 <div class="weather-image-map" >
     <div style="
         width:<?php echo $this->data['map']['width'];?>px;
