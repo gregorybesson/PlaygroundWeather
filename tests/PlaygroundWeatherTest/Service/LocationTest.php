@@ -55,7 +55,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         ->will($this->returnValue('AwesomeKey'));
 
         $ws->getOptions()
-        ->expects($this->once())
+        ->expects($this->never())
         ->method('getUserKeyPremium')
         ->will($this->returnValue('AwesomeKeyPremium'));
 

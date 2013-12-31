@@ -77,6 +77,10 @@ class Module
                     $viewHelper->setWidgetTemplate($locator->get('playgroundweather_module_options')->getImageWidgetTemplate());
                     return $viewHelper;
                 },
+                'temperature' => function($sm) {
+                    $viewHelper = new View\Helper\Temperature();
+                    return $viewHelper;
+                }
             ),
         );
     }

@@ -158,10 +158,12 @@ class DataUse extends EventProvider implements ServiceManagerAwareInterface
         $resultArray = array();
         foreach ($locations as $location) {
             $daily = $this->getLocationWeather($location, $day, 1);
-            $arrayLoc = array();
-            $arrayLoc['location'] = $location;
-            $arrayLoc['weather'] = $this->getDailyAsArray(current($daily));
-            array_push($resultArray, $arrayLoc);
+            if (!empty($daily)) {
+                $arrayLoc = array();
+                $arrayLoc['location'] = $location;
+                $arrayLoc['weather'] = $this->getDailyAsArray(current($daily));
+                array_push($resultArray, $arrayLoc);
+            }
         }
         return $resultArray;
     }

@@ -153,12 +153,21 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
 
     public function parseForecastsToObjects(\PlaygroundWeather\Entity\Location $location, $xmlFileURL)
     {
-        if (!$xmlFileURL) {
+        $url = curl_init($xmlFileURL);
+        curl_setopt($url, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($url, CURLOPT_CONNECTTIMEOUT, 5);
+        $data = curl_exec($url);
+        $http_code = curl_getinfo($url, CURLINFO_HTTP_CODE);
+        curl_close($url);
+        if ($http_code != 200) {
             return false;
         }
         try {
-            $xmlContent = simplexml_load_file($xmlFileURL, null, LIBXML_NOCDATA);
+            $xmlContent = simplexml_load_string($data, null, LIBXML_NOCDATA);
         } catch (\Exception $e) {
+            return false;
+        }
+        if (!$xmlContent->weather ) {
             return false;
         }
         foreach ($xmlContent->weather as $daily) {
