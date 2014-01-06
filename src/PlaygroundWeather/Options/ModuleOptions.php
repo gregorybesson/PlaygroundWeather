@@ -3,6 +3,8 @@
 namespace PlaygroundWeather\Options;
 
 use Zend\Stdlib\AbstractOptions;
+use DateTime;
+use DateInterval;
 
 class ModuleOptions extends AbstractOptions
 {
@@ -51,6 +53,18 @@ class ModuleOptions extends AbstractOptions
      * Template for the weather map widget
      */
     protected $imageWidgetTemplate = 'playground-weather/widget/base-template.phtml';
+
+    /**
+     * First day for which we want to update weather data using Cron
+     * Difference in day(s) from current day
+     */
+    protected $cronStart = -1;
+
+    /**
+     * Last day for which we want to update weather data using Cron
+     * Difference in day(s) from current day
+     */
+    protected $cronEnd = 3;
 
     /**
      * Set media path
@@ -216,6 +230,54 @@ class ModuleOptions extends AbstractOptions
     {
         $this->imageWidgetTemplate = trim($imageWidgetTemplate);
         return $this;
+    }
+
+    public function getCronStart()
+    {
+        return $this->cronStart;
+    }
+
+    public function setCronStart($cronStart)
+    {
+        $this->cronStart = $cronStart;
+        return $this;
+    }
+
+    public function getCronEnd()
+    {
+        return $this->cronEnd;
+    }
+
+    public function setCronEnd($cronEnd)
+    {
+        $this->cronEnd = $cronEnd;
+        return $this;
+    }
+
+    public function getCronDays()
+    {
+        $days = array();
+        for($i = $this->getCronStart(); $i <= $this->getCronEnd(); $i++) {
+            $days[] = $i;
+        }
+        return $days;
+    }
+
+    public function getCronDates()
+    {
+        $cronDays = array();
+        foreach ($this->getCronDays() as $interval) {
+            $today = new Datetime('today');
+            $diff = new DateInterval('P'.abs($interval).'D');
+            if ($interval == 0) {
+                $cronDays[$interval] = $today;
+            } elseif ($interval > 0) {
+                $cronDays[$interval] = $today->add($diff);
+            }  elseif ($interval < 0) {
+                $cronDays[$interval] = $today->sub($diff);
+            }
+        }
+        return $cronDays;
     }
 
 }

@@ -59,7 +59,6 @@ class Code extends ProvidesEventsForm
      * Set service manager instance
      *
      * @param  ServiceManager $serviceManager
-     * @return User
      */
     public function setServiceManager (ServiceManager $serviceManager)
     {

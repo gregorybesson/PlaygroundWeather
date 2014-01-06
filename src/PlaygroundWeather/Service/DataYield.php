@@ -158,10 +158,11 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
         curl_setopt($url, CURLOPT_CONNECTTIMEOUT, 5);
         $data = curl_exec($url);
         $http_code = curl_getinfo($url, CURLINFO_HTTP_CODE);
-        curl_close($url);
         if ($http_code != 200) {
-            return false;
+            $data = curl_exec($url);
+            $http_code = curl_getinfo($url, CURLINFO_HTTP_CODE);
         }
+        curl_close($url);
         try {
             $xmlContent = simplexml_load_string($data, null, LIBXML_NOCDATA);
         } catch (\Exception $e) {
@@ -212,14 +213,18 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
 
     public function createDaily(array $data)
     {
-        $daily = new DailyOccurrence();
+        $past = $this->isPastDate($data['date']);
+        $daily = $this->getDailyOccurrenceMapper()->findOneBy($data['location'], $data['date'], !$past);
+        if (!$daily) {
+            $daily = new DailyOccurrence();
+            if ($data['location'] instanceof \PlaygroundWeather\Entity\Location) {
+                $daily->setLocation($data['location']);
+            }
+            if ($data['date'] instanceof \DateTime) {
+                $daily->setDate($data['date']);
+            }
+        }
         $daily->populate($data);
-        if (array_key_exists('location',$data) && $data['location'] instanceof \PlaygroundWeather\Entity\Location) {
-            $daily->setLocation($data['location']);
-        }
-        if (array_key_exists('date',$data) && $data['date'] instanceof \DateTime) {
-            $daily->setDate($data['date']);
-        }
         if (array_key_exists('code_value', $data)) {
             $code = $this->getCodeMapper()->findDefaultByCode((int) $data['code_value']);
             if ($code) {
@@ -232,17 +237,17 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
 
     public function createHourly(array $data)
     {
-        $hourly = new HourlyOccurrence();
-        $hourly->populate($data);
-
-        if (array_key_exists('dailyOccurrence',$data) && $data['dailyOccurrence'] instanceof DailyOccurrence) {
-            $hourly->setDailyOccurrence($data['dailyOccurrence']);
-        }
-        if (array_key_exists('time',$data)) {
-            $date = $hourly->getDailyOccurrence()->getDate();
+        if (array_key_exists('dailyOccurrence',$data) && $data['dailyOccurrence'] instanceof \PlaygroundWeather\Entity\DailyOccurrence) {
+            $date = $data['dailyOccurrence']->getDate();
             $time = $date->setTime((int)substr($data['time'], -4, -2), (int)substr($data['time'], 2, 4));
+        }
+        $hourly = $this->getHourlyOccurrenceMapper()->findOneBy($data['dailyOccurrence'], $time);
+        if (!$hourly) {
+            $hourly = new HourlyOccurrence();
+            $hourly->setDailyOccurrence($data['dailyOccurrence']);
             $hourly->setTime($time);
         }
+        $hourly->populate($data);
         if (array_key_exists('code_value', $data)) {
             $code = $this->getCodeMapper()->findDefaultByCode((int) $data['code_value']);
             if ($code) {

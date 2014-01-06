@@ -8,7 +8,7 @@ $form->prepare();
 		<li class="btn-admin"><a href="<?php echo $this->url('admin/weather/codes/add'); ?>"><?php echo $this->translate('Ajouter un état du ciel'); ?></a></li>
 	</ul>
 
-	<h2>Table d'association</h2>
+	<h2><?php echo $this->translate('Association table'); ?></h2>
 	<?php if ($this->appCodes) : ?>
 	<h3><?php echo $this->translate('Etats du ciel personnalisés') ?></h3>
     	<table id="app_codes">

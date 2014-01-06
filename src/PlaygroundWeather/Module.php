@@ -11,6 +11,7 @@ class Module
     public function onBootstrap(MvcEvent $e)
     {
         $sm = $e->getApplication()->getServiceManager();
+        $em = $e->getApplication()->getEventManager();
 
         $options = $sm->get('playgroundcore_module_options');
         $locale = $options->getLocale();
@@ -25,17 +26,35 @@ class Module
         }
         AbstractValidator::setDefaultTranslator($translator,'playgroundcore');
 
-        $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
-        $moduleRouteListener->attach($eventManager);
+        $moduleRouteListener->attach($em);
 
-        // Here we need to schedule the core cron service
+        // Attach core cron service
+        $em->getSharedManager()->attach('Zend\Mvc\Application','getCronjobs', array($this, 'addCronjob'));
 
         // If cron is called, the $e->getRequest()->getPost() produces an error so I protect it with
         // this test
         if ((get_class($e->getRequest()) == 'Zend\Console\Request')) {
             return;
         }
+    }
+
+    /**
+     * This method get the cron config for this module an add cronjobs to the listener
+     *
+     * @param  EventManager $e
+     * @return array
+     */
+    public function addCronjob($e)
+    {
+        $cronjobs = $e->getParam('cronjobs');
+
+        $cronjobs['refresh_data_weather'] = array(
+            'frequency' => '5 0 * * *',
+            'callback'  => '\PlaygroundWeather\Service\Cron::refreshWeatherData',
+            'args'      => array(),
+        );
+        return $cronjobs;
     }
 
     public function getAutoloaderConfig()
@@ -98,6 +117,7 @@ class Module
                 'playgroundweather_datause_service' => 'PlaygroundWeather\Service\DataUse',
                 'playgroundweather_code_service' => 'PlaygroundWeather\Service\Code',
                 'playgroundweather_imagemap_service' => 'PlaygroundWeather\Service\ImageMap',
+                'playgroundweather_cron_service' => 'PlaygroundWeather\Service\Cron',
             ),
 
             'factories' => array(

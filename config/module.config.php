@@ -37,7 +37,7 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'playgroundweather_webservice'             => 'PlaygroundWeather\Controller\Frontend\WebServiceController',
+            'playgroundweather_webservice'      => 'PlaygroundWeather\Controller\Frontend\WebServiceController',
             'playgroundweatheradmin'            => 'PlaygroundWeather\Controller\Admin\AdminController',
             'playgroundweather_admin_code'      => 'PlaygroundWeather\Controller\Admin\CodeController',
             'playgroundweather_admin_location'  => 'PlaygroundWeather\Controller\Admin\LocationController',

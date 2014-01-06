@@ -40,6 +40,16 @@ class HourlyOccurrence
         return $this->getEntityRepository()->findBy($array, $sortArray);
     }
 
+    // Unique constraint lies on this 2 parameters so we can use findOne
+    public function findOneBy($dailyOccurrence, $time)
+    {
+        return $this->getEntityRepository()->findOneBy(
+            array(
+                'dailyOccurrence' => $dailyOccurrence,
+                'time' => $time,
+            ));
+    }
+
     public function insert($entity)
     {
         return $this->persist($entity);
