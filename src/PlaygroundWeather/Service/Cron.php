@@ -3,6 +3,7 @@
 namespace PlaygroundWeather\Service;
 
 use ZfcBase\EventManager\EventProvider;
+use DateTime;
 
 class Cron
 {
@@ -22,24 +23,42 @@ class Cron
 
         $locations = $locationMapper->findAll();
 
-        $i = 0;
+        $queryRanges = $options->getQueryRanges();
         $missing = '';
+
+        $i = 0;
         $start = new \DateTime();
-        foreach($locations as $location) {
-            foreach($options->getCronDates() as $date) {
-                $res = $weatherDataYieldService->getLocationWeather($location, $date);
+
+        // start CRON
+        if ($queryRanges['pastStart']!= null) {
+            foreach($locations as $location) {
+                $res = $weatherDataYieldService->getLocationWeather($location, $queryRanges['pastStart'], $queryRanges['pastNb']);
                 if ($res) {
                     $i ++;
                 } else {
-                    $missing .= $location->getCity() . ' ' . $location->getCountry() . ' on the ' . $date->format('Y-m-d') . "\n";
+                    $missing .= 'real data for ' . $location->getCity() . ' ' . $location->getCountry() . "\n";
                 }
             }
         }
+        if ($queryRanges['forecastStart']!= null) {
+            foreach($locations as $location) {
+                $res = $weatherDataYieldService->getLocationWeather($location, $queryRanges['forecastStart'], $queryRanges['forecastNb']);
+                if ($res) {
+                    $i ++;
+                } else {
+                    $missing .= 'forecasts for ' . $location->getCity() . ' ' . $location->getCountry() . "\n";
+                }
+            }
+        }
+
+        // end of CRON
+
         $end = new \DateTime();
         $diff = $end->getTimestamp() - $start->getTimestamp();
 
         $txt = 'locations : '. count($locations) . "\n"
-            . 'days : '. count($options->getCronDates()) . "\n"
+            . 'past days : '. count($queryRanges['pastNb']) . "\n"
+            . 'forecast days : '. count($queryRanges['forecastNb']) . "\n"
             . 'successful queries : '. $i . "\n"
             . 'executed at ' . $start->format('Y-m-d H:i:s') . "\n"
             . 'last : '. $diff . ' s' . "\n";

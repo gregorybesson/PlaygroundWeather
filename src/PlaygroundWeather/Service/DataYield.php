@@ -158,7 +158,8 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
         curl_setopt($url, CURLOPT_CONNECTTIMEOUT, 5);
         $data = curl_exec($url);
         $http_code = curl_getinfo($url, CURLINFO_HTTP_CODE);
-        if ($http_code != 200) {
+        while ($http_code != 200) {
+            sleep(1);
             $data = curl_exec($url);
             $http_code = curl_getinfo($url, CURLINFO_HTTP_CODE);
         }

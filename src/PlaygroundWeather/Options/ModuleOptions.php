@@ -280,4 +280,36 @@ class ModuleOptions extends AbstractOptions
         return $cronDays;
     }
 
+    public function getQueryRanges()
+    {
+        $cronDays = $this->getCronDays();
+        $pastStart = null;
+        $pastNb = 1;
+        $forecastStart = null;
+        $forecastNb = 1;
+
+        if (current($cronDays) < 0) {
+            $today = new Datetime('today');
+            $diff = new DateInterval('P'.abs(current($cronDays)).'D');
+            $pastStart = $today->sub($diff);
+            while (next($cronDays) < 0) {
+                ++$pastNb;
+            }
+        }
+        if (current($cronDays) >= 0) {
+            $today = new Datetime('today');
+            $diff = new DateInterval('P'.abs(current($cronDays)).'D');
+            $forecastStart = $today->add($diff);
+            while (next($cronDays)) {
+                ++$forecastNb;
+            }
+        }
+        return array(
+            'pastStart'=>$pastStart,
+            'pastNb' => $pastNb,
+            'forecastStart' => $forecastStart,
+            'forecastNb' => $forecastNb
+        );
+    }
+
 }
