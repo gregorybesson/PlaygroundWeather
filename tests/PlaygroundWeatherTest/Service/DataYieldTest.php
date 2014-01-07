@@ -112,7 +112,7 @@ class DataYieldTest extends \PHPUnit_Framework_TestCase
         $date = new Datetime('now');
         $dateStr = $date->format('Y-m-d');
 
-        $this->assertEquals('URL?q=paris&num_of_days=1&date='.$dateStr.'&fx=yes&cc=yes&includeLocation=yes&showComments=no&format=xml&key=AwesomeKey',
+        $this->assertEquals('URL?q=paris&num_of_days=1&date=&fx=yes&cc=yes&includeLocation=yes&showComments=no&format=xml&key=AwesomeKey',
             $ws->request(array('paris')));
     }
 
@@ -150,7 +150,7 @@ class DataYieldTest extends \PHPUnit_Framework_TestCase
         $date = new Datetime();
         $dateStr = $date->format('Y-m-d');
 
-        $this->assertEquals('URL?q=paris&num_of_days=3&date='.$dateStr.'&fx=yes&cc=yes&includeLocation=no&showComments=no&format=xml&key=AwesomeKey',
+        $this->assertEquals('URL?q=paris&num_of_days=3&date=&fx=yes&cc=yes&includeLocation=no&showComments=no&format=xml&key=AwesomeKey',
             $ws->request(array('paris'), $date, 3, 3, false, true, true, false));
     }
 
@@ -198,7 +198,15 @@ class DataYieldTest extends \PHPUnit_Framework_TestCase
         ->with($this->isInstanceOf('\PlaygroundWeather\Entity\DailyOccurrence'))
         ->will($this->returnValue(true));
 
-        $this->assertTrue($ws->createDaily(array()));
+        $ws->getDailyOccurrenceMapper()
+        ->expects($this->once())
+        ->method('findOneBy')
+        ->with($this->isInstanceOf('\PlaygroundWeather\Entity\Location'), $this->isInstanceOf('\DateTime'), $this->isType('boolean'))
+        ->will($this->returnValue(false));
+
+        $location = new \PlaygroundWeather\Entity\Location();
+        $date = new \DateTime();
+        $this->assertTrue($ws->createDaily(array('location'=>$location, 'date'=>$date)));
     }
 
     public function testCreateDailyNotInsert()
@@ -212,11 +220,47 @@ class DataYieldTest extends \PHPUnit_Framework_TestCase
 
         $ws->getDailyOccurrenceMapper()
         ->expects($this->once())
+        ->method('findOneBy')
+        ->with($this->isInstanceOf('\PlaygroundWeather\Entity\Location'), $this->isInstanceOf('\DateTime'), $this->isType('boolean'))
+        ->will($this->returnValue(false));
+
+        $ws->getDailyOccurrenceMapper()
+        ->expects($this->once())
         ->method('insert')
         ->with($this->isInstanceOf('\PlaygroundWeather\Entity\DailyOccurrence'))
         ->will($this->returnValue(false));
 
-        $this->assertFalse($ws->createDaily(array()));
+        $location = new \PlaygroundWeather\Entity\Location();
+        $date = new \DateTime();
+        $this->assertFalse($ws->createDaily(array('location'=>$location, 'date'=>$date)));
+    }
+
+    public function testCreateDailyUpdateExisting()
+    {
+        $dailyMapper = $this->getMockBuilder('PlaygroundWeather\Mapper\DailyOccurrence')
+        ->disableOriginalConstructor()
+        ->getMock();
+
+        $ws = new \PlaygroundWeather\Service\DataYield();
+        $ws->setDailyOccurrenceMapper($dailyMapper);
+
+        $daily = new DailyOccurrence();
+
+        $ws->getDailyOccurrenceMapper()
+        ->expects($this->once())
+        ->method('findOneBy')
+        ->with($this->isInstanceOf('\PlaygroundWeather\Entity\Location'), $this->isInstanceOf('\DateTime'), $this->isType('boolean'))
+        ->will($this->returnValue($daily));
+
+        $ws->getDailyOccurrenceMapper()
+        ->expects($this->once())
+        ->method('insert')
+        ->with($this->isInstanceOf('\PlaygroundWeather\Entity\DailyOccurrence'))
+        ->will($this->returnValue(true));
+
+        $location = new \PlaygroundWeather\Entity\Location();
+        $date = new \DateTime();
+        $this->assertTrue($ws->createDaily(array('location'=>$location, 'date'=>$date)));
     }
 
     public function testCreateHourly()
@@ -232,6 +276,56 @@ class DataYieldTest extends \PHPUnit_Framework_TestCase
         $ws = new \PlaygroundWeather\Service\DataYield();
         $ws->setHourlyOccurrenceMapper($hourlyMapper);
         $ws->setCodeMapper($codeMapper);
+
+        $ws->getHourlyOccurrenceMapper()
+        ->expects($this->once())
+        ->method('findOneBy')
+        ->with($this->isInstanceOf('\PlaygroundWeather\Entity\DailyOccurrence'), $this->isInstanceOf('\DateTime'))
+        ->will($this->returnValue(false));
+
+        $ws->getHourlyOccurrenceMapper()
+        ->expects($this->once())
+        ->method('insert')
+        ->with($this->isInstanceOf('\PlaygroundWeather\Entity\HourlyOccurrence'))
+        ->will($this->returnValue(true));
+
+        $code = new Code();
+
+        $ws->getCodeMapper()
+        ->expects($this->once())
+        ->method('findDefaultByCode')
+        ->with($this->isType('integer'))
+        ->will($this->returnValue($code));
+
+        $daily = new DailyOccurrence();
+        $date = new \Datetime();
+        $daily->setDate($date);
+        $data = array('code_value' => 1, 'time' => 100, 'dailyOccurrence' =>$daily);
+
+        $this->assertTrue($ws->createHourly($data));
+    }
+
+    public function testCreateHourlyUpdateExisting()
+    {
+        $hourlyMapper = $this->getMockBuilder('PlaygroundWeather\Mapper\HourlyOccurrence')
+        ->disableOriginalConstructor()
+        ->getMock();
+
+        $codeMapper = $this->getMockBuilder('PlaygroundWeather\Mapper\Code')
+        ->disableOriginalConstructor()
+        ->getMock();
+
+        $ws = new \PlaygroundWeather\Service\DataYield();
+        $ws->setHourlyOccurrenceMapper($hourlyMapper);
+        $ws->setCodeMapper($codeMapper);
+
+        $hourly = new HourlyOccurrence();
+
+        $ws->getHourlyOccurrenceMapper()
+        ->expects($this->once())
+        ->method('findOneBy')
+        ->with($this->isInstanceOf('\PlaygroundWeather\Entity\DailyOccurrence'), $this->isInstanceOf('\DateTime'))
+        ->will($this->returnValue($hourly));
 
         $ws->getHourlyOccurrenceMapper()
         ->expects($this->once())

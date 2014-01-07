@@ -18,6 +18,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         $classes = $this->em->getMetadataFactory()->getAllMetadata();
         $tool->dropSchema($classes);
         $tool->createSchema($classes);
+        parent::setUp();
     }
 
     public function testQueryAll()

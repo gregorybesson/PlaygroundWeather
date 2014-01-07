@@ -2,33 +2,36 @@
 namespace PlaygroundWeather\Controller\Admin;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use PlaygroundWeather\Service\Location as LocationService;
+use PlaygroundWeather\Service\DataYield as DataYieldService;
 use Zend\View\Model\ViewModel;
 use DateTime;
 
 class AdminController extends AbstractActionController
 {
     /**
-     * @var LocationService
+     * @var DataYieldService
      */
-    protected $locationService;
+    protected $dataYieldService;
 
     public function adminAction()
     {
+
+        $options = $this->getDataYieldService()->getOptions();
+        var_dump($options->getCronDates());
         return new ViewModel(array());
     }
 
-    public function getLocationService()
+    public function getDataYieldService()
     {
-        if ($this->locationService === null) {
-            $this->locationService = $this->getServiceLocator()->get('playgroundweather_location_service');
+        if ($this->dataYieldService === null) {
+            $this->dataYieldService = $this->getServiceLocator()->get('playgroundweather_datayield_service');
         }
-        return $this->locationService;
+        return $this->dataYieldService;
     }
 
-    public function setLocationService($locationService)
+    public function setDataYieldService($dataYieldService)
     {
-        $this->locationService = $locationService;
+        $this->dataYieldService = $dataYieldService;
 
         return $this;
     }
