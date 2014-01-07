@@ -112,7 +112,7 @@ class DataYieldTest extends \PHPUnit_Framework_TestCase
         $date = new Datetime('now');
         $dateStr = $date->format('Y-m-d');
 
-        $this->assertEquals('URL?q=paris&num_of_days=1&date='.$dateStr.'&fx=yes&cc=yes&includeLocation=yes&showComments=no&format=xml&key=AwesomeKey',
+        $this->assertEquals('URL?q=paris&num_of_days=1&date=&fx=yes&cc=yes&includeLocation=yes&showComments=no&format=xml&key=AwesomeKey',
             $ws->request(array('paris')));
     }
 
@@ -150,7 +150,7 @@ class DataYieldTest extends \PHPUnit_Framework_TestCase
         $date = new Datetime();
         $dateStr = $date->format('Y-m-d');
 
-        $this->assertEquals('URL?q=paris&num_of_days=3&date='.$dateStr.'&fx=yes&cc=yes&includeLocation=no&showComments=no&format=xml&key=AwesomeKey',
+        $this->assertEquals('URL?q=paris&num_of_days=3&date=&fx=yes&cc=yes&includeLocation=no&showComments=no&format=xml&key=AwesomeKey',
             $ws->request(array('paris'), $date, 3, 3, false, true, true, false));
     }
 

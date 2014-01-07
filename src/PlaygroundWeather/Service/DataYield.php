@@ -79,10 +79,9 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
         $showComments = ($showComments) ? 'yes' : 'no';
 
         $dateStr = '';
-        $today = new DateTime("now");
+        $today = new DateTime("today");
         $diff_days = 0;
         if ($date) {
-            $today->setTime(0,0);
             $diff = $today->diff($date);
             $diff_days = $diff->days;
             if ($diff->invert) {
@@ -101,11 +100,12 @@ class DataYield extends EventProvider implements ServiceManagerAwareInterface
                 }
                 return $this->requestPast($location, $date->format('Y-m-d'), $endDate, $includeLocation);
             } else {
-                $dateStr = $date->format('Y-m-d');
+                if ($diff_days == 1) {
+                    $dateStr =  'tomorrow';
+                } elseif ($diff_days > 1) {
+                    $dateStr = $date->format('Y-m-d');
+                }
             }
-        }
-        else {
-            $dateStr = $today->format('Y-m-d');
         }
         $premium = ($diff_days + $numDays <= 5) ? false : true;
         return $this->requestForecast($location, $dateStr, $numDays, $fx, $cc, $includeLocation, $showComments, $premium);
