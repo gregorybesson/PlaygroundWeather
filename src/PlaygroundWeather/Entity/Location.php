@@ -52,6 +52,11 @@ class Location implements InputFilterAwareInterface
      */
     protected $longitude;
 
+    /**
+     * @ORM\Column(type="decimal")
+     */
+    protected $gtmOffset = 0;
+
     public function getId()
     {
         return $this->id;
@@ -118,6 +123,18 @@ class Location implements InputFilterAwareInterface
         return $this;
     }
 
+    public function getGtmOffset()
+    {
+        return $this->gtmOffset;
+    }
+
+    public function setGtmOffset($gtmOffset)
+    {
+        $this->gtmOffset = $gtmOffset;
+        return $this;
+    }
+
+
     public function getQueryArray()
     {
         return array((string) $this->getLatitude(), (string) $this->getLongitude());
@@ -140,6 +157,9 @@ class Location implements InputFilterAwareInterface
         if (isset($data['longitude']) && $data['longitude'] != null) {
             $this->longitude = $data['longitude'];
         }
+        if (isset($data['gtmOffset']) && $data['gtmOffset'] != null) {
+            $this->gtmOffset = $data['gtmOffset'];
+        }
     }
 
     public function getArrayCopy()
@@ -156,6 +176,7 @@ class Location implements InputFilterAwareInterface
             'region' => $this->getRegion(),
             'latitude' => $this->getLatitude(),
             'longitude' => $this->getLongitude(),
+            'gtmOffset' => $this->getGtmOffset(),
         );
     }
 
@@ -210,8 +231,13 @@ class Location implements InputFilterAwareInterface
                 'name' => 'longitude',
                 'required' => false,
                 'validators' => array(
-                    array('name' => 'Float', 'options' => array('locale' => 'en_US')),
-                ),
+                    array(
+                        'name' => 'Float',
+                        'options' => array(
+                            'locale' => 'en_US'
+                        )
+                    )
+                )
             )));
 
             $this->inputFilter = $inputFilter;

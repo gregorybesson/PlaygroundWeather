@@ -17,7 +17,6 @@ class AdminController extends AbstractActionController
     {
 
         $options = $this->getDataYieldService()->getOptions();
-        var_dump($options->getCronDates());
         return new ViewModel(array());
     }
 

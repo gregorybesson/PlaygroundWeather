@@ -80,9 +80,40 @@ class LocationController extends AbstractActionController
 
     public function listAction()
     {
+        $filterCriteria = $this->getEvent()->getRouteMatch()->getParam('criteria');
+        $filterWay = $this->getEvent()->getRouteMatch()->getParam('filterWay');
+
+        $sortOptions = array();
+        if ($filterCriteria && $filterWay) {
+            $sortOptions[$filterCriteria] = $filterWay;
+        }
+
+        $filter = array();
+        $formFilter = $this->getServiceLocator()->get('playgroundweather_adminfilter_form');
+        $formFilter->get('submit')->setLabel('Filter');
+        $formFilter->get('columns')->setCount(5)->prepareFieldset();
+        $data = array('columns' => array(
+                array('columnName' =>'city'),
+                array('columnName' =>'country'),
+                array('columnName' =>'region'),
+                array('columnName' =>'latitude'),
+                array('columnName' =>'longitude'),
+        ));
+        $formFilter->setData($data);
+        if($this->getRequest()->isPost()) {
+            $formFilter->setData($this->getRequest()->getPost());
+            if ($formFilter->isValid()) {
+                $data = $formFilter->getData();
+                foreach ($data['columns'] as $column) {
+                    if ($column['columnFilter']) {
+                        $filter[] = array($column['columnName'], $column['columnFilter']);
+                    }
+                }
+            }
+        }
         $adapter = new DoctrineAdapter(
                         new LargeTablePaginator(
-                            $this->getLocationService()->getLocationMapper()->queryAll(array('city' => 'ASC'))
+                            $this->getLocationService()->getLocationMapper()->queryCustom($filter,$sortOptions)
                         )
                     );
         $paginator = new Paginator($adapter);
@@ -91,8 +122,11 @@ class LocationController extends AbstractActionController
         $paginator->setCurrentPageNumber($this->getEvent()->getRouteMatch()->getParam('p'));
 
         return new ViewModel(array(
+            'formFilter' =>$formFilter,
             'locations' => $paginator,
             'flashMessages' => $this->flashMessenger()->getMessages(),
+            'filterCriteria' => $filterCriteria,
+            'filterWay' => $filterWay,
         ));
     }
 

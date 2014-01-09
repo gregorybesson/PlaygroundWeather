@@ -39,6 +39,26 @@ class Location
         return $query;
     }
 
+    public function queryCustom($filterArray = array(), $sortArray = array())
+    {
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder->select('l' );
+        $queryBuilder->from('PlaygroundWeather\Entity\Location', 'l');
+        if (!empty($filterArray)) {
+            $item = current($filterArray);
+            $queryBuilder->where('l.'.$item[0]. ' LIKE \'%' .$item[1].'%\'');
+            while(next($filterArray)) {
+                $item = current($filterArray);
+                $queryBuilder->andwhere('l.'.$item[0]. ' LIKE \'%' .$item[1].'%\'');
+            }
+        }
+        if (!empty($sortArray)) {
+            $queryBuilder->orderBy('l.'.key($sortArray), current($sortArray));
+        }
+        return $queryBuilder->getQuery();
+    }
+
+
     public function getDefaultLocation($sortArray = array())
     {
         $query = $this->em->createQuery(
