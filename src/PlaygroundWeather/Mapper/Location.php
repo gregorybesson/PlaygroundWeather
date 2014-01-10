@@ -46,10 +46,10 @@ class Location
         $queryBuilder->from('PlaygroundWeather\Entity\Location', 'l');
         if (!empty($filterArray)) {
             $item = current($filterArray);
-            $queryBuilder->where('l.'.$item[0]. ' LIKE \'%' .$item[1].'%\'');
+            $queryBuilder->where('l.'.key($item). ' LIKE \'%' .current($item).'%\'');
             while(next($filterArray)) {
                 $item = current($filterArray);
-                $queryBuilder->andwhere('l.'.$item[0]. ' LIKE \'%' .$item[1].'%\'');
+                $queryBuilder->andwhere('l.'.key($item). ' LIKE \'%' .current($item).'%\'');
             }
         }
         if (!empty($sortArray)) {
@@ -58,6 +58,14 @@ class Location
         return $queryBuilder->getQuery();
     }
 
+    public function getCountries()
+    {
+        $query = $this->em->createQuery(
+            'SELECT DISTINCT l.country FROM PlaygroundWeather\Entity\Location l
+            ORDER BY l.country ASC'
+        );
+        return $query->getResult();
+    }
 
     public function getDefaultLocation($sortArray = array())
     {

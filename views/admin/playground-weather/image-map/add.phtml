@@ -21,6 +21,10 @@
         <?php echo $this->formInput($form->get('description')); ?>
     </div>
     <div class="label-input">
+        <?php echo $this->formLabel($form->get('country')); ?>
+        <?php echo $this->formSelect($form->get('country')); ?>
+    </div>
+    <div class="label-input">
         <?php echo $this->formLabel($form->get('image')); ?>
         <?php echo $this->formFile($form->get('image')); ?>
     </div>
@@ -55,7 +59,31 @@
         <?php echo $this->formInput($form->get('longitude2')); ?>
     </div>
     <h3 style="clear:both;"><?php echo $this->translate('Add locations for which you want to display weather on this map')?></h3>
-    <div class="label-input">
+    <div class="label-input" id="locations">
         <?php echo $this->formMultiCheckbox($form->get('locationsCheckboxes')); ?>
     </div>
 <?php echo $this->form()->closeTag() ?>
+
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        var updateForm = function() {
+            var country = $('#country').val();
+            var checkboxes = $('#locations').children("label");
+            $.each(checkboxes, function(key, obj) {
+            	if($(obj)[0]['innerText'].match(country)) {
+            		$(obj).show();
+            	}
+            	else {
+            		$(obj).hide();
+            	}
+            });
+        }
+
+        updateForm();
+        $('#country').change(function() {
+            updateForm();
+        });
+
+
+    });
+</script>

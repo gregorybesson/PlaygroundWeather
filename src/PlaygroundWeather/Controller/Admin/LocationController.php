@@ -90,7 +90,7 @@ class LocationController extends AbstractActionController
 
         $filter = array();
         $formFilter = $this->getServiceLocator()->get('playgroundweather_adminfilter_form');
-        $formFilter->get('submit')->setLabel('Filter');
+        $formFilter->get('submit')->setValue('Filter');
         $formFilter->get('columns')->setCount(5)->prepareFieldset();
         $data = array('columns' => array(
                 array('columnName' =>'city'),
@@ -106,7 +106,7 @@ class LocationController extends AbstractActionController
                 $data = $formFilter->getData();
                 foreach ($data['columns'] as $column) {
                     if ($column['columnFilter']) {
-                        $filter[] = array($column['columnName'], $column['columnFilter']);
+                        $filter[] = array($column['columnName'] => $column['columnFilter']);
                     }
                 }
             }
