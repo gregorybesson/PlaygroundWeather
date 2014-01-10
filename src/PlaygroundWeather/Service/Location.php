@@ -124,6 +124,7 @@ class Location extends EventProvider implements ServiceManagerAwareInterface
                  'region' => (string) $result->region,
                  'latitude' => (string) $result->latitude,
                  'longitude' => (string) $result->longitude,
+                 'gtmOffset' => (string) $result->timezone,
              ));
              $locations[] = $location;
         }

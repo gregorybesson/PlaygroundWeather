@@ -138,7 +138,7 @@ return array(
                             ),
 
                             'locations' => array(
-                                'type' => 'Literal',
+                                'type' => 'Segment',
                                 'options' => array(
                                     'route' => '/locations',
                                     'defaults' => array(
@@ -159,25 +159,12 @@ return array(
                                         ),
                                     ),
                                     'list' => array(
-                                        'type' => 'Literal',
+                                        'type' => 'Segment',
                                         'options' => array(
-                                            'route' => '/list',
+                                            'route' => '/list[/:criteria][/:filterWay][/:p]',
                                             'defaults' => array(
                                                 'controller' => 'playgroundweather_admin_location',
                                                 'action' => 'list',
-                                            ),
-                                        ),
-                                        'may_terminate' => true,
-                                        'child_routes' => array(
-                                            'pagination' => array(
-                                                'type' => 'Segment',
-                                                'options' => array(
-                                                    'route' => '[/:p]',
-                                                    'defaults' => array(
-                                                        'controller' => 'playgroundweather_admin_location',
-                                                        'action' => 'list'
-                                                    ),
-                                                ),
                                             ),
                                         ),
                                     ),

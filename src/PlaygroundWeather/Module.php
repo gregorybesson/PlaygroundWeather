@@ -192,6 +192,11 @@ class Module
                     $form->setInputFilter($imageMap->getInputFilter());
                     return $form;
                 },
+                'playgroundweather_adminfilter_form' => function ($sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Admin\Filter(null, $sm, $translator);
+                    return $form;
+                },
             ),
         );
     }
