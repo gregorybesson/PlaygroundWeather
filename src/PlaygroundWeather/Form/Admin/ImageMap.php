@@ -58,6 +58,19 @@ class ImageMap extends ProvidesEventsForm
             )
         ));
 
+        $countries = $this->getCountries();
+        $this->add(array(
+            'name' => 'country',
+            'type' => 'Zend\Form\Element\Select',
+            'options' => array(
+                'label' => $translator->translate('Country', 'playgroundweather'),
+                'value_options' => $countries,
+            ),
+            'attributes' => array(
+                'id'=> 'country'
+            )
+        ));
+
         $this->add(array(
             'name' => 'image',
             'options' => array(
@@ -150,6 +163,9 @@ class ImageMap extends ProvidesEventsForm
                 'label' => $translator->translate('Locations', 'playgroundweather'),
                 'value_options' => $locations,
             ),
+            'attributes' => array(
+                'id' => 'locations',
+            ),
         ));
 
         $submitElement = new Element\Button('submit');
@@ -167,11 +183,23 @@ class ImageMap extends ProvidesEventsForm
     {
         $locations = array();
         $locationMapper = $this->getServiceManager()->get('playgroundweather_location_mapper');
-        $results = $locationMapper->findAll(array('country'=>'ASC'));
+        $results = $locationMapper->findAll(array('city'=>'ASC'));
         foreach ($results as $result) {
             $locations[$result->getId()] = $result->getCity() . ' (' . $result->getCountry() . ')';
         }
         return $locations;
+    }
+
+    public function getCountries()
+    {
+        $countries = array();
+        $locationMapper = $this->getServiceManager()->get('playgroundweather_location_mapper');
+
+        $results = $locationMapper->getCountries();
+        foreach ($results as $result) {
+            $countries[current($result)] = current($result);
+        }
+        return $countries;
     }
 
     /**

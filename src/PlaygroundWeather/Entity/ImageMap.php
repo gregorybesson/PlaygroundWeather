@@ -37,6 +37,11 @@ class ImageMap implements InputFilterAwareInterface
     protected $description;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    protected $country;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Location", fetch="EXTRA_LAZY", cascade={"persist","remove"})
      */
     protected $locations = '';
@@ -62,12 +67,12 @@ class ImageMap implements InputFilterAwareInterface
     protected $latitude1;
 
     /**
-     * @ORM\Column(name="longitude1", type="decimal",  precision=8, scale=5)
+     * @ORM\Column(name="longitude1", type="decimal", precision=8, scale=5)
      */
     protected $longitude1;
 
     /**
-     * @ORM\Column(name="latitude2", type="decimal",  precision=8, scale=5)
+     * @ORM\Column(name="latitude2", type="decimal", precision=8, scale=5)
      */
     protected $latitude2;
 
@@ -172,6 +177,17 @@ class ImageMap implements InputFilterAwareInterface
     public function setDescription($description)
     {
         $this->description = $description;
+        return $this;
+    }
+
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    public function setCountry($country)
+    {
+        $this->country = $country;
         return $this;
     }
 
@@ -289,6 +305,9 @@ class ImageMap implements InputFilterAwareInterface
         if (isset($data['description']) && $data['description'] != null) {
             $this->description = $data['description'];
         }
+        if (isset($data['country']) && $data['country'] != null) {
+            $this->country = $data['country'];
+        }
         if (isset($data['imageWidth']) && $data['imageWidth'] != null) {
             $this->imageWidth = $data['imageWidth'];
         }
@@ -341,6 +360,14 @@ class ImageMap implements InputFilterAwareInterface
 
             $inputFilter->add($factory->createInput(array(
                 'name' => 'description',
+                'required' => true,
+                'validators' => array(
+                    array('name' => 'NotEmpty',),
+                ),
+            )));
+
+            $inputFilter->add($factory->createInput(array(
+                'name' => 'country',
                 'required' => true,
                 'validators' => array(
                     array('name' => 'NotEmpty',),
