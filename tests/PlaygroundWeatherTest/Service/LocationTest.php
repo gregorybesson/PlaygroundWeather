@@ -59,7 +59,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         ->method('getUserKeyPremium')
         ->will($this->returnValue('AwesomeKeyPremium'));
 
-        $this->assertEquals('URL?query=paris,France&popular=no&num_of_results=2&format=xml&wct=&key=AwesomeKey',
+        $this->assertEquals('URL?query=paris,France&popular=no&timezone=yes&num_of_results=2&format=xml&wct=&key=AwesomeKey',
                             $ws->request(array('paris', 'France'), 2, true, false, 'fakeCategory'));
     }
 
@@ -90,7 +90,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         ->with($this->isInstanceOf('\PlaygroundWeather\Entity\Location'))
         ->will($this->returnValue($location));
 
-        $data = array('city'=>'Paris', 'country'=>'france', 'latitude'=> -1.25787, 'longitude'=> 52.39747);
+        $data = array('city'=>'Paris', 'country'=>'france', 'latitude'=> -1.25787, 'longitude'=> 52.39747, 'gtmOffset' => '1.0');
         $this->assertInstanceOf('\PlaygroundWeather\Entity\Location', $ws->create($data));
     }
 
@@ -113,7 +113,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         ->expects($this->never())
         ->method('insert');
 
-        $data = array('city'=>'Paris', 'country'=>'france', 'latitude'=> -1.25787, 'longitude'=> 52.39747);
+        $data = array('city'=>'Paris', 'country'=>'france', 'latitude'=> -1.25787, 'longitude'=> 52.39747, 'gtmOffset' => '1.0');
         $this->assertFalse($ws->create($data));
     }
 
