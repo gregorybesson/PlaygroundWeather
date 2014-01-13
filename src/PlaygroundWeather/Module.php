@@ -100,8 +100,8 @@ class Module
                     $viewHelper = new View\Helper\Temperature();
                     return $viewHelper;
                 },
-                'codeIcone' => function($sm) {
-                    $viewHelper = new View\Helper\Icone();
+                'codeIcon' => function($sm) {
+                    $viewHelper = new View\Helper\Icon();
                     return $viewHelper;
                 }
             ),
