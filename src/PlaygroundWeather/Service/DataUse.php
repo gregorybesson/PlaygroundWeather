@@ -102,15 +102,19 @@ class DataUse extends EventProvider implements ServiceManagerAwareInterface
 
     public function getDailyAsArray($daily)
     {
-        $lastAssociatedCode = $this->getCodeMapper()->findLastAssociatedCode($daily->getCode());
-        return array(
+        $data = array(
             'id' => $daily->getId(),
             'date' => $daily->getDate(),
             'location' => $daily->getLocation()->getForJson(),
             'minTemperature' => $daily->getMinTemperature(),
             'maxTemperature' => $daily->getMaxTemperature(),
-            'code' => $lastAssociatedCode->getForJson(),
+            'code' => null,
         );
+        if ($daily->getCode()) {
+            $lastAssociatedCode = $this->getCodeMapper()->findLastAssociatedCode($daily->getCode());
+            $data['code'] = $lastAssociatedCode->getForJson();
+        }
+        return $data;
     }
 
     public function getCloserHourlyOccurrence(DailyOccurrence $dailyOccurrence, DateTime $time)

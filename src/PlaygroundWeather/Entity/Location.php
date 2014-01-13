@@ -55,7 +55,7 @@ class Location implements InputFilterAwareInterface
     /**
      * @ORM\Column(type="decimal")
      */
-    protected $gtmOffset = 0;
+    protected $gtmOffset = 1.0;
 
     public function getId()
     {

@@ -124,6 +124,43 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->tm->getCountries());
     }
 
+    public function testQueryPartialByCountry()
+    {
+        $location = new Location();
+        $location->setCity('xxxxx');
+        $location->setCountry('france');
+        $location->setLatitude(3);
+        $location->setLongitude(3);
+        $this->tm->insert($location);
+
+        $location2 = new Location();
+        $location2->setCity('yyyyy');
+        $location2->setCountry('france');
+        $location2->setLatitude(4);
+        $location2->setLongitude(4);
+        $this->tm->insert($location2);
+
+        $location1 = new Location();
+        $location1->setCity('wwwww');
+        $location1->setCountry('spain');
+        $location1->setLatitude(5);
+        $location1->setLongitude(5);
+        $this->tm->insert($location1);
+
+        $this->assertCount(2, $this->tm->queryPartialByCountry('france')->getResult());
+        $this->assertContains($location1, $this->tm->queryPartialByCountry('spain')->getResult());
+
+        $result = $this->tm->queryPartialByCountry('france')->getResult();
+        $this->assertEquals($location, current($result));
+        $this->assertEquals($location2, end($result));
+
+        $this->tm->remove($location);
+        $this->tm->remove($location1);
+        $this->tm->remove($location2);
+        $this->assertEmpty($this->tm->queryPartialByCountry('france')->getResult());
+        $this->assertEmpty($this->tm->queryPartialByCountry('spain')->getResult());
+    }
+
     public function tearDown()
     {
         $dbh = $this->em->getConnection();
