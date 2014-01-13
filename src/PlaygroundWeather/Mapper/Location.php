@@ -39,6 +39,16 @@ class Location
         return $query;
     }
 
+    public function queryPartialByCountry($country, $sortArray = array())
+    {
+        $query = $this->em->createQuery(
+            'SELECT l FROM PlaygroundWeather\Entity\Location l
+            WHERE l.country LIKE \'%'.$country.'%\'
+            ORDER BY l.city ASC'
+        );
+        return $query;
+    }
+
     public function queryCustom($filterArray = array(), $sortArray = array())
     {
         $queryBuilder = $this->em->createQueryBuilder();
