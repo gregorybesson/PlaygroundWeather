@@ -38,7 +38,7 @@ class Location extends EventProvider implements ServiceManagerAwareInterface
      * @param string $category = ''
      * @return string url
      */
-    public function request(array $locationData, $numResults = 1, $timezone = false, $popular = true, $category = '')
+    public function request(array $locationData, $numResults = 1, $timezone = true, $popular = false, $category = '')
     {
         $location = $this->createQueryString($locationData);
         if (!$location) {
@@ -56,6 +56,7 @@ class Location extends EventProvider implements ServiceManagerAwareInterface
         return $this->getOptions()->getLocationURL($premium)
             . '?query=' . $location
             . '&popular=' . $popular
+            . '&timezone=' . $timezone
             . '&num_of_results=' . $numResults
             . '&format=xml'
             . '&wct=' . $category
@@ -124,7 +125,7 @@ class Location extends EventProvider implements ServiceManagerAwareInterface
                  'region' => (string) $result->region,
                  'latitude' => (string) $result->latitude,
                  'longitude' => (string) $result->longitude,
-                 'gtmOffset' => (string) $result->timezone,
+                 'gtmOffset' => (string) $result->timezone->offset,
              ));
              $locations[] = $location;
         }
@@ -135,7 +136,7 @@ class Location extends EventProvider implements ServiceManagerAwareInterface
     {
         if ((isset($data['city']) && !empty($data['city']))
                && (isset($data['country']) && !empty($data['country']))) {
-            return $this->parseResultToObjects($this->request(array($data['city'], $data['country']), 3, false, false));
+            return $this->parseResultToObjects($this->request(array($data['city'], $data['country']), 3));
         } elseif (isset($data['city']) && !empty($data['city'])) {
             return $this->parseResultToObjects($this->request(array($data['city'])));
         } elseif ((isset($data['latitude']) && !empty($data['latitude']))
