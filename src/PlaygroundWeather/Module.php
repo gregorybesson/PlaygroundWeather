@@ -99,6 +99,10 @@ class Module
                 'temperature' => function($sm) {
                     $viewHelper = new View\Helper\Temperature();
                     return $viewHelper;
+                },
+                'codeIcone' => function($sm) {
+                    $viewHelper = new View\Helper\Icone();
+                    return $viewHelper;
                 }
             ),
         );
