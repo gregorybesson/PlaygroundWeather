@@ -50,7 +50,7 @@ class Module
         $cronjobs = $e->getParam('cronjobs');
 
         $cronjobs['refresh_data_weather'] = array(
-            'frequency' => '5 0 * * *',
+            'frequency' => '5 1 * * *',
             'callback'  => '\PlaygroundWeather\Service\Cron::refreshWeatherData',
             'args'      => array(),
         );
@@ -98,6 +98,10 @@ class Module
                 },
                 'temperature' => function($sm) {
                     $viewHelper = new View\Helper\Temperature();
+                    return $viewHelper;
+                },
+                'codeIcon' => function($sm) {
+                    $viewHelper = new View\Helper\Icon();
                     return $viewHelper;
                 }
             ),

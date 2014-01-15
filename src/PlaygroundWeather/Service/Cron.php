@@ -28,7 +28,6 @@ class Cron
 
         $i = 0;
         $start = new \DateTime();
-
         // start CRON
         if ($queryRanges['pastStart']!= null) {
             foreach($locations as $location) {

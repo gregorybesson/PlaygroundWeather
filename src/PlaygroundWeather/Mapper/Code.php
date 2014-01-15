@@ -38,6 +38,11 @@ class Code
         return $this->getEntityRepository()->findBy($array, $sortArray);
     }
 
+    public function findOneBy($array = array(), $sortArray = array())
+    {
+        return $this->getEntityRepository()->findOneBy($array, $sortArray);
+    }
+
     public function insert($entity)
     {
         return $this->persist($entity);

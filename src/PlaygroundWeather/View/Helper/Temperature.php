@@ -20,7 +20,7 @@ class Temperature extends AbstractHelper
 
     public function __invoke($temperatureC, $locale = null)
     {
-        if (!$temperatureC || (!is_float($temperatureC) && !is_int($temperatureC))) {
+        if (!is_float($temperatureC) && !is_int($temperatureC)) {
             return '';
         }
         if ($locale === null) {
@@ -29,7 +29,7 @@ class Temperature extends AbstractHelper
         if (in_array($locale, $this->localesFahrenheit)) {
             return $this->celsiusToFahrenheit($temperatureC) . '°F';
         }
-        return $temperatureC . '°C';
+        return strval($temperatureC) . '°C';
     }
 
     public function celsiusToFahrenheit($tempC)
