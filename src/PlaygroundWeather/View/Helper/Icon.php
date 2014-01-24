@@ -32,7 +32,7 @@ class Icon extends AbstractHelper implements ServiceLocatorAwareInterface
             return '';
         }
        $weatherCode = $this->getCodeMapper()->findLastAssociatedCode($weatherCode);
-        return '<img src="'.$weatherCode->getIconURL().'" alt="Icone du code d\'état du ciel '.$code.'"/>';
+        return $weatherCode->getIconURL();
     }
 
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
