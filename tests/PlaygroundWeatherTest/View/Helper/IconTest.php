@@ -94,7 +94,7 @@ class IconTest extends \PHPUnit_Framework_TestCase
         ->with($this->isInstanceOf('PlaygroundWeather\Entity\Code'))
         ->will($this->returnValue($code));
 
-        $this->assertEquals('<img src="imageIconUrl" alt="Icone du code d\'état du ciel 3"/>', $helper(3));
+        $this->assertEquals('imageIconUrl', $helper(3));
     }
 
     public function testHelperCodeExisting2()
@@ -127,7 +127,7 @@ class IconTest extends \PHPUnit_Framework_TestCase
         ->with($this->isInstanceOf('PlaygroundWeather\Entity\Code'))
         ->will($this->returnValue($code));
 
-        $this->assertEquals('<img src="imageIconUrl" alt="Icone du code d\'état du ciel 3"/>', $helper(3));
+        $this->assertEquals('imageIconUrl', $helper(3));
     }
 
     public function testHelperCodeExistingNoImage()
@@ -160,7 +160,7 @@ class IconTest extends \PHPUnit_Framework_TestCase
         ->with($this->isInstanceOf('PlaygroundWeather\Entity\Code'))
         ->will($this->returnValue($code));
 
-        $this->assertEquals('<img src="" alt="Icone du code d\'état du ciel 3"/>', $helper(3));
+        $this->assertEquals('', $helper(3));
     }
 
 }
