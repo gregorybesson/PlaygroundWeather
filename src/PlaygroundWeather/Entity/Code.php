@@ -8,6 +8,9 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\Factory;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
+
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
@@ -16,10 +19,18 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  *              name="weather_code",
  *              uniqueConstraints={@UniqueConstraint(name="code", columns={"value", "is_default", "description"})}
  *           )
+ * @Gedmo\TranslationEntity(class="PlaygroundWeather\Entity\WeatherTranslation")
  */
-class Code implements InputFilterAwareInterface
+class Code implements InputFilterAwareInterface, Translatable
 {
     protected $inputFilter;
+
+    protected $locale;
+
+    public function setTranslatableLocale($locale)
+    {
+        $this->locale = $locale;
+    }
 
     /**
      * @ORM\Id
@@ -34,6 +45,7 @@ class Code implements InputFilterAwareInterface
     protected $value;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="string")
      */
     protected $description = '';
