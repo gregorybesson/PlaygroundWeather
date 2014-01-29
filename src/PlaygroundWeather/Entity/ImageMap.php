@@ -9,15 +9,28 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\Factory;
+
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
+
 use PlaygroundWeather\Entity\Location;
 
 /**
  * @ORM\Entity @HasLifecycleCallbacks
  * @ORM\Table(name="weather_image_map")
+ *
+ * @Gedmo\TranslationEntity(class="PlaygroundWeather\Entity\WeatherTranslation")
  */
-class ImageMap implements InputFilterAwareInterface
+class ImageMap implements InputFilterAwareInterface, Translatable
 {
     protected $inputFilter;
+
+    protected $locale;
+
+    public function setTranslatableLocale($locale)
+    {
+        $this->locale = $locale;
+    }
 
     /**
      * @ORM\Id
@@ -27,11 +40,13 @@ class ImageMap implements InputFilterAwareInterface
     protected $id;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="string")
      */
     protected $name;
 
     /**
+     * @Gedmo\Translatable
      * @ORM\Column(type="string")
      */
     protected $description;
