@@ -2,14 +2,15 @@
     <li class="btn-admin"><a href="<?php echo $this->url('admin/weather/locations/add'); ?>"><?php echo $this->translate('Ajouter un lieu'); ?></a></li>
 </ul>
 
-
+<?php $filterCriteria = ($this->filterCriteria) ? $this->filterCriteria : 'city';  ?>
+<?php $filterWay = ($this->filterWay) ? $this->filterWay : 'ASC';  ?>
 
 <h2><?php echo $this->translate('Lieux') ?></h2>
     <table id="app_codes">
         <thead>
             <tr>
                 <th><?php echo $this->translate('Ville') ?>
-                <?php if($this->filterCriteria =='city' && $this->filterWay == 'ASC'): ?>
+                <?php if($filterCriteria =='city' && $filterWay == 'ASC'): ?>
             	    <a href="<?php echo $this->url('admin/weather/locations/list', array('criteria' => 'city', 'filterWay' => 'DESC')); ?>">
             	    	<img src="<?php echo $this->adminAssetPath('images/admin/arrow-down.png');?>" alt="" />
             	    </a>
@@ -20,7 +21,7 @@
             	<?php endif; ?>
                 </th>
                 <th><?php echo $this->translate('Pays') ?>
-                <?php if($this->filterCriteria =='country' && $this->filterWay == 'ASC'): ?>
+                <?php if($filterCriteria =='country' && $filterWay == 'ASC'): ?>
             	    <a href="<?php echo $this->url('admin/weather/locations/list', array('criteria' => 'country', 'filterWay' => 'DESC')); ?>">
             	    	<img src="<?php echo $this->adminAssetPath('images/admin/arrow-down.png');?>" alt="" />
             	    </a>
@@ -69,7 +70,7 @@
         </tbody>
     </table>
 
-<?php echo (count($this->locations)>1)?$this->paginationControl($this->locations, 'Sliding', 'playground-weather/location/pagination_locations.phtml', array('criteria' => $this->filterCriteria, 'way' => $this->filterWay)):''; ?>
+<?php echo (count($this->locations)>1)?$this->paginationControl($this->locations, 'Sliding', 'playground-weather/location/pagination_locations.phtml', array('criteria' => $filterCriteria, 'way' => $filterWay)):''; ?>
 
 <ul class="liste-buttons">
     <li class="btn-admin"><a href="<?php echo $this->url('admin/weather/locations/add'); ?>"><?php echo $this->translate('Ajouter un lieu'); ?></a></li>
