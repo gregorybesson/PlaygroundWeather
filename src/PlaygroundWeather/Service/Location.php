@@ -149,6 +149,9 @@ class Location extends EventProvider implements ServiceManagerAwareInterface
     public function create($data = array())
     {
         $location = new LocationEntity();
+        foreach ($data as $key=>$value) {
+            $data[$key] = base64_decode($value);
+        }
         $location->populate($data);
         if (!$this->getLocationMapper()->assertNoOther($location)) {
             return false;
