@@ -171,13 +171,13 @@ return array(
                                     'create' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                            'route' => '/create[/:city][/:country][/:region][/:latitude][/:longitude]',
+                                            'route' => '/create[/:city][/:country][/:latitude][/:longitude][/:region]',
                                             'constraints' => array(
                                                 ':city' => '[a-zA-Z0-9_\-]+',
                                                 ':country' => '[a-zA-Z0-9_\-]+',
-                                                ':region' => '[a-zA-Z0-9_\-]*',
                                                 ':latitude' => '[0-9]{1-3}[0-9]+',
                                                 ':longitude' => '[0-9]{1-3}[0-9]+',
+                                                ':region' => '[a-zA-Z0-9_\-]*',
                                             ),
                                             'defaults' => array(
                                                 'controller' => 'playgroundweather_admin_location',
