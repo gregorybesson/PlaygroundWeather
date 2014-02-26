@@ -161,6 +161,41 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->tm->queryPartialByCountry('spain')->getResult());
     }
 
+    public function testCreate()
+    {
+        $this->assertEmpty($this->tm->findBy(array('region'=>'yyyyy')));
+
+        $location = new Location();
+        $location->setCity('xxxxx');
+        $location->setRegion('yyyyy');
+        $location->setCountry('france');
+        $location->setLatitude(3);
+        $location->setLongitude(3);
+        $this->tm->insert($location);
+
+        $this->assertCount(1, $this->tm->findBy(array('region'=>'yyyyy')));
+
+        $this->tm->remove($location);
+        $this->assertEmpty($this->tm->findBy(array('region'=>'yyyyy')));
+    }
+
+    public function testCreateNoRegion()
+    {
+        $this->assertEmpty($this->tm->findAll());
+
+        $location = new Location();
+        $location->setCity('xxxxx');
+        $location->setCountry('france');
+        $location->setLatitude(3);
+        $location->setLongitude(3);
+        $this->tm->insert($location);
+
+        $this->assertCount(1, $this->tm->findAll());
+        $this->assertEquals('', current($this->tm->findAll())->getRegion());
+        $this->tm->remove($location);
+        $this->assertEmpty($this->tm->findAll());
+    }
+
     public function tearDown()
     {
         $dbh = $this->em->getConnection();

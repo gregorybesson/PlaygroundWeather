@@ -54,11 +54,11 @@
             <td><?php echo $location->getLongitude() ?></td>
             <?php $createlink = $this->url('admin/weather/locations/create',
                 array(
-                    'city' => base64_encode($location->getCity()),
-                    'country' => base64_encode($location->getCountry()),
-                    'region' => base64_encode($location->getRegion()),
-                    'latitude' => base64_encode($location->getLatitude()),
-                    'longitude' => base64_encode($location->getLongitude()),
+                    'city' => ($location->getCity())? base64_encode($location->getCity()) : null,
+                    'country' => ($location->getCountry())? base64_encode($location->getCountry()) : null,
+                    'latitude' => ($location->getLatitude())? base64_encode($location->getLatitude()) : null,
+                    'longitude' => ($location->getLongitude())? base64_encode($location->getLongitude()) : null,
+                    'region' => ($location->getRegion())? base64_encode($location->getRegion()) : null,
                 ));
             ?>
             <td><a href="<?php echo $createlink; ?>"><?php echo $this->translate('Ajouter'); ?></a></td>
