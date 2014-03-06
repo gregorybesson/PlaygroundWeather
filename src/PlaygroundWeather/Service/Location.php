@@ -138,10 +138,10 @@ class Location extends EventProvider implements ServiceManagerAwareInterface
                && (isset($data['country']) && !empty($data['country']))) {
             return $this->parseResultToObjects($this->request(array($data['city'], $data['country']), 3));
         } elseif (isset($data['city']) && !empty($data['city'])) {
-            return $this->parseResultToObjects($this->request(array($data['city'])));
+            return $this->parseResultToObjects($this->request(array($data['city']), 3));
         } elseif ((isset($data['latitude']) && !empty($data['latitude']))
                && (isset($data['longitude']) && !empty($data['longitude']))) {
-            return $this->parseResultToObjects($this->request(array($data['latitude'], $data['longitude'])));
+            return $this->parseResultToObjects($this->request(array($data['latitude'], $data['longitude']), 3));
         }
         return false;
     }
