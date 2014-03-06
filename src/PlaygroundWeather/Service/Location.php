@@ -38,8 +38,11 @@ class Location extends EventProvider implements ServiceManagerAwareInterface
      * @param string $category = ''
      * @return string url
      */
-    public function request(array $locationData, $numResults = 1, $timezone = true, $popular = false, $category = '')
+    public function request(array $locationData, $timezone = true, $popular = false, $category = '', $numResults = null)
     {
+        if (!$numResults) {
+            $numResults = $this->getOptions()->getLocationResultNb();
+        }
         $location = $this->createQueryString($locationData);
         if (!$location) {
             return '';
@@ -136,12 +139,12 @@ class Location extends EventProvider implements ServiceManagerAwareInterface
     {
         if ((isset($data['city']) && !empty($data['city']))
                && (isset($data['country']) && !empty($data['country']))) {
-            return $this->parseResultToObjects($this->request(array($data['city'], $data['country']), 3));
+            return $this->parseResultToObjects($this->request(array($data['city'], $data['country'])));
         } elseif (isset($data['city']) && !empty($data['city'])) {
-            return $this->parseResultToObjects($this->request(array($data['city']), 3));
+            return $this->parseResultToObjects($this->request(array($data['city'])));
         } elseif ((isset($data['latitude']) && !empty($data['latitude']))
                && (isset($data['longitude']) && !empty($data['longitude']))) {
-            return $this->parseResultToObjects($this->request(array($data['latitude'], $data['longitude']), 3));
+            return $this->parseResultToObjects($this->request(array($data['latitude'], $data['longitude'])));
         }
         return false;
     }
@@ -170,7 +173,11 @@ class Location extends EventProvider implements ServiceManagerAwareInterface
         if (!$location) {
             return false;
         }
-        $locationMapper->remove($location);
+        try {
+            $locationMapper->remove($location);
+        } catch(\Exception $e) {
+            return false;
+        }
         return true;
     }
 

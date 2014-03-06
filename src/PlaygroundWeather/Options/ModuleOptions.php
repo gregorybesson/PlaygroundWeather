@@ -45,6 +45,11 @@ class ModuleOptions extends AbstractOptions
     protected $locationURL = '';
 
     /**
+     * nb of results for locations (max 3 for free API users)
+     */
+    protected $locationResultNb = 3;
+
+    /**
      * Template for the weather table widget
      */
     protected $tableWidgetTemplate = 'playground-weather/widget/base-template.phtml';
@@ -195,6 +200,17 @@ class ModuleOptions extends AbstractOptions
     public function setLocationURL($locationURL)
     {
         $this->locationURL = trim($locationURL);
+        return $this;
+    }
+
+    public function getLocationResultNb()
+    {
+        return $this->locationResultNb;
+    }
+
+    public function setLocationResultNb($locationResultNb)
+    {
+        $this->locationResultNb = $locationResultNb;
         return $this;
     }
 
