@@ -71,7 +71,7 @@ class LocationController extends AbstractActionController
         }
         $result = $this->getLocationService()->remove($locationId);
         if (!$result) {
-            $this->flashMessenger()->addMessage('Une erreur est survenue pendant la suppression du lieu');
+            $this->flashMessenger()->addMessage('Le lieu n\'a pas pu être supprimé');
         } else {
             $this->flashMessenger()->addMessage('Le lieu a bien été supprimé');
         }

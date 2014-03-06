@@ -60,7 +60,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         ->will($this->returnValue('AwesomeKeyPremium'));
 
         $this->assertEquals('URL?query=paris,France&popular=no&timezone=yes&num_of_results=2&format=xml&wct=&key=AwesomeKey',
-                            $ws->request(array('paris', 'France'), 2, true, false, 'fakeCategory'));
+                            $ws->request(array('paris', 'France'),true, false, 'fakeCategory', 2));
     }
 
     public function testCreate()
