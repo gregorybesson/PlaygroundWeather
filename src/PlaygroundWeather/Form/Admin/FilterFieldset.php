@@ -5,7 +5,7 @@ namespace PlaygroundWeather\Form\Admin;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
 use Zend\Form\Element;
-use Zend\I18n\Translator\Translator;
+use Zend\Mvc\I18n\Translator;
 use Zend\ServiceManager\ServiceManager;
 use Zend\InputFilter\InputFilterProviderInterface;
 

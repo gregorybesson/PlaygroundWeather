@@ -29,7 +29,7 @@ class CodeTest extends \PHPUnit_Framework_TestCase
 
     public function testHandle7Codes()
     {
-        $this->form->get('codes')->setCount(7)->prepareFieldset();
+        $this->form->get('codes')->setCount(7)->prepareElement($this->form);
         $this->form->setData($this->codesData);
         $this->form->isValid();
         $data = $this->form->getData();

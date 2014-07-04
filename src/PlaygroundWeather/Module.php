@@ -111,6 +111,85 @@ class Module
     public function getServiceConfig()
     {
         return array(
+
+              'factories' => array(
+                'playgroundweather_module_options' => function ($sm) {
+                    $config = $sm->get('Configuration');
+
+                    return new Options\ModuleOptions(isset($config['playgroundweather']) ? $config['playgroundweather'] : array());
+                },
+
+                'playgroundweather_code_mapper' => function ($sm) {
+                    $mapper = new Mapper\Code(
+                        $sm->get('doctrine.entitymanager.orm_default')
+                    );
+
+                    return $mapper;
+                },
+                'playgroundweather_location_mapper' => function ($sm) {
+                    $mapper = new Mapper\Location(
+                        $sm->get('doctrine.entitymanager.orm_default')
+                    );
+
+                    return $mapper;
+                },
+                'playgroundweather_dailyoccurrence_mapper' => function ($sm) {
+                    $mapper = new Mapper\DailyOccurrence(
+                        $sm->get('doctrine.entitymanager.orm_default')
+                    );
+
+                    return $mapper;
+                },
+                'playgroundweather_hourlyoccurrence_mapper' => function ($sm) {
+                    $mapper = new Mapper\HourlyOccurrence(
+                        $sm->get('doctrine.entitymanager.orm_default')
+                    );
+
+                    return $mapper;
+                },
+                'playgroundweather_imagemap_mapper' => function ($sm) {
+                    $mapper = new Mapper\ImageMap(
+                        $sm->get('doctrine.entitymanager.orm_default')
+                    );
+
+                    return $mapper;
+                },
+                'playgroundweather_code_form' => function ($sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Admin\Code(null, $sm, $translator);
+
+                    return $form;
+                },
+                'playgroundweather_fileimport_form' => function ($sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Admin\FileImport(null, $sm, $translator);
+
+                    return $form;
+                },
+                'playgroundweather_location_form' => function ($sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Admin\Location(null, $sm, $translator);
+                    $location = new Entity\Location();
+                    $form->setInputFilter($location->getInputFilter());
+
+                    return $form;
+                },
+                'playgroundweather_imagemap_form' => function ($sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Admin\ImageMap(null, $sm, $translator);
+                    $imageMap = new Entity\ImageMap();
+                    $form->setInputFilter($imageMap->getInputFilter());
+
+                    return $form;
+                },
+                'playgroundweather_adminfilter_form' => function ($sm) {
+                    $translator = $sm->get('translator');
+                    $form = new Form\Admin\Filter(null, $sm, $translator);
+                    
+                    return $form;
+                },
+            ),
+
             'aliases' => array(
             ),
 
@@ -124,84 +203,7 @@ class Module
                 'playgroundweather_cron_service' => 'PlaygroundWeather\Service\Cron',
             ),
 
-            'factories' => array(
-                'playgroundweather_module_options' => function ($sm) {
-                    $config = $sm->get('Configuration');
 
-                    return new Options\ModuleOptions(isset($config['playgroundweather']) ? $config['playgroundweather'] : array());
-                },
-
-                'playgroundweather_code_mapper' => function ($sm) {
-                    $mapper = new Mapper\Code(
-                        $sm->get('doctrine.entitymanager.orm_default')
-                    );
-                    return $mapper;
-                },
-                'playgroundweather_location_mapper' => function ($sm) {
-                    $mapper = new Mapper\Location(
-                        $sm->get('doctrine.entitymanager.orm_default')
-                    );
-                    return $mapper;
-                },
-                'playgroundweather_dailyoccurrence_mapper' => function ($sm) {
-                    $mapper = new Mapper\DailyOccurrence(
-                        $sm->get('doctrine.entitymanager.orm_default')
-                    );
-                    return $mapper;
-                },
-                'playgroundweather_hourlyoccurrence_mapper' => function ($sm) {
-                    $mapper = new Mapper\HourlyOccurrence(
-                        $sm->get('doctrine.entitymanager.orm_default')
-                    );
-                    return $mapper;
-                },
-                'playgroundweather_imagemap_mapper' => function ($sm) {
-                    $mapper = new Mapper\ImageMap(
-                        $sm->get('doctrine.entitymanager.orm_default')
-                    );
-                    return $mapper;
-                },
-                'playgroundweather_code_form' => function ($sm) {
-                    $translator = $sm->get('translator');
-                    $form = new Form\Admin\Code(null, $sm, $translator);
-//                     $codeObject = new Entity\WeatherCode();
-//                     $inputFilter = $codeObject->getInputFilter();
-
-//                     $fileFilter = new \Zend\InputFilter\FileInput('icon');
-//                     $validatorChain = new \Zend\Validator\ValidatorChain();
-//                     $validatorChain->attach(new \Zend\Validator\File\Exists());
-//                     $validatorChain->attach(new \Zend\Validator\File\Extension(array('jpg', 'jpeg', 'png')));
-//                     $fileFilter->setValidatorChain($validatorChain);
-
-//                     $inputFilter->add($fileFilter);
-//                     $form->setInputFilter($inputFilter);
-                    return $form;
-                },
-                'playgroundweather_fileimport_form' => function ($sm) {
-                    $translator = $sm->get('translator');
-                    $form = new Form\Admin\FileImport(null, $sm, $translator);
-                    return $form;
-                },
-                'playgroundweather_location_form' => function ($sm) {
-                    $translator = $sm->get('translator');
-                    $form = new Form\Admin\Location(null, $sm, $translator);
-                    $location = new Entity\Location();
-                    $form->setInputFilter($location->getInputFilter());
-                    return $form;
-                },
-                'playgroundweather_imagemap_form' => function ($sm) {
-                    $translator = $sm->get('translator');
-                    $form = new Form\Admin\ImageMap(null, $sm, $translator);
-                    $imageMap = new Entity\ImageMap();
-                    $form->setInputFilter($imageMap->getInputFilter());
-                    return $form;
-                },
-                'playgroundweather_adminfilter_form' => function ($sm) {
-                    $translator = $sm->get('translator');
-                    $form = new Form\Admin\Filter(null, $sm, $translator);
-                    return $form;
-                },
-            ),
         );
     }
 }
