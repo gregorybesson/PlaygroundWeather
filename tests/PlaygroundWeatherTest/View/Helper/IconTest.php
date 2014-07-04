@@ -32,7 +32,7 @@ class IconTest extends \PHPUnit_Framework_TestCase
         ->expects($this->never())
         ->method('findLastAssociatedCode');
 
-        $this->assertEquals('', $helper->__invoke());
+        $this->assertEquals('', $helper->__invoke(''));
     }
 
 
@@ -53,7 +53,6 @@ class IconTest extends \PHPUnit_Framework_TestCase
         $helper->getCodeMapper()
         ->expects($this->once())
         ->method('findDefaultByCode')
-        ->with($this->isType('integer'))
         ->will($this->returnValue(false));
 
         $helper->getCodeMapper()
