@@ -50,7 +50,7 @@ class Module
         $cronjobs = $e->getParam('cronjobs');
 
         $cronjobs['refresh_data_weather'] = array(
-            'frequency' => '5 1 * * *',
+            'frequency' => '5 2 * * *',
             'callback'  => '\PlaygroundWeather\Service\Cron::refreshWeatherData',
             'args'      => array(),
         );
